@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build and distribution artifacts.
+# The previous repo committed a PyInstaller bundle with SUMO binaries inside and
+# grew to 1.8 GB, permanently, because git history keeps it. Keep these out.
+build/
+dist/
+*.spec
+
+# Simulation output: regenerate it, never commit it.
+runs/
+results/
+out/
+*.net.xml
+*.rou.xml
+*.add.xml
+tripinfo*.xml
+summary*.xml
+*.sumocfg
+
+# Local
+.env
+.DS_Store
+Thumbs.db
+*.log

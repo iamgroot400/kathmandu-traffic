@@ -1,0 +1,3 @@
+# Keep the OSM extract byte-identical to what Overpass returned.
+# Without this, git rewrites it to CRLF on checkout and it no longer matches the source.
+*.osm.xml -text
