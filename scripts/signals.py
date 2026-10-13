@@ -14,8 +14,9 @@ from __future__ import annotations
 
 import math
 
-# An approach within this many degrees of the reference axis shares its phase.
-AXIS_TOLERANCE_DEG = 45.0
+# Approaches spread by less than this all point the same way: a parallel merge or a
+# bend, where a signal would only add delay. Above it, flows genuinely conflict.
+MIN_CONFLICT_DEG = 30.0
 
 
 def _approach_axis(link) -> float:
@@ -35,26 +36,33 @@ def _axis_gap(p: float, q: float) -> float:
 
 
 def split_phases(inlinks: list):
-    """Split incoming links into two opposing-axis groups: (major, minor).
+    """Split incoming links into two conflicting groups, one per signal phase.
 
-    Returns (None, None) when every approach shares one axis - that is a mid-link
-    node or a bend, not an intersection, and signalising it would only add delay.
+    A node needs a signal when two or more approaches arrive on meaningfully
+    different axes and compete for the same downstream capacity. That includes
+    two roads merging at a sharp angle, not just classic crossroads - the worst
+    bottleneck in this network is a three-into-one merge.
+
+    Returns (None, None) below three approaches, or when every approach points the
+    same way: a bend or a parallel merge, where a signal would only add delay.
+
+    Three approaches, not two, is deliberate. Signalising every two-way merge costs
+    so much capacity that the network stops draining (78% of trips complete instead
+    of 100%), and real networks give way at merges rather than signalising them.
+    Two-approach merges that still congest are a geometry problem, not a signal one.
     """
     if len(inlinks) < 3:
         return None, None
 
-    # the widest approach defines the major axis
-    reference = max(inlinks, key=lambda l: l.number_of_lanes)
-    ref_axis = _approach_axis(reference)
-
-    major, minor = [], []
-    for link in inlinks:
-        target = major if _axis_gap(_approach_axis(link), ref_axis) <= AXIS_TOLERANCE_DEG else minor
-        target.append(link)
-
-    if not minor:
+    pairs = sorted(((_approach_axis(l), l) for l in inlinks), key=lambda t: t[0])
+    axes = [a for a, _ in pairs]
+    if axes[-1] - axes[0] < MIN_CONFLICT_DEG:
         return None, None
-    return major, minor
+
+    # Split where consecutive approaches are furthest apart in angle. On a crossroads
+    # this puts the opposing pairs together, which is the standard arrangement.
+    _, k = max((axes[i + 1] - axes[i], i) for i in range(len(axes) - 1))
+    return [l for _, l in pairs[:k + 1]], [l for _, l in pairs[k + 1:]]
 
 
 def add_fixed_time_signals(W, cycle_s: float = 90.0, min_green: float = 10.0) -> dict:

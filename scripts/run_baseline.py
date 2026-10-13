@@ -59,8 +59,8 @@ def nearest_node(lat, lon, node_coords):
     return best, math.sqrt(best_d) * 111.32
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser(description="Network validation + smoke-test run")
+def add_model_args(ap: argparse.ArgumentParser) -> None:
+    """Model parameters, shared by every script that builds this network."""
     ap.add_argument("--data", type=Path, default=Path("data"))
     # 0.3 = the arterial share of citywide demand. This network holds only
     # trunk/primary/secondary roads, so trips that stay on local streets are not
@@ -85,8 +85,13 @@ def main() -> None:
     ap.add_argument("--no-signals", action="store_true",
                     help="leave intersections as free merges (OSM import default)")
     ap.add_argument("--cycle", type=float, default=90.0, help="signal cycle length")
-    args = ap.parse_args()
 
+
+def build_world(args):
+    """Validate the network, build the World, signalise it and load demand.
+
+    Returns (World, {zone_id: node_id}).
+    """
     nodes, links = load_network(args.data)
     print(f"network:      {len(nodes)} nodes, {len(links)} links")
 
@@ -142,6 +147,15 @@ def main() -> None:
     print(f"demand:       {loaded:,} trips loaded, {skipped:,} skipped "
           f"(intrazonal or below deltan={args.deltan})")
 
+    return W, zones
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description="Network validation + calibrated baseline run")
+    add_model_args(ap)
+    args = ap.parse_args()
+
+    W, _zones = build_world(args)
     print("running ...")
     W.exec_simulation()
     W.analyzer.print_simple_stats()

@@ -89,11 +89,11 @@ Network: **233 nodes, 590 links**, 100% strongly connected, zero dead ends.
 | Demand | 30% of the 260k peak-hour matrix | arterial share — see below |
 | Effective free-flow speed | 30 km/h | OSM's 50 km/h limit is never sustained here |
 | Jam density | 0.2 veh/m/lane | ~5 m per vehicle, motorcycle-heavy mix |
-| Signals | 109 intersections, 90 s cycle | OSM import creates none |
+| Signals | 128 intersections, 90 s cycle | OSM import creates none |
 | Demand window | 3600 s | the peak hour |
 | Simulation horizon | 10800 s | so the network drains |
 
-Result: **14.8 km/h** mean speed, delay ratio **0.78**, **100%** of trips completing.
+Result: **14.3 km/h** mean speed, delay ratio **0.79**, **100%** of trips completing.
 
 ### Signals
 
@@ -101,11 +101,30 @@ UXsim's OSM importer makes every node an unsignalised free merge, so `scripts/si
 adds a two-phase fixed-time plan to each real intersection (3+ approaches on more than
 one axis). Opposing arms share a phase; green is split in proportion to the lanes each
 phase serves, so the baseline is a *reasonably* timed signal rather than a strawman for
-optimisation to beat. 124 nodes stay as free merges — they are mid-link joins and bends,
-not junctions.
+optimisation to beat. 105 nodes stay as free merges — bends, diverges and two-way merges,
+where real networks give way rather than signalise.
 
-Signals cost about 3 km/h and raise the delay ratio from 0.65 to 0.78, which is expected:
+Signals cost about 3 km/h and raise the delay ratio from 0.65 to 0.79, which is expected:
 a two-phase signal halves each approach's capacity. Run `--no-signals` to compare.
+
+Signalising *every* two-approach merge as well (165 nodes) over-constrains the network —
+only 78% of trips complete and mean speed falls to 11.5 km/h. Watch for that trap: total
+delay appears to *fall*, but only because the delay of the 22% of trips that never
+finished goes uncounted.
+
+## Bottlenecks
+
+```bash
+python scripts/find_bottlenecks.py --top 20   # writes data/bottlenecks.csv
+```
+
+Delay is measured per link and attributed to the link's **downstream** node, since that
+is where the queue forms and what a signal can act on. Free-flow travel time is
+subtracted, so a link being long or slow does not count as a bottleneck.
+
+Total: **27,361 vehicle-hours**. The top 20 nodes carry **73%** of it, of which 11 are
+signalised and therefore controllable. One node, `3511456911`, carries **22%** of all
+delay on its own — a three-into-one merge, and the obvious first DRL target.
 
 ### Why 30% of demand
 
