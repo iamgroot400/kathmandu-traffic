@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Validate the network, then run a reduced-demand simulation.
+"""Validate the network, then run the calibrated baseline.
+
+    python scripts/run_baseline.py
+
+Defaults reproduce the calibrated baseline: 30% of the citywide peak-hour matrix
+at an effective free-flow speed of 30 km/h. That gives ~17.7 km/h mean speed, a
+delay ratio of 0.65, and 99% of trips completing. See the README for the reasoning.
 
 UXsim warns that its OSM import can produce fragmented networks with many dead
 ends. A fragmented network fails silently: trips between unconnected parts are
 simply never completed, so the run still "succeeds" while measuring nothing. This
 checks connectivity first and refuses to run if the network cannot carry the demand.
-
-    python scripts/smoke_test.py --demand-scale 0.1
 """
 from __future__ import annotations
 
@@ -54,8 +58,11 @@ def nearest_node(lat, lon, node_coords):
 def main() -> None:
     ap = argparse.ArgumentParser(description="Network validation + smoke-test run")
     ap.add_argument("--data", type=Path, default=Path("data"))
-    ap.add_argument("--demand-scale", type=float, default=0.1,
-                    help="fraction of the OD matrix to load (1.0 = full peak hour)")
+    # 0.3 = the arterial share of citywide demand. This network holds only
+    # trunk/primary/secondary roads, so trips that stay on local streets are not
+    # represented. Calibrated so mean speed matches observed Kathmandu peak.
+    ap.add_argument("--demand-scale", type=float, default=0.3,
+                    help="arterial share of the OD matrix (1.0 = full citywide peak hour)")
     ap.add_argument("--deltan", type=int, default=5, help="vehicles per simulated platoon")
     # Demand is injected over the peak hour, but the clock runs on so the network can
     # drain. Stopping at the end of the demand window would mark every late-departing
@@ -65,8 +72,8 @@ def main() -> None:
     # OSM maxspeed is the legal limit (50 km/h), which no Kathmandu arterial sustains.
     # In a mesoscopic model, poor lane discipline and erratic braking are represented
     # here - as a lower effective free-flow speed - not as driver behaviour.
-    ap.add_argument("--free-flow-kmh", type=float, default=None,
-                    help="override OSM maxspeed on every link")
+    ap.add_argument("--free-flow-kmh", type=float, default=30.0,
+                    help="override OSM maxspeed on every link (None = use OSM)")
     ap.add_argument("--jam-density", type=float, default=0.2,
                     help="veh/m/lane at standstill (0.2 = 5 m per vehicle)")
     args = ap.parse_args()

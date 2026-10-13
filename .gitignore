@@ -27,6 +27,9 @@ tripinfo*.xml
 summary*.xml
 *.sumocfg
 
+# osmnx download cache
+cache/
+
 # Local
 .env
 .DS_Store

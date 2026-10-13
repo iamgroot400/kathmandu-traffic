@@ -75,6 +75,45 @@ no net commuter flow into the core in the morning or out in the evening. Treat t
 matrix as a hypothesis to test, and re-check any conclusion that depends on its
 shape against surveyed counts.
 
+## Baseline
+
+```bash
+python scripts/build_network.py     # import OSM into UXsim, cache as CSV (needs network)
+python scripts/run_baseline.py      # validate + run the calibrated baseline
+```
+
+Network: **233 nodes, 590 links**, 100% strongly connected, zero dead ends.
+
+| Parameter | Value | Why |
+|---|---|---|
+| Demand | 30% of the 260k peak-hour matrix | arterial share — see below |
+| Effective free-flow speed | 30 km/h | OSM's 50 km/h limit is never sustained here |
+| Jam density | 0.2 veh/m/lane | ~5 m per vehicle, motorcycle-heavy mix |
+| Demand window | 3600 s | the peak hour |
+| Simulation horizon | 7200 s | so the network drains |
+
+Result: **17.7 km/h** mean speed, delay ratio **0.65**, **99%** of trips completing.
+
+### Why 30% of demand
+
+The network contains only trunk, primary and secondary roads. Trips that stay on
+residential and tertiary streets have nowhere to go in this model, so loading the
+full citywide matrix puts every trip on a fifth of the city's road length — which
+gridlocks (at 100%, only 12% of trips complete and speed collapses to 3 km/h).
+
+The 30% figure is calibrated so mean speed lands in the observed Kathmandu peak
+range. **It is a calibration against one aggregate target, not a measured arterial
+share** — replace it with surveyed link counts and the GEH check when available.
+
+### What a mesoscopic model cannot tell you
+
+UXsim has no car-following model: no reaction time, no lane discipline, no
+overtaking. Vehicles move as platoons along a fundamental diagram. Erratic braking
+and poor lane discipline are therefore represented only by their *aggregate effect* —
+the reduced free-flow speed above — and the model can reproduce that outcome but
+cannot test whether driver behaviour is its cause. That question needs a
+microscopic model (SUMO, with reaction time and sublane dynamics).
+
 ## Attribution
 
 Map data © OpenStreetMap contributors, available under the
