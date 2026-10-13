@@ -17,11 +17,15 @@ from __future__ import annotations
 import argparse
 import csv
 import math
+import sys
 from pathlib import Path
 
 import networkx as nx
 from uxsim import World
 from uxsim.OSMImporter import OSMImporter
+
+sys.path.insert(0, str(Path(__file__).parent))
+from signals import add_fixed_time_signals, self_check  # noqa: E402
 
 
 def load_network(data: Path):
@@ -68,7 +72,9 @@ def main() -> None:
     # drain. Stopping at the end of the demand window would mark every late-departing
     # trip as incomplete and bias travel times toward short trips.
     ap.add_argument("--demand-window", type=int, default=3600, help="peak-hour length")
-    ap.add_argument("--tmax", type=int, default=7200, help="simulation horizon")
+    # 10800 not 7200: signals slow the network enough that a 2 h horizon leaves ~20%
+    # of trips unfinished, which biases every statistic toward short trips.
+    ap.add_argument("--tmax", type=int, default=10800, help="simulation horizon")
     # OSM maxspeed is the legal limit (50 km/h), which no Kathmandu arterial sustains.
     # In a mesoscopic model, poor lane discipline and erratic braking are represented
     # here - as a lower effective free-flow speed - not as driver behaviour.
@@ -76,6 +82,9 @@ def main() -> None:
                     help="override OSM maxspeed on every link (None = use OSM)")
     ap.add_argument("--jam-density", type=float, default=0.2,
                     help="veh/m/lane at standstill (0.2 = 5 m per vehicle)")
+    ap.add_argument("--no-signals", action="store_true",
+                    help="leave intersections as free merges (OSM import default)")
+    ap.add_argument("--cycle", type=float, default=90.0, help="signal cycle length")
     args = ap.parse_args()
 
     nodes, links = load_network(args.data)
@@ -113,6 +122,12 @@ def main() -> None:
     OSMImporter.osm_network_to_World(W, nodes, links,
                                      default_jam_density=args.jam_density,
                                      coef_degree_to_meter=111000)
+
+    if not args.no_signals:
+        info = add_fixed_time_signals(W, cycle_s=args.cycle)
+        self_check(W)
+        print(f"signals:      {info['signalised']} intersections at {args.cycle:.0f}s cycle "
+              f"({info['skipped']} nodes left as free merges)")
 
     loaded = skipped = 0
     with (args.data / "od_matrix.csv").open(encoding="utf-8") as fh:

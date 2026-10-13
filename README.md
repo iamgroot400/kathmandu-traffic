@@ -89,10 +89,23 @@ Network: **233 nodes, 590 links**, 100% strongly connected, zero dead ends.
 | Demand | 30% of the 260k peak-hour matrix | arterial share — see below |
 | Effective free-flow speed | 30 km/h | OSM's 50 km/h limit is never sustained here |
 | Jam density | 0.2 veh/m/lane | ~5 m per vehicle, motorcycle-heavy mix |
+| Signals | 109 intersections, 90 s cycle | OSM import creates none |
 | Demand window | 3600 s | the peak hour |
-| Simulation horizon | 7200 s | so the network drains |
+| Simulation horizon | 10800 s | so the network drains |
 
-Result: **17.7 km/h** mean speed, delay ratio **0.65**, **99%** of trips completing.
+Result: **14.8 km/h** mean speed, delay ratio **0.78**, **100%** of trips completing.
+
+### Signals
+
+UXsim's OSM importer makes every node an unsignalised free merge, so `scripts/signals.py`
+adds a two-phase fixed-time plan to each real intersection (3+ approaches on more than
+one axis). Opposing arms share a phase; green is split in proportion to the lanes each
+phase serves, so the baseline is a *reasonably* timed signal rather than a strawman for
+optimisation to beat. 124 nodes stay as free merges — they are mid-link joins and bends,
+not junctions.
+
+Signals cost about 3 km/h and raise the delay ratio from 0.65 to 0.78, which is expected:
+a two-phase signal halves each approach's capacity. Run `--no-signals` to compare.
 
 ### Why 30% of demand
 
