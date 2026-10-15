@@ -81,7 +81,11 @@ def main() -> None:
     hours = args.demand_window / 3600.0
     rows = []
     for link in W.LINKS:
-        volume = link.departure_count(W.TMAX)
+        # Count departures within the demand window only. Counting over the whole
+        # simulation (which runs on so the network can drain) and dividing by the
+        # one-hour peak inflates V/C by up to 3x.
+        volume = link.departure_count(args.demand_window)
+        total_volume = link.departure_count(W.TMAX)
         cap_veh_h = getattr(link, "capacity", 0.0) * 3600.0
         vc = (volume / hours) / cap_veh_h if cap_veh_h > 0 else 0.0
         tt, free = tt_by_link.get(link.name, (0.0, 0.0))
@@ -90,7 +94,8 @@ def main() -> None:
             "end_node": link.end_node.name,
             "end_lat": link.end_node.y,
             "end_lon": link.end_node.x,
-            "volume": volume,
+            "volume_peak_hour": volume,
+            "volume_total": total_volume,
             "capacity_veh_h": round(cap_veh_h, 1),
             "vc_ratio": round(vc, 3),
             "delay_s": round(max(0.0, tt - free), 1),
@@ -103,8 +108,8 @@ def main() -> None:
     print(f"\n{'='*74}\nTOP {args.top} LINKS BY VOLUME / CAPACITY\n{'='*74}")
     print(f"{'#':>3} {'link':<28} {'V/C':>6} {'vol':>7} {'delay s':>8} {'queue':>6}")
     for i, r in enumerate(by_vc[:args.top], 1):
-        print(f"{i:>3} {r['link'][:28]:<28} {r['vc_ratio']:>6.2f} {r['volume']:>7.0f} "
-              f"{r['delay_s']:>8.1f} {r['queue_veh']:>6.1f}")
+        print(f"{i:>3} {r['link'][:28]:<28} {r['vc_ratio']:>6.2f} "
+              f"{r['volume_peak_hour']:>7.0f} {r['delay_s']:>8.1f} {r['queue_veh']:>6.1f}")
 
     # which nodes are hotspots, so landmarks can be checked against them
     hot_nodes = {r["end_node"] for r in by_vc[:args.top]} | {r["end_node"] for r in by_delay[:args.top]}
