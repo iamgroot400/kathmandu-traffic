@@ -27,9 +27,17 @@ def phase_queue(node, phase: int) -> float:
     return total
 
 
+# Yellow plus all-red. Every phase change forfeits this much discharge time.
+LOST_TIME_S = 3.0
+# Vehicles per second of green a single lane discharges, mixed motorcycle traffic.
+DISCHARGE_VEH_PER_S_LANE = 0.5
+
+
 def should_switch(current_queue: float, best_queue: float, best_phase: int,
                   current_phase: int, elapsed: float,
-                  min_green: float, max_green: float) -> bool:
+                  min_green: float, max_green: float,
+                  lanes_served: float = 2.0,
+                  lost_time: float = LOST_TIME_S) -> bool:
     """Decide whether to end the current green phase now.
 
     Called every timestep for each signalised intersection.
@@ -47,13 +55,13 @@ def should_switch(current_queue: float, best_queue: float, best_phase: int,
     if elapsed >= max_green:
         return best_queue > 0             # fairness ceiling: anyone waiting gets a turn
 
-    # In between, require the alternative to be meaningfully better, or the signal
-    # flaps every few seconds and each switch wastes a clearance interval. The margin
-    # decays from 2 vehicles at min green to 0 at max green, so a phase becomes
-    # progressively easier to interrupt the longer it has held.
-    span = max(1e-9, max_green - min_green)
-    margin = 2.0 * (1.0 - (elapsed - min_green) / span)
-    return best_queue > current_queue + margin
+    # In between, the alternative must beat the current phase by more than switching
+    # costs. A phase change forfeits `lost_time` seconds of discharge to yellow and
+    # all-red, so the imbalance has to exceed the vehicles that would have cleared in
+    # that time - otherwise the signal flaps and throughput falls while each individual
+    # switch looks locally justified.
+    forfeited = lost_time * DISCHARGE_VEH_PER_S_LANE * lanes_served
+    return best_queue > current_queue + forfeited
 
 
 def make_controller(min_green: float, max_green: float):
@@ -66,8 +74,12 @@ def make_controller(min_green: float, max_green: float):
         best = max((p for p in phases if p != current), key=lambda p: queues[p],
                    default=current)
 
+        # how much discharge capacity the current phase forfeits by switching
+        lanes = sum(l.number_of_lanes for l in node.inlinks.values()
+                    if current in (l.signal_group or [])) or 1.0
+
         if should_switch(queues[current], queues[best], best, current,
-                         node.signal_t, min_green, max_green):
+                         node.signal_t, min_green, max_green, lanes_served=lanes):
             node.signal_phase = best
             node.signal_t = 0.0
 
@@ -96,6 +108,12 @@ def self_check() -> None:
     # clearly better alternative, min green satisfied: should switch
     assert should_switch(0.0, 50.0, 1, 0, 30.0, 10.0, 60.0), \
         "did not switch to a phase with a much longer queue"
+    # imbalance smaller than the discharge forfeited to clearance: hold.
+    # 3 s lost time x 0.5 veh/s/lane x 2 lanes = 3 vehicles must be beaten.
+    assert not should_switch(10.0, 12.0, 1, 0, 30.0, 10.0, 60.0, lanes_served=2.0), \
+        "switched for a 2-vehicle gain that costs 3 vehicles of lost discharge"
+    assert should_switch(10.0, 14.0, 1, 0, 30.0, 10.0, 60.0, lanes_served=2.0), \
+        "held despite a gain larger than the clearance cost"
 
 
 if __name__ == "__main__":

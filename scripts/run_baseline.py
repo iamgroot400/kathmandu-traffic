@@ -63,11 +63,18 @@ def nearest_node(lat, lon, node_coords):
 def add_model_args(ap: argparse.ArgumentParser) -> None:
     """Model parameters, shared by every script that builds this network."""
     ap.add_argument("--data", type=Path, default=Path("data"))
-    # 0.3 = the arterial share of citywide demand. This network holds only
-    # trunk/primary/secondary roads, so trips that stay on local streets are not
-    # represented. Calibrated so mean speed matches observed Kathmandu peak.
-    ap.add_argument("--demand-scale", type=float, default=0.3,
+    # Effective load = demand-scale x pcu-factor, and only that product is identified
+    # by the calibration (mean speed). It is decomposed into two defensible parts:
+    #   0.48  arterial share - this network holds only trunk/primary/secondary roads,
+    #         so trips that stay on local streets are not represented
+    #   0.625 PCU factor - Kathmandu's fleet converted to passenger-car equivalents
+    # 0.48 x 0.625 = 0.30, the value originally fitted with PCU implicitly 1.0.
+    ap.add_argument("--demand-scale", type=float, default=0.48,
                     help="arterial share of the OD matrix (1.0 = full citywide peak hour)")
+    # 70% two-wheelers @0.25 + 20% cars @1.0 + 10% buses @2.5 = 0.625 PCU per vehicle.
+    # UXsim is single-class, so the mix enters as weighted demand, not vehicle types.
+    ap.add_argument("--pcu-factor", type=float, default=0.625,
+                    help="passenger-car equivalents per vehicle (1.0 = all cars)")
     ap.add_argument("--deltan", type=int, default=5, help="vehicles per simulated platoon")
     # Demand is injected over the peak hour, but the clock runs on so the network can
     # drain. Stopping at the end of the demand window would mark every late-departing
@@ -152,7 +159,7 @@ def build_world(args, verbose: bool = True):
     with (args.data / "od_matrix.csv").open(encoding="utf-8") as fh:
         for row in csv.DictReader(fh):
             o, d = zones.get(row["origin_id"]), zones.get(row["dest_id"])
-            vol = int(int(row["demand"]) * args.demand_scale)
+            vol = int(int(row["demand"]) * args.demand_scale * args.pcu_factor)
             if o is None or d is None or o == d or vol < args.deltan:
                 skipped += vol
                 continue
