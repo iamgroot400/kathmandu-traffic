@@ -87,17 +87,22 @@ def add_model_args(ap: argparse.ArgumentParser) -> None:
     ap.add_argument("--cycle", type=float, default=90.0, help="signal cycle length")
 
 
-def build_world(args):
+def build_world(args, verbose: bool = True):
     """Validate the network, build the World, signalise it and load demand.
 
-    Returns (World, {zone_id: node_id}).
+    Returns (World, {zone_id: node_id}). `verbose=False` silences it for solvers
+    that rebuild the World once per iteration.
     """
+    def say(msg):
+        if verbose:
+            print(msg)
+
     nodes, links = load_network(args.data)
-    print(f"network:      {len(nodes)} nodes, {len(links)} links")
+    say(f"network:      {len(nodes)} nodes, {len(links)} links")
 
     g, scc, dead_ends = connectivity(nodes, links)
-    print(f"largest SCC:  {len(scc)} nodes ({len(scc)/len(nodes):.0%} of network)")
-    print(f"dead ends:    {len(dead_ends)}")
+    say(f"largest SCC:  {len(scc)} nodes ({len(scc)/len(nodes):.0%} of network)")
+    say(f"dead ends:    {len(dead_ends)}")
     if len(scc) < 0.5 * len(nodes):
         raise SystemExit(
             f"network is fragmented - only {len(scc)}/{len(nodes)} nodes are mutually "
@@ -114,16 +119,16 @@ def build_world(args):
             zones[row["zone_id"]] = nid
             if dist_km > 1.0:
                 far += 1
-    print(f"zones mapped: {len(zones)} -> {len(set(zones.values()))} distinct nodes")
-    print(f"              {far} zones are >1 km from any connected node")
+    say(f"zones mapped: {len(zones)} -> {len(set(zones.values()))} distinct nodes")
+    say(f"              {far} zones are >1 km from any connected node")
 
     if args.free_flow_kmh:
         for l in links:
             l[4] = args.free_flow_kmh / 3.6
 
     # print_mode=0 also silences analyzer output, so stats would vanish too.
-    W = World(name="kathmandu-smoke", deltan=args.deltan, tmax=args.tmax,
-              print_mode=1, save_mode=1, show_mode=0, random_seed=0)
+    W = World(name="kathmandu", deltan=args.deltan, tmax=args.tmax,
+              print_mode=1 if verbose else 0, save_mode=1, show_mode=0, random_seed=0)
     OSMImporter.osm_network_to_World(W, nodes, links,
                                      default_jam_density=args.jam_density,
                                      coef_degree_to_meter=111000)
@@ -131,8 +136,8 @@ def build_world(args):
     if not args.no_signals:
         info = add_fixed_time_signals(W, cycle_s=args.cycle)
         self_check(W)
-        print(f"signals:      {info['signalised']} intersections at {args.cycle:.0f}s cycle "
-              f"({info['skipped']} nodes left as free merges)")
+        say(f"signals:      {info['signalised']} intersections at {args.cycle:.0f}s cycle "
+            f"({info['skipped']} nodes left as free merges)")
 
     loaded = skipped = 0
     with (args.data / "od_matrix.csv").open(encoding="utf-8") as fh:
@@ -144,7 +149,7 @@ def build_world(args):
                 continue
             W.adddemand(str(o), str(d), 0, args.demand_window, volume=vol)
             loaded += vol
-    print(f"demand:       {loaded:,} trips loaded, {skipped:,} skipped "
+    say(f"demand:       {loaded:,} trips loaded, {skipped:,} skipped "
           f"(intrazonal or below deltan={args.deltan})")
 
     return W, zones
