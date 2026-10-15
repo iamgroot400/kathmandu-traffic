@@ -59,9 +59,24 @@ def main() -> None:
     args = ap.parse_args()
 
     W, _zones = build_world(args, verbose=False)
-    W.exec_simulation()
+
+    # Queues must be sampled *during* the run. Reading num_vehicles_queue afterwards
+    # always returns 0, because by then the network has drained.
+    peak_queue = {l.name: 0.0 for l in W.LINKS}
+    while W.check_simulation_ongoing():
+        W.exec_simulation(duration_t=60)
+        for l in W.LINKS:
+            if l.num_vehicles_queue > peak_queue[l.name]:
+                peak_queue[l.name] = l.num_vehicles_queue
+
     a = W.analyzer
     a.basic_analysis()
+
+    # Per-link travel times come from the analyzer. `actual_travel_time(0)` would be
+    # the travel time at t=0 on an empty network - always equal to free flow.
+    tt_by_link = {}
+    for _, r in a.link_to_pandas().iterrows():
+        tt_by_link[r["link"]] = (r["average_travel_time"], r["free_travel_time"])
 
     hours = args.demand_window / 3600.0
     rows = []
@@ -69,8 +84,7 @@ def main() -> None:
         volume = link.departure_count(W.TMAX)
         cap_veh_h = getattr(link, "capacity", 0.0) * 3600.0
         vc = (volume / hours) / cap_veh_h if cap_veh_h > 0 else 0.0
-        tt = link.actual_travel_time(0)
-        free = link.length / link.free_flow_speed if link.free_flow_speed else 0.0
+        tt, free = tt_by_link.get(link.name, (0.0, 0.0))
         rows.append({
             "link": link.name,
             "end_node": link.end_node.name,
@@ -80,7 +94,7 @@ def main() -> None:
             "capacity_veh_h": round(cap_veh_h, 1),
             "vc_ratio": round(vc, 3),
             "delay_s": round(max(0.0, tt - free), 1),
-            "queue_veh": round(link.num_vehicles_queue, 1),
+            "queue_veh": round(peak_queue.get(link.name, 0.0), 1),
         })
 
     by_vc = sorted(rows, key=lambda r: r["vc_ratio"], reverse=True)

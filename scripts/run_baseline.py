@@ -97,6 +97,9 @@ def add_model_args(ap: argparse.ArgumentParser) -> None:
                     help="queue-actuated control instead of fixed-time")
     ap.add_argument("--min-green", type=float, default=10.0)
     ap.add_argument("--max-green", type=float, default=60.0)
+    # UXsim's route choice carries duo_noise, so each seed is a different realization.
+    # Comparing two configurations on one seed each cannot separate effect from noise.
+    ap.add_argument("--seed", type=int, default=0, help="random seed for this run")
 
 
 def build_world(args, verbose: bool = True):
@@ -140,7 +143,8 @@ def build_world(args, verbose: bool = True):
 
     # print_mode=0 also silences analyzer output, so stats would vanish too.
     W = World(name="kathmandu", deltan=args.deltan, tmax=args.tmax,
-              print_mode=1 if verbose else 0, save_mode=1, show_mode=0, random_seed=0)
+              print_mode=1 if verbose else 0, save_mode=1, show_mode=0,
+              random_seed=args.seed)
     OSMImporter.osm_network_to_World(W, nodes, links,
                                      default_jam_density=args.jam_density,
                                      coef_degree_to_meter=111000)
