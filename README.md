@@ -135,6 +135,50 @@ only 78% of trips complete and mean speed falls to 11.5 km/h. Watch for that tra
 delay appears to *fall*, but only because the delay of the 22% of trips that never
 finished goes uncounted.
 
+## Calibration
+
+### Speed friction factor (α = 0.60)
+
+Every link is overridden to **30 km/h** effective free-flow speed, against OSM's
+tagged 50 km/h urban arterial limit — a 40% reduction, i.e. α = 0.60. This single
+factor stands in for roadside parking, informal bus stops, street vendors, narrow
+and encroached lane geometry, and the absence of lane discipline. In a mesoscopic
+model these cannot be represented as behaviour (there is no car-following model), so
+they enter as a reduced effective speed. The model reproduces their *outcome*; it
+cannot test them as a *cause*.
+
+### Fleet composition (PCU = 0.625)
+
+UXsim is single-class — it has no vehicle types, lengths or per-class dynamics. The
+fleet mix therefore enters as PCU-weighted demand:
+
+| Class | Share | PCU |
+|---|---|---|
+| Two-wheelers | 70% | 0.25 |
+| Cars / taxis | 20% | 1.00 |
+| Micro-buses / buses | 10% | 2.50 |
+| **Weighted** | | **0.625** |
+
+Only the *product* `demand_scale × pcu_factor` is identified by the speed calibration,
+so the originally fitted 0.30 is decomposed into **0.48 arterial share × 0.625 PCU**.
+The simulation is unchanged; the factor is now two parts that can be defended
+separately. The 0.2 veh/m/lane jam density is independently consistent with this mix
+(mean vehicle length 3.1 m plus a ~2 m gap).
+
+### Route assignment — DUE does not converge
+
+`SolverDUE` **oscillates rather than converging** on this network. Over four
+iterations the route-cost gap ran 611.6 → 13.5 → 510.0 → 36.5, with total travel time
+swinging roughly 14× between iterations and UXsim warning that 39,355 of 55,900
+vehicles failed to finish. The solver replaces adaptive routing with pre-enumerated
+fixed routes, which concentrates traffic and gridlocks the network, then over-corrects.
+
+Results therefore use UXsim's default **`homogeneous_DUO`** — within-day rerouting on
+current travel times, updated every 600 s — which completes 100% of trips and is
+stable. State this in the methodology rather than claiming equilibrium: *route
+assignment used within-day dynamic user optimum; day-to-day DUE was attempted but did
+not reach a stable gap within a feasible compute budget (~4 min/iteration).*
+
 ## Bottlenecks
 
 ```bash
