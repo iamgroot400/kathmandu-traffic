@@ -1,9 +1,32 @@
 # Kathmandu Traffic
 
-Road geometry for Kathmandu, as a starting point for traffic simulation work.
+## What this is trying to prove
 
-Contains the road network and a synthetic demand matrix. No simulation code or
-results yet — those come next.
+We are testing whether Kathmandu's peak-hour arterial congestion can be meaningfully
+reduced **without building any new road** — using only two levers a city can actually
+deploy: retiming the traffic signals, and charging for road use. Concretely, we build a
+mesoscopic simulation of the Ring Road and city-core arterial network (233 nodes, 590
+links from OpenStreetMap), load it with a synthetic 260,000-trip peak-hour demand
+matrix, and establish a baseline in which 128 intersections run well-tuned fixed-time
+signals and drivers have settled into user equilibrium. We then measure how much of that
+baseline's **27,361 vehicle-hours of delay** can be removed by (a) adaptive signal
+control learned by reinforcement learning at the ~15 intersections that cause most of it,
+(b) marginal-cost congestion tolls, and (c) both together — benchmarked against the
+system-optimum assignment that bounds what any such scheme could possibly achieve. The
+claim is causal and relative — that these levers recover a specific, quantified share of
+delay at a specific set of locations — **not** a forecast of Kathmandu's actual travel
+times, because the demand matrix is synthesised rather than surveyed and the model has
+not yet been validated against observed link counts.
+
+## Pipeline
+
+```bash
+python scripts/build_od.py          # demand: gravity model over 109 zones
+python scripts/build_network.py     # network: OSM -> UXsim, cached as CSV
+python scripts/run_baseline.py      # baseline: validate, signalise, simulate
+python scripts/find_bottlenecks.py  # rank intersections by delay caused
+python scripts/run_due.py           # day-to-day user equilibrium
+```
 
 ## The map
 
