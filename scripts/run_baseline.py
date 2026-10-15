@@ -26,6 +26,7 @@ from uxsim.OSMImporter import OSMImporter
 
 sys.path.insert(0, str(Path(__file__).parent))
 from signals import add_fixed_time_signals, self_check  # noqa: E402
+from adaptive_signals import attach as attach_adaptive  # noqa: E402
 
 
 def load_network(data: Path):
@@ -85,6 +86,10 @@ def add_model_args(ap: argparse.ArgumentParser) -> None:
     ap.add_argument("--no-signals", action="store_true",
                     help="leave intersections as free merges (OSM import default)")
     ap.add_argument("--cycle", type=float, default=90.0, help="signal cycle length")
+    ap.add_argument("--adaptive", action="store_true",
+                    help="queue-actuated control instead of fixed-time")
+    ap.add_argument("--min-green", type=float, default=10.0)
+    ap.add_argument("--max-green", type=float, default=60.0)
 
 
 def build_world(args, verbose: bool = True):
@@ -138,6 +143,10 @@ def build_world(args, verbose: bool = True):
         self_check(W)
         say(f"signals:      {info['signalised']} intersections at {args.cycle:.0f}s cycle "
             f"({info['skipped']} nodes left as free merges)")
+        if args.adaptive:
+            n = attach_adaptive(W, min_green=args.min_green, max_green=args.max_green)
+            say(f"control:      queue-actuated on {n} intersections "
+                f"(min green {args.min_green:.0f}s, max {args.max_green:.0f}s)")
 
     loaded = skipped = 0
     with (args.data / "od_matrix.csv").open(encoding="utf-8") as fh:
