@@ -50,6 +50,26 @@ def link_delays(W) -> dict:
     return out
 
 
+def write_toll_schedule(delays: dict, path: Path) -> None:
+    """Persist per-link delay so tolls can be set from observation, not omniscience.
+
+    A city sets a congestion charge from what it measured last month, not from a
+    simultaneous simulation of today. Writing the schedule once also avoids paying
+    for a reference run inside every priced scenario.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["link", "observed_delay_s"])
+        for name, d in sorted(delays.items()):
+            w.writerow([name, round(d, 3)])
+
+
+def load_toll_schedule(path: Path) -> dict:
+    with Path(path).open(encoding="utf-8") as fh:
+        return {r["link"]: float(r["observed_delay_s"]) for r in csv.DictReader(fh)}
+
+
 def apply_tolls(W, delays: dict, strength: float, window: float) -> int:
     """Charge each link in proportion to the delay it showed when untolled.
 
@@ -74,6 +94,8 @@ def main() -> None:
     ap.add_argument("--value-of-time", type=float, default=300.0,
                     help="NPR per hour, used only to report tolls in money")
     ap.add_argument("--out", type=Path, default=Path("results/pricing.csv"))
+    ap.add_argument("--save-tolls", type=Path, default=None,
+                    help="write the observed-delay schedule and exit")
     args = ap.parse_args()
 
     print("untolled reference run ...")
@@ -83,6 +105,12 @@ def main() -> None:
     ref = measure(W0)
     worst = max(delays.values()) if delays else 0.0
     print(f"  worst link delay {worst:.0f} s/veh over {len(delays)} links\n")
+
+    if args.save_tolls:
+        write_toll_schedule(delays, args.save_tolls)
+        print(f"wrote {args.save_tolls} ({sum(1 for d in delays.values() if d > 0)} "
+              f"links with non-zero delay)")
+        return
 
     rows = []
     for s in args.strengths:

@@ -29,9 +29,19 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 # Configuration name -> overrides applied to the default model args.
+# Tolls come from a schedule measured in an earlier untolled run, so a priced
+# scenario costs one simulation rather than two, and the city is not assumed to
+# know today's congestion while setting today's price.
+TOLLS = Path(__file__).parent.parent / "results" / "tolls.csv"
+
 CONFIGS = {
     "fixed_time": {},
     "adaptive": {"adaptive": True},
+    # 0.2, not 1.0: the worst link shows 3733 s of delay, so charging it in full
+    # would price the corridor out of existence and measure a road closure rather
+    # than a toll. 0.2 caps the worst charge near 750 s (~62 NPR at 300 NPR/h).
+    "pricing": {"toll_file": TOLLS, "toll_strength": 0.2},
+    "adaptive_pricing": {"adaptive": True, "toll_file": TOLLS, "toll_strength": 0.2},
 }
 
 # Two-sided 95% t critical values by degrees of freedom (n-1).

@@ -100,6 +100,10 @@ def add_model_args(ap: argparse.ArgumentParser) -> None:
     # UXsim's route choice carries duo_noise, so each seed is a different realization.
     # Comparing two configurations on one seed each cannot separate effect from noise.
     ap.add_argument("--seed", type=int, default=0, help="random seed for this run")
+    ap.add_argument("--toll-file", type=Path, default=None,
+                    help="per-link delay schedule to price from (results/tolls.csv)")
+    ap.add_argument("--toll-strength", type=float, default=0.0,
+                    help="toll as a multiple of each link's observed delay")
 
 
 def build_world(args, verbose: bool = True):
@@ -158,6 +162,13 @@ def build_world(args, verbose: bool = True):
             n = attach_adaptive(W, min_green=args.min_green, max_green=args.max_green)
             say(f"control:      queue-actuated on {n} intersections "
                 f"(min green {args.min_green:.0f}s, max {args.max_green:.0f}s)")
+
+    if args.toll_file and args.toll_strength > 0:
+        from run_pricing import apply_tolls, load_toll_schedule
+        priced = apply_tolls(W, load_toll_schedule(args.toll_file),
+                             args.toll_strength, args.demand_window)
+        say(f"pricing:      {priced} links tolled at {args.toll_strength}x "
+            f"observed delay, peak window only")
 
     loaded = skipped = 0
     with (args.data / "od_matrix.csv").open(encoding="utf-8") as fh:
