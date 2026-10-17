@@ -63,6 +63,10 @@ def nearest_node(lat, lon, node_coords):
 def add_model_args(ap: argparse.ArgumentParser) -> None:
     """Model parameters, shared by every script that builds this network."""
     ap.add_argument("--data", type=Path, default=Path("data"))
+    # Overridable so an alternative demand (e.g. with cordon trips) can be run
+    # without overwriting the files a sweep in progress is still reading.
+    ap.add_argument("--od-file", type=Path, default=None, help="default: <data>/od_matrix.csv")
+    ap.add_argument("--zones-file", type=Path, default=None, help="default: <data>/zones.csv")
     # Effective load = demand-scale x pcu-factor, and only that product is identified
     # by the calibration (mean speed). It is decomposed into two defensible parts:
     #   0.48  arterial share - this network holds only trunk/primary/secondary roads,
@@ -132,7 +136,9 @@ def build_world(args, verbose: bool = True):
     coords = {n[0]: (n[1], n[2]) for n in nodes if n[0] in scc}
     zones = {}
     far = 0
-    with (args.data / "zones.csv").open(encoding="utf-8") as fh:
+    zones_file = args.zones_file or (args.data / "zones.csv")
+    od_file = args.od_file or (args.data / "od_matrix.csv")
+    with zones_file.open(encoding="utf-8") as fh:
         for row in csv.DictReader(fh):
             nid, dist_km = nearest_node(float(row["lat"]), float(row["lon"]), coords)
             zones[row["zone_id"]] = nid
@@ -171,7 +177,7 @@ def build_world(args, verbose: bool = True):
             f"observed delay, peak window only")
 
     loaded = skipped = 0
-    with (args.data / "od_matrix.csv").open(encoding="utf-8") as fh:
+    with od_file.open(encoding="utf-8") as fh:
         for row in csv.DictReader(fh):
             o, d = zones.get(row["origin_id"]), zones.get(row["dest_id"])
             vol = int(int(row["demand"]) * args.demand_scale * args.pcu_factor)
