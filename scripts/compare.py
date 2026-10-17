@@ -104,11 +104,16 @@ def main() -> None:
     ap.add_argument("--seeds", type=int, default=5)
     ap.add_argument("--jobs", type=int, default=4, help="parallel runs (~2.6 GB each)")
     ap.add_argument("--baseline", default="fixed_time")
+    # Applied to every config. 10800 left 4 of 12 fixed-time seeds undrained (one at
+    # 80% completion), which deflates the baseline's own delay and makes every
+    # comparison against it an underestimate.
+    ap.add_argument("--tmax", type=int, default=None, help="simulation horizon, all configs")
     ap.add_argument("--out", type=Path, default=Path("results/comparison.csv"))
     args = ap.parse_args()
 
     seeds = list(range(1, args.seeds + 1))
-    tasks = [{"config": name, "seed": s, "overrides": ov}
+    extra = {"tmax": args.tmax} if args.tmax else {}
+    tasks = [{"config": name, "seed": s, "overrides": {**ov, **extra}}
              for name, ov in CONFIGS.items() for s in seeds]
     print(f"{len(CONFIGS)} configs x {len(seeds)} seeds = {len(tasks)} runs, "
           f"{args.jobs} at a time\n")
