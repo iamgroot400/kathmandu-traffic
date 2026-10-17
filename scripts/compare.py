@@ -23,7 +23,7 @@ import json
 import math
 import statistics
 import sys
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -113,13 +113,30 @@ def main() -> None:
     print(f"{len(CONFIGS)} configs x {len(seeds)} seeds = {len(tasks)} runs, "
           f"{args.jobs} at a time\n")
 
+    # Write each run as it returns, not at the end: a long sweep that crashes on the
+    # last run should not lose the other 59, and progress should be watchable.
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    partial = args.out.with_suffix(".partial.csv")
+    results, header_written = [], False
+    done = 0
     with ProcessPoolExecutor(max_workers=args.jobs) as pool:
-        results = list(pool.map(worker, tasks))
-
-    failed = [r for r in results if "error" in r]
-    for r in failed:
-        print(f"  ! {r['config']} seed {r['seed']}: {r['error']}")
-    results = [r for r in results if "error" not in r]
+        futures = [pool.submit(worker, t) for t in tasks]
+        for fut in as_completed(futures):
+            r = fut.result()
+            done += 1
+            if "error" in r:
+                print(f"  ! {r['config']} seed {r['seed']}: {r['error']}")
+                continue
+            results.append(r)
+            with partial.open("a", newline="", encoding="utf-8") as fh:
+                w = csv.DictWriter(fh, fieldnames=list(r))
+                if not header_written:
+                    w.writeheader()
+                    header_written = True
+                w.writerow(r)
+            print(f"  [{done}/{len(tasks)}] {r['config']} seed {r['seed']}: "
+                  f"delay {r['delay_s']:.0f}s, {r['completed']:.1%} complete", flush=True)
+    print()
 
     by_config = {}
     for r in results:
