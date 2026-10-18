@@ -181,13 +181,11 @@ def main():
     doc = SimpleDocTemplate(str(ROOT / "paper" / "kathmandu_traffic_paper.pdf"),
                             pagesize=A4, topMargin=0.9 * inch, bottomMargin=0.9 * inch,
                             leftMargin=0.9 * inch, rightMargin=0.9 * inch,
-                            title="Signal Retiming and Congestion Pricing on Kathmandu's Arterial Network",
-                            author="Aashik Khatri, Pratik Sharma")
+                            title="Signal Retiming and Congestion Pricing on Kathmandu's Arterial Network")
     s = []
 
     s.append(Paragraph("Signal Retiming and Congestion Pricing on Kathmandu's "
                         "Arterial Network: A Paired Seed Simulation Study", TITLE))
-    s.append(Paragraph("Aashik Khatri, Pratik Sharma", AUTHORS))
 
     s.append(Paragraph("Abstract", H1))
     s.append(Paragraph(
