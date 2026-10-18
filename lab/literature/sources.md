@@ -1,0 +1,30 @@
+# Sources
+
+| Key | Citation | Link | What was opened | Verified |
+|---|---|---|---|---|
+| mao2013 | Mao, X., Qin, L., Hu, D., & Tan, X. (2013). Joint Implementation of Signal Control and Congestion Pricing in Transportation Network. *Journal of Applied Mathematics*, 2013, 315752. | https://doi.org/10.1155/2013/315752 | abstract only (via repec mirror; direct journal page returned no text) | yes |
+| smith1997 | Smith, M.J., Xiang, Y., & Yarrow, R. (1997). Bilevel optimisation of signal timings and road prices on urban road networks. *Proceedings, Transportation Systems 1997*, Chania, Greece, pp. 609-614. | https://trid.trb.org/View/505744 | abstract only (catalogue record) | yes |
+| clegg2001 | Clegg, J., Smith, M.J., Xiang, Y., & Yarrow, R. (2001). Bilevel programming applied to optimising urban transportation. *Transportation Research Part B: Methodological*, 35(1), 41-70. DOI not verified — a PII-based guess (10.1016/S0191-2615(00)00018-7) was offered by a search but explicitly flagged as unconfirmed; do not cite a DOI for this paper without checking Crossref/ScienceDirect directly. | https://ideas.repec.org/a/eee/transb/v35y2001i1p41-70.html | abstract only (via repec) — model is multi-modal elastic equilibrium with signal green-times and charges (fares, parking, road-use prices); algorithm proven to approach locally-optimal (KKT) points; tested on a small 5-route, 2-signal-junction network. No comparison of combined vs. separate-lever effect in the abstract. | yes (existence + abstract), DOI unverified |
+| smith2022 | Smith, M.J., Iryo, T., Mounce, R., Satsukawa, K., & Watling, D. (2022). Zero-queue traffic control, using green-times and prices together. *Transportation Research Part C: Emerging Technologies*, 138, 103630. | https://doi.org/10.1016/j.trc.2022.103630 (open-access PDF: https://eprints.whiterose.ac.uk/id/eprint/184551/13/1-s2.0-S0968090X22000742-main.pdf) | abstract only (full open-access PDF link obtained but not yet fetched) | yes |
+| seo2025 | Seo, T. (2025). UXsim: lightweight mesoscopic traffic flow simulator in pure Python. *Journal of Open Source Software*, 10(106), 7617. | https://doi.org/10.21105/joss.07617 | abstract/citation only — page served no body text | yes |
+| seo2023 | Seo, T. (2023). UXsim: An open source macroscopic and mesoscopic traffic simulator in Python — a technical overview. arXiv:2309.17114. | https://arxiv.org/abs/2309.17114 | full text (via ar5iv) | yes |
+| ni2026sumo | Ni, Y-C., Akopian, A., Kouvelas, A., & Makridis, M.A. (2026). Revisiting mesoscopic traffic flow simulation in SUMO: Limitations, analysis, and an alternative. arXiv:2606.09282. | https://arxiv.org/abs/2606.09282 | title/authors only — PDF unreadable, claims about queue dynamics/backward-wave limitations come from a search-engine snippet, not a page I opened directly | partial — treat the specific limitation claims as **unverified** until the PDF text is actually read |
+| tamang2026 | Tamang, R., K.C., A., Pandey, B., & Acharya, A. (2026). Performance Evaluation and Improvement Strategies: A Case Study of Lainchaur Intersection. *Everest Advances in Science and Technology*, 2(2), 79-92. | https://doi.org/10.3126/east.v2i2.99468 | full abstract + findings | yes |
+| luitel2025 | Luitel, S., Subedi, A.K., Nepal, S., & Tiwari, H. (2025). A Multi-Faceted Approach to Urban Congestion in Developing Nations: Theory, Practice, and the Kathmandu Experience. *Journal of Advanced College of Engineering and Management*, 11(1), 139-163. | https://doi.org/10.3126/jacem.v11i1.84536 | abstract only | yes |
+| bhatta2024 | Bhatta, A. (2024). *Evaluation of Traffic Congestion Costs of New Baneshwor to Old Baneshwor Road Section* [Thesis]. Nepal Engineering College. | https://cps.nec.edu.np/thesisabstracts/show/161 | abstract only | yes |
+
+## Leads to verify (not opened — found in search snippets only, do not cite as support)
+
+- Smith et al. 1994(b), the original York/Cambridge CONTRAM study on delay-based pricing + signal policy P0 — referenced secondarily inside smith2022's citation trail, actual paper/numbers not located.
+- Guo, Li, Nie, Xie (2024). Combinatorial congestion pricing, arXiv:2412.06482 — toll-location selection, no signal control component; not opened.
+- Dial, R.B. Network-optimized road pricing, Part II (Operations Research, 1999) — pricing-only, not opened.
+- Jagati/Bhaktapur VISSIM study, Kantipath Monte Carlo study, Kathmandu-Bhaktapur bus-lane VISSIM study, Jadibuti-Koteshwor reversible-lane study, Manandhar (2023) VISSIM calibration thesis — all found in initial unstructured search (pre-skill), titles/topics only, none opened or confirmed.
+- Himalayan Times opinion piece advocating Kalanki-Tripureshwor-Sundhara tolling — journalism, not an academic source; never to be cited as research evidence, only as color on local policy discourse if used at all.
+- "A Taxonomy of Adaptive Traffic Signal Control" (arXiv:2308.01952) — general background on oversaturation changing signal-control objectives; not opened, cited claim about SCOOT/IMPOST gating is from search synthesis only.
+
+## Added 2026-10-19 (E6/E7 validation sourcing — verified directly via pdftotext, not via the H3 literature-review search)
+
+| Key | Citation | Link | What was opened | Verified |
+|---|---|---|---|---|
+| jica2012 | Japan International Cooperation Agency (JICA) & Department of Roads, Nepal. (2012). *Data Collection Survey on Traffic Improvement in Kathmandu Valley*. Final Report, October 2012. | https://openjicareport.jica.go.jp/pdf/12082459_01.pdf (and companion volumes _02 through _06) | full text (downloaded and extracted via pdftotext directly, not a search snippet — see `lab/experiments/E6.md`, D7) | yes |
+| jica2017 | Japan International Cooperation Agency (JICA), Department of Roads, & Kathmandu Valley Development Authority. (2017). *The Project on Urban Transport Improvement for Kathmandu Valley*. Final Report, Volume II: Master Plan and Pilot Project, May 2017 (report 17-068). | https://openjicareport.jica.go.jp/pdf/12289682_01.pdf | full text (downloaded and extracted via pdftotext directly — see `lab/experiments/E6.md`) | yes |
