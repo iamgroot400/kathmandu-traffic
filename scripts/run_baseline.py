@@ -108,6 +108,11 @@ def add_model_args(ap: argparse.ArgumentParser) -> None:
                     help="per-link delay schedule to price from (results/tolls.csv)")
     ap.add_argument("--toll-strength", type=float, default=0.0,
                     help="toll as a multiple of each link's observed delay")
+    ap.add_argument("--tidal-period", choices=["am", "pm"], default=None,
+                    help="apply the tidal-flow lever (H4) for this period; pair with "
+                         "--od-file data/od_matrix_<period>.csv")
+    ap.add_argument("--tidal-lane-shift", type=float, default=1.0,
+                    help="lane-equivalents shifted from light to heavy direction")
 
 
 def build_world(args, verbose: bool = True):
@@ -158,6 +163,12 @@ def build_world(args, verbose: bool = True):
     OSMImporter.osm_network_to_World(W, nodes, links,
                                      default_jam_density=args.jam_density,
                                      coef_degree_to_meter=111000)
+
+    if args.tidal_period:
+        from tidal_lanes import apply_tidal_lanes
+        n = apply_tidal_lanes(W, args.tidal_period, lane_shift=args.tidal_lane_shift)
+        say(f"tidal lanes:  {n} corridors shifted {args.tidal_lane_shift:.1f} "
+            f"lane-equivalents for {args.tidal_period}")
 
     if not args.no_signals:
         info = add_fixed_time_signals(W, cycle_s=args.cycle)
