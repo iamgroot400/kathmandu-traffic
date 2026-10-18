@@ -1,0 +1,55 @@
+\subsection{What the validation gap means for these results}
+% built from assumptions.md's untested/violated rows + the claim ledger's weak/moderate rows
+Section~\ref{sec:validation} is the central limitation of this study. The baseline's
+absolute delay and speed figures should be read as internally consistent values
+produced by a calibrated model, not as measured properties of Kathmandu's roads: a
+single calibration target (mean speed) does not constrain how demand distributes
+spatially (Section~\ref{sec:sensitivity}), and a direct check against six named
+intersections confirms this in practice, not only in principle. The relative
+comparisons in Section~\ref{sec:core} are better supported than the absolute
+numbers, but not unconditionally: the single-seed spot check in
+Section~\ref{sec:validation} found adaptive signal control specifically reverses
+direction at the one intersection where the baseline is most wrong, while pricing
+and the combined lever did not. We report this as a bounded, $n=1$ finding that
+future work with more seeds at that location should either confirm or retire, not
+as a qualification of the main $n=15$ result.
+
+\subsection{Demand is synthesized, not surveyed}
+% A1
+The 260,000-trip demand matrix is a gravity model over junction density, with no
+land-use data, survey, or observed trip count behind it, and no peak directionality
+(production equals attraction at every zone) unless explicitly reweighted for a
+specific test (Section~\ref{sec:additional-methods}). Any claim about where
+congestion occurs, as opposed to how much an intervention changes it in aggregate,
+should be weighted accordingly.
+
+\subsection{Route choice is a process, not an equilibrium}
+% A5, C7
+Day-to-day equilibrium did not converge on this network (Section~\ref{sec:related}
+documents the only comparable prior results; our own attempt is reported in
+Section~\ref{sec:stats}). Results describe within-day dynamic user optimum
+behavior. Whether the oscillation reflects a solver-tuning limitation or a
+structurally unstable equilibrium on this network was not determined.
+
+\subsection{Pricing is a lower bound; two supported alternatives are confounded}
+% A6, M3
+The pricing result (Section~\ref{sec:core}) assumes inelastic demand: drivers
+reroute around a toll but do not cancel trips. A real deployment with elastic
+demand would plausibly show a larger effect than reported here. Separately, the two
+supported additional interventions (Section~\ref{sec:additional}) each carry an
+unresolved confound: staggered departures' 36.33\% reduction reflects a large
+(50\%) window change whose benefit may not scale linearly to smaller, more
+realistic schedule shifts; decentralized attraction's 31.13\% reduction is mixed
+with an 11.4\% cut to total demand that this study did not isolate with a
+volume-matched control.
+
+\subsection{Scope not modeled}
+% A9, C12
+Trips originating or ending outside the modeled network boundary are not
+represented in the main results; an attempt to add such demand (Section~\ref{sec:additional})
+reduced, rather than improved, face-validity against named landmarks and is not
+used elsewhere in this paper. One of its two failures was traced to the network
+extract's geographic boundary excluding a real feeder road; the other remains
+unexplained. Deep reinforcement learning for signal control, public transport
+interventions, and new road or rail capacity are outside this study's scope by
+design, not by result.

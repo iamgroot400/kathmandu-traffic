@@ -1,0 +1,47 @@
+\label{sec:related}
+% M1
+Joint optimization of signal control and road pricing has a bilevel-programming
+tradition dating to at least Smith, Xiang, and Yarrow \cite{smith1997}, who set
+signal timings and road prices together in a link-flow framework chosen for
+tractability on large networks; Clegg, Smith, Xiang, and Yarrow \cite{clegg2001}
+extend this to a multi-modal elastic-demand model with a proven convergence result,
+tested on a small five-route, two-junction network. Mao, Qin, Hu, and Tan
+\cite{mao2013} model signal settings and congestion tolls as a bilevel program whose
+upper level maximizes network reserve capacity or minimizes total travel time and
+whose lower level is a deterministic user equilibrium, reporting ``promising
+results'' on an unspecified numerical example. Smith, Iryo, Mounce, Satsukawa, and
+Watling \cite{smith2022} show that using link-exit prices -- rather than observed
+delays -- in a signal-and-pricing control policy maximizes network capacity with
+zero queues in steady state, extended to dynamic networks.
+
+These establish that jointly deploying signal control and pricing is a studied
+design; the two-lever choice in this paper is not itself novel. We had initially
+intended to compare our combined lever's effect against a super-additive
+interaction claim and ask whether such a measurement existed elsewhere; having
+found in Section~\ref{sec:core} that this project's own data does not support a
+super-additive interaction once properly tested, that comparison is no longer
+applicable, and we do not draw a novelty claim from the joint-deployment
+literature above. % M1 retired (D21): the claim it would have supported is
+% itself unsupported, so citing a "gap in the literature" here would be citing
+% a gap that is no longer this paper's finding.
+
+Prior Kathmandu-specific traffic modeling is limited to single-intersection
+microsimulation. Tamang, K.C., Pandey, and Acharya \cite{tamang2026} model the
+Lainchaur intersection in PTV VISSIM, calibrated from video survey data, finding
+major approaches at Level of Service F and recommending adaptive or actuated
+control over the fixed-time Webster-method plans they tested. Luitel, Subedi,
+Nepal, and Tiwari \cite{luitel2025} review Kathmandu's congestion in the context of
+other developing-country cities, recommending a multimodal, data-driven approach
+without modeling a specific intervention. Bhatta \cite{bhatta2024} estimates a
+monetized congestion cost for one road section without evaluating any policy lever.
+No located study models the city at network or mesoscopic scale, or tests
+congestion pricing there; this is a narrower and better-supported novelty claim than
+the general one above. % M2
+
+UXsim \cite{seo2023}\cite{seo2025} is used here as a mesoscopic simulator over a
+microscopic one (e.g.\ SUMO) because it scales to network sizes of hundreds of nodes
+in seconds to minutes on commodity hardware, at the cost of no car-following model
+or lane-level dynamics; friction effects such as encroachment and lane indiscipline
+are therefore represented only as an aggregate free-flow-speed reduction
+(Section~\ref{sec:calibration}), reproducing their outcome without testing them as a
+cause.

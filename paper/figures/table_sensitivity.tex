@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering
+\caption{$\pm20\%$ sensitivity of the calibrated baseline's three fitted/overridden parameters, $n=3$ seeds per variant. The $-20\%$ rows for \texttt{demand\_scale} and \texttt{pcu\_factor} are bit-for-bit identical, confirming only their product is identified.}
+\label{tab:sensitivity}
+\begin{tabular}{llrrr}
+\hline
+Knob & Variant & Speed (km/h) & Completion & Note \\
+\hline
+Baseline & --- & 13.69 & 100.0\% & $n=3$ \\
+\texttt{demand\_scale} & -20\% & 15.91 & 100.0\% & 100\% all seeds \\
+\texttt{demand\_scale} & +20\% & 10.08 & 79.2\% & 75.8\%--82.7\% range \\
+\texttt{pcu\_factor} & -20\% & 15.91 & 100.0\% & 100\% all seeds \\
+\texttt{pcu\_factor} & +20\% & 9.87 & 79.1\% & 74.5\%--81.4\% range \\
+\texttt{free\_flow\_kmh} & -20\% & 10.31 & 93.4\% & 80.3\%--100.0\% range \\
+\texttt{free\_flow\_kmh} & +20\% & 15.06 & 100.0\% & 100\% all seeds \\
+\hline
+\end{tabular}
+\end{table}

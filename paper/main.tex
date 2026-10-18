@@ -1,0 +1,51 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{mathptmx} % Times New Roman-equivalent, per JACEM's stated font requirement
+\usepackage{setspace}
+\setstretch{1.08} % tuned toward JACEM's stated ~45 lines/page at 11pt on A4 with 1in margins
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+
+% [TODO(author): confirm JACEM provides no required .docx/LaTeX template beyond the
+%  text specifications in their author guidelines (A4, 1in margins, Times New Roman
+%  11pt, 45 lines/page, <=10 pages). This file targets those specs directly; if a
+%  template exists, re-flow this content into it instead of adjusting geometry here.]
+
+\title{Signal Retiming and Congestion Pricing on Kathmandu's Arterial Network:\\
+A Paired-Seed Simulation Study of Independent, Combined, and Alternative Interventions}
+
+% [TODO(author): title page per JACEM's guidelines also needs author names,
+%  affiliations, positions, mailing address, phone, and email - none of which
+%  this draft can supply.]
+\author{[TODO(author): name, affiliation, position, mailing address, phone, email]}
+\date{}
+
+\begin{document}
+\maketitle
+
+\input{sections/abstract}
+
+\section{Introduction}
+\input{sections/introduction}
+
+\section{Related Work}
+\input{sections/related_work}
+
+\section{Methods}
+\input{sections/methods}
+
+\section{Results}
+\input{sections/results}
+
+\section{Discussion and Limitations}
+\input{sections/discussion}
+
+\section{Conclusion}
+\input{sections/conclusion}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

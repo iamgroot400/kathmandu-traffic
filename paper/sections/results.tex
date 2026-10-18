@@ -1,0 +1,105 @@
+\subsection{Core result: signals, pricing, and their combination}
+\label{sec:core}
+% C1, C2, C3, C3f
+Table~\ref{tab:core} reports the paired-seed comparison. Adaptive signal control
+reduces mean delay by 24.50\% $\pm$ 7.08\% relative to fixed-time, with all 15 seeds
+agreeing in sign. Congestion pricing reduces delay by 31.89\% $\pm$ 5.97\%, also
+15/15. Combining both levers reduces delay by 65.30\% $\pm$ 4.47\%, also 15/15 --
+the strongest single result in this study.
+
+We tested directly whether this combined effect exceeds what independent levers
+would predict (a super-additive interaction), computing the per-seed interaction
+term $\Delta_{\text{combined}} - (\Delta_{\text{adaptive}} + \Delta_{\text{pricing}})$,
+each $\Delta$ the paired delay change against fixed-time on the same seed. This
+term is $-185.3 \pm 275.6$ seconds ($t=-1.44$, $df=14$), with the confidence
+interval including zero and only 9 of 15 seeds agreeing in sign. \textbf{We do not
+find a statistically supported super-additive interaction.} The combined lever's
+own effect is real and strong; the specific claim that the two levers interact
+synergistically is not supported by this test, and we report the null result
+rather than the stronger claim an earlier, uncorrected analysis in this project's
+own working notes had assumed.
+
+\input{../figures/table_core}
+
+\subsection{Sensitivity and identifiability}
+\label{sec:sensitivity}
+% C4, A4
+A $\pm20\%$ sweep on each of the three fitted/overridden baseline parameters
+(arterial-share $\times$ PCU factor, free-flow speed) found that the $-20\%$
+variants of the arterial-share and PCU factors produce \emph{bit-for-bit identical}
+simulation output -- direct confirmation that only their product is identified by
+the mean-speed calibration (Section~\ref{sec:calibration}), not an inference from
+argument alone. Separately, every $\pm20\%$ variant that increases congestion
+(demand/PCU $+20\%$, free-flow speed $-20\%$) dropped completion to 74.5--83\% at
+the same 14{,}400~s horizon used elsewhere in this study, with one knob showing a
+within-knob seed split as wide as 80.3\% vs.\ 100\% (Table~\ref{tab:sensitivity}).
+The calibrated baseline is not comfortably inside a stable operating regime on this
+axis.
+
+\input{../figures/table_sensitivity}
+
+\subsection{Validation against observed counts}
+\label{sec:validation}
+% C5, C6
+Table~\ref{tab:geh} reports GEH at six named intersections: 2 of 6 pass GEH$<5$,
+with errors in both directions -- Koteshwor undershoots by roughly 5$\times$
+(GEH~102.22), Sorakhutte overshoots (GEH~16.13). Node-matching precision rules out
+a landmark-mismatch artifact at Koteshwor (0.03~km to the nearest model node); a
+direct distance check also rules out the map-boundary limitation found elsewhere
+in this study (Section~\ref{sec:additional}) as the cause here, since Koteshwor is
+4.22--4.88~km from the nearest extract edge, and a direct read of the network
+topology confirms the matched node correctly represents a multi-corridor
+convergence (Araniko Highway and the Ring Road, 7 links, 4 inbound approaches).
+
+A single-seed check at the two most GEH-discrepant intersections found that the
+relative lever comparisons from Section~\ref{sec:core} do not uniformly hold where
+the baseline itself is most wrong: pricing and the combined lever still reduced
+delay at both checked intersections, but adaptive signal control alone
+\emph{increased} delay by 213.9\% at the intersection with the largest GEH
+discrepancy. This is a single-seed spot check, not a statistical claim comparable to
+Section~\ref{sec:core}'s result, and is reported as a bounded caveat rather than
+folded into the aggregate finding.
+
+\subsection{Additional interventions}
+\label{sec:additional}
+% C8, C9, C10, C11, C12
+Table~\ref{tab:additional} reports four further candidate interventions, each
+checked for completion-bias before its raw paired result was trusted (as in
+Section~\ref{sec:sensitivity}).
+
+Two were rejected. The tidal-flow lever caused new non-completion in up to 5 of 15
+seeds at full magnitude, leaving only 7 of 15 seeds clean (both configurations at
+100\% completion) for the comparison that matters; halving the capacity shift
+eliminated that side effect (12 of 15 seeds clean) but did not reveal a hidden
+benefit (delay among the clean seeds was higher, not lower, than baseline at both
+magnitudes), pointing at corridor selection -- not shift magnitude -- as the
+underlying problem, since corridors were chosen by distance from the demand
+centroid rather than by checking whether the lightened direction had spare capacity
+to give up. Partial friction removal (free-flow speed $+17\%$) produced an apparent
+28.61\% reduction that was almost entirely a completion-bias artifact: 10 of 15
+seeds became newly incomplete, leaving only 5 of 15 clean seeds, among which the
+effect is $-1.71\% \pm 13.47\%$, not significant -- a wide interval consistent with
+the small remaining sample, not strong evidence either way.
+
+Two were supported, each with a stated caveat, both on a clean sample of 12 of 15
+seeds. Staggered departures (demand spread over a 50\% longer window) reduced delay
+by 36.33\% $\pm$ 6.99\%, the largest single-lever effect in this study, surviving
+the completion check (only 1 of 15 seeds affected); the caveat is that a
+50\%-longer window is a large real-world coordination ask, so the result should not
+be read as implying any smaller stagger yields a proportionally smaller benefit --
+that was not tested. Decentralized core attraction reduced delay by
+31.13\% $\pm$ 4.57\%, also on 12 of 15 clean seeds, but the intervention necessarily
+also cuts total demand by 11.4\%; this study did not run a volume-matched control
+to separate the redistribution effect from the pure demand-reduction effect, so the
+result is reported as supported-but-confounded.
+
+Separately, adding external (cordon) demand at network boundaries -- intended to
+expose hotspots driven by trips from outside the modeled area -- instead reduced
+face-validity against named landmarks (2 of 7 matching before, 1 of 7 after). One
+failure (Kalanki) was traced to a map-boundary limit: the landmark sits 1.25~km from
+the OSM extract's edge, so the real feeder road is outside the modeled network
+entirely, a scope limitation rather than a demand-parameter error. A second failure
+(Chabahil) remains unexplained. Cordon demand is not used in any of the results
+above.
+
+\input{../figures/table_additional}

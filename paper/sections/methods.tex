@@ -1,0 +1,136 @@
+\subsection{Network and demand}
+% A1, A2
+We built a mesoscopic traffic simulation using UXsim \cite{seo2023}\cite{seo2025}, a
+link-based kinematic-wave model equivalent to a mesoscopic version of Newell's
+simplified car-following model. The network covers Kathmandu's Ring Road and
+city-core arterial roads (trunk, primary, and secondary classes plus their link
+connectors), imported from OpenStreetMap: 233 nodes and 590 directional links, 100\%
+strongly connected with zero dead ends.
+
+Demand is a synthetic gravity model over 109 zones on a 1~km grid (zone mass = count
+of road junctions in the cell), with exponential distance decay ($\beta=0.2$ per km),
+scaled to 260{,}000 peak-hour trips. % A1
+This demand is a proxy for activity, not a survey; it is production/attraction
+symmetric, so it carries no directional (AM/PM) asymmetry unless explicitly
+reweighted (Section~\ref{sec:additional-methods}).
+
+\subsection{Calibration and its identifiability limit}
+\label{sec:calibration}
+% A2, A3, A4
+Because only trunk/primary/secondary roads are modeled, loading the full citywide
+demand gridlocks the network (12\% completion, 3~km/h mean speed). We load 30\% of
+the matrix, decomposed as a 0.48 arterial-share factor times a 0.625 passenger-car-equivalent
+(PCU) factor reflecting Kathmandu's fleet mix (70\% two-wheelers at 0.25~PCU, 20\%
+cars at 1.0, 10\% buses at 2.5). UXsim is single-class, so this mix enters as
+PCU-weighted demand, not distinct vehicle types. Free-flow speed is overridden to
+30~km/h network-wide (vs.\ OSM's 50~km/h tag), standing in for roadside parking,
+encroachment, and lane indiscipline that a mesoscopic model cannot represent
+behaviorally. % A3
+
+Only the \emph{product} of the arterial-share and PCU factors is identified by the
+single calibration target (observed mean speed); we confirm this empirically in
+Section~\ref{sec:sensitivity} rather than only arguing it. % A4, forward ref to C4/E7
+
+\subsection{Route choice}
+% A5
+Route assignment uses UXsim's default within-day dynamic user optimum (\texttt{homogeneous\_DUO}),
+rerouting on current travel time every 600~s. Day-to-day equilibrium (\texttt{SolverDUE})
+was attempted and does not converge on this network: the route-cost gap oscillated
+611.6 $\rightarrow$ 13.5 $\rightarrow$ 510.0 $\rightarrow$ 36.5 over four iterations,
+with total travel time swinging roughly 14$\times$ between iterations.
+% D2 (C7 in the claim ledger)
+Results therefore describe a routing \emph{process}, not a settled equilibrium.
+
+\subsection{Interventions}
+Four levers are compared against a calibrated fixed-time baseline (128 signalised
+intersections on a 90~s cycle, placed by the widest angular gap between approach
+axes among nodes with $\geq$3 approaches and $\geq 30^\circ$ spread; 105 nodes remain
+free merges). % A7, A8, A6
+
+\emph{Adaptive signals}: a queue-actuated heuristic (not a learned policy) that
+switches phase when the best competing phase's queue exceeds the current phase's
+queue plus a lost-time-adjusted threshold (3.0~s lost time per switch, 0.5
+veh/s/lane discharge rate).
+
+\emph{Congestion pricing}: each link is tolled at 0.2$\times$ its own observed delay
+(seconds), from a schedule measured once in an untolled run and applied only during
+the peak demand window. The 0.2 multiplier avoids pricing the single worst link
+(3{,}733~s observed delay) out of existence. Because the toll schedule is fixed and
+demand is not price-elastic in this model, the pricing effect is a stated
+\emph{lower bound}: a real deployment with elastic demand would plausibly show a
+larger effect. % A6
+
+\subsection{Statistical design}
+\label{sec:stats}
+UXsim's route choice carries stochastic noise (\texttt{duo\_noise}), so a single run
+cannot separate an intervention's effect from realization noise; in early testing a
+0.02\% change in total demand moved mean delay by 2.3\% on a single seed. All
+comparisons therefore run the same 15 random seeds under every configuration and
+report the paired difference with a 95\% confidence interval (Student's $t$,
+$df=14$), rather than comparing unpaired means. The simulation is otherwise
+deterministic given a seed: the calibrated baseline reproduces bit-for-bit across
+two independently run comparison scripts (\texttt{checks/check\_reproducibility.py}),
+so any difference between configurations reflects the intervention, not an
+unseeded source of randomness.
+
+All runs use a 14{,}400~s simulation horizon with a 3{,}600~s demand-loading window.
+An earlier 10{,}800~s horizon left some fixed-time seeds undrained (as low as 79.9\%
+completion), which biases delay downward by excluding the slowest-finishing trips
+from the average -- a completion-bias artifact we checked for throughout this study
+(Sections~\ref{sec:sensitivity}--\ref{sec:additional}) and recommend any replication
+check explicitly rather than assume away.
+
+This study makes 15 distinct paired-seed comparisons (Sections~\ref{sec:core},
+\ref{sec:sensitivity}, \ref{sec:additional}), none individually corrected for
+multiple comparisons. We rely instead on a stricter, non-parametric signal: every
+supported finding in this paper has 12 or more of its (up to 15) paired seeds
+agreeing with the direction predicted before the run, several unanimously. Since
+the direction was predicted in advance for each test (one-tailed), the probability
+of all 15 seeds agreeing by chance alone, if the true effect were zero, is
+$0.5^{15} \approx 0.0031\%$; for the two findings resting on 12 clean seeds
+(Section~\ref{sec:additional}), it is $0.5^{12} \approx 0.0244\%$ -- both far
+stricter than a nominal $p<0.05$ threshold applied to any single comparison, which
+is why we report the seed-agreement count alongside every confidence interval
+rather than the interval alone. The two rejected interventions
+(Section~\ref{sec:additional}) are exactly the cases where this stricter bar is not
+met.
+
+\subsection{Additional interventions}
+\label{sec:additional-methods}
+Four further candidate interventions were tested with the same paired-seed design
+(Section~\ref{sec:additional}):
+
+\emph{Tidal-flow lanes}: capacity is shifted from the lighter to the heavier
+direction on three radial corridors (selected by distance from the demand-weighted
+centroid, not by a traffic survey) during a demand period reweighted for AM
+directional asymmetry -- itself a reweighting of the base matrix (zones within the
+closest 20\% to the centroid classed as ``core''; core-bound trips scaled
+$\times 1.4$, core-outbound $\times 1/1.4$), since the base matrix has none.
+Two magnitudes were tested: 1.0 and 0.5 lane-equivalents shifted.
+
+\emph{Partial friction removal} (a proxy for parking/encroachment enforcement):
+free-flow speed raised from 30 to 35~km/h network-wide, with no other change.
+
+\emph{Staggered departures}: the same total demand spread over a 5{,}400~s window
+instead of 3{,}600~s, as a coarse proxy for coordinated schedule shifts across
+institutions.
+
+\emph{Decentralized attraction}: a 25\% cut to trip attraction at the same
+``core'' zones defined above, as a proxy for relocating institutional destinations
+out of the city center; this also reduces total demand by 11.4\%, a confound noted
+in Section~\ref{sec:additional}.
+
+\subsection{Validation}
+\label{sec:validation-methods}
+We checked the calibrated baseline against observed traffic counts using the GEH
+statistic, $\mathrm{GEH} = \sqrt{(M-C)^2 / ((M+C)/2)}$ where $M$ is modeled and $C$
+is observed peak-hour volume (PCU/h), with GEH~$<5$ as a conventional pass threshold.
+Observed counts come from a JICA/Department of Roads traffic survey (December
+2011--January 2012) \cite{jica2012}, cross-referenced against a 2017 JICA follow-up
+report \cite{jica2017} that reproduces two of the same intersections' counts as
+machine-readable text rather than scanned images; the remaining four landmarks'
+coordinates were geocoded via OpenStreetMap Nominatim rather than taken from the
+original survey, and are correspondingly less precise. The observed data predates
+this study's network snapshot by roughly 14 years; a clean GEH result supports
+plausibility of the model's spatial pattern, not a claim that it matches 2026
+Kathmandu.
