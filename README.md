@@ -8,15 +8,18 @@ deploy: retiming the traffic signals, and charging for road use. Concretely, we 
 mesoscopic simulation of the Ring Road and city-core arterial network (233 nodes, 590
 links from OpenStreetMap), load it with a synthetic 260,000-trip peak-hour demand
 matrix, and establish a baseline in which 128 intersections run well-tuned fixed-time
-signals and drivers have settled into user equilibrium. We then measure how much of that
-baseline's **27,361 vehicle-hours of delay** can be removed by (a) adaptive signal
-control learned by reinforcement learning at the ~15 intersections that cause most of it,
-(b) marginal-cost congestion tolls, and (c) both together — benchmarked against the
-system-optimum assignment that bounds what any such scheme could possibly achieve. The
-claim is causal and relative — that these levers recover a specific, quantified share of
-delay at a specific set of locations — **not** a forecast of Kathmandu's actual travel
-times, because the demand matrix is synthesised rather than surveyed and the model has
-not yet been validated against observed link counts.
+signals and drivers reroute within-day onto current travel times (dynamic user optimum,
+not a settled equilibrium — day-to-day equilibrium was attempted and does not converge
+on this network, see Calibration below). We then measure how much delay can be removed,
+relative to that fixed-time baseline, by (a) a queue-actuated adaptive signal heuristic
+(hand-coded hysteresis control, not a learned/RL policy) at the 128 signalised
+intersections, (b) marginal-cost congestion tolls, and (c) both together — compared
+against each other with a paired-seed statistical test, not against a system-optimum
+bound (no system-optimum assignment is computed anywhere in this project). The claim is
+causal and relative — that these levers recover a specific, quantified share of delay —
+**not** a forecast of Kathmandu's actual travel times, because the demand matrix is
+synthesised rather than surveyed and the model's absolute numbers pass GEH validation
+at only 2 of 6 checked intersections (see Validation below).
 
 ## Pipeline
 
@@ -25,7 +28,13 @@ python scripts/build_od.py          # demand: gravity model over 109 zones
 python scripts/build_network.py     # network: OSM -> UXsim, cached as CSV
 python scripts/run_baseline.py      # baseline: validate, signalise, simulate
 python scripts/find_bottlenecks.py  # rank intersections by delay caused
-python scripts/run_due.py           # day-to-day user equilibrium
+python scripts/run_due.py           # day-to-day user equilibrium (does not converge - see Calibration)
+python scripts/compare.py           # paired-seed sweep across fixed_time/adaptive/pricing/combined
+python scripts/run_pricing.py       # measure a toll schedule from an untolled run
+python scripts/add_cordon.py        # external demand - tried, made validation worse, not used (D6)
+python scripts/validate_hotspots.py # face-validity check against named landmarks
+python scripts/geh_check.py         # GEH validation against observed counts
+python scripts/sensitivity.py       # +/-20% sensitivity of the baseline's fitted knobs
 ```
 
 ## The map
@@ -114,9 +123,12 @@ Network: **233 nodes, 590 links**, 100% strongly connected, zero dead ends.
 | Jam density | 0.2 veh/m/lane | ~5 m per vehicle, motorcycle-heavy mix |
 | Signals | 128 intersections, 90 s cycle | OSM import creates none |
 | Demand window | 3600 s | the peak hour |
-| Simulation horizon | 10800 s | so the network drains |
+| Simulation horizon | 14400 s | 10800 s left some seeds undrained; see Signals below |
 
-Result: **14.3 km/h** mean speed, delay ratio **0.79**, **100%** of trips completing.
+Result (15-seed paired sweep, the authoritative figure — see `lab/experiments/E1.md`):
+**13.26 km/h** mean speed, **2351 ± 165s** average delay. An earlier single-seed check
+at tmax=10800 reported 14.3 km/h / delay ratio 0.79 / 100% completion; that number is
+superseded by the 15-seed result above and should not be quoted on its own.
 
 ### Signals
 
@@ -189,9 +201,21 @@ Delay is measured per link and attributed to the link's **downstream** node, sin
 is where the queue forms and what a signal can act on. Free-flow travel time is
 subtracted, so a link being long or slow does not count as a bottleneck.
 
-Total: **27,361 vehicle-hours**. The top 20 nodes carry **73%** of it, of which 11 are
-signalised and therefore controllable. One node, `3511456911`, carries **22%** of all
-delay on its own — a three-into-one merge, and the obvious first DRL target.
+Total: **27,361 vehicle-hours** (single-run figure; see caveat below). The top 20 nodes
+carry **73%** of it, of which 11 are signalised and therefore controllable. One node,
+`3511456911`, carries **22%** of delay in that single run — a three-into-one merge,
+already signalised, with a V/C-style ratio of 611.7 (i.e. massively over capacity even
+with a working signal; this is a geometry/capacity problem, not a timing one).
+
+**Re-verified 2026-10-18 against 15 seeds at tmax=14400** (`scripts/verify_bottleneck.py`):
+the 22% figure was the *high end* of a real distribution, not typical. Across 15 seeds,
+this node's share of total delay is **mean 15.7%, range 9.3-21.9%, stdev 3.9%**. It
+remains clearly the single largest contributor and the right target for a surgical
+capacity fix — just report 15.7% (or "9-22% across seeds"), not 22%, going forward.
+Also found in passing: 2 of the 15 seeds showed total network delay 3-5x higher than
+the rest (~105,000 vs. a typical 20,000-55,000 veh-h) - not yet investigated, flagged
+here so nobody quotes a single-seed total-delay number from this project with false
+confidence.
 
 ### Why 30% of demand
 
@@ -213,6 +237,39 @@ the reduced free-flow speed above — and the model can reproduce that outcome b
 cannot test whether driver behaviour is its cause. That question needs a
 microscopic model (SUMO, with reaction time and sublane dynamics).
 
+## Validation against observed counts
+
+```bash
+python scripts/geh_check.py   # GEH vs 6 named intersections
+```
+
+Checked against JICA/Department of Roads traffic counts (2012 survey; see
+`lab/experiments/E6.md`) at 6 named Kathmandu intersections, using the GEH statistic
+(the standard model-vs-observed-volume check; GEH < 5 is a conventional pass).
+
+**2 of 6 (33%) pass** — well short of the usual ≥85% target. Thapathali (GEH 0.77)
+and Old Baneshwor (GEH 3.16) fit well; Koteshwor (GEH 102, model undershoots by ~5x),
+Kalimati, and New Baneshwor also undershoot, while Sorakhutte *overshoots*. The mixed
+direction rules out one simple story (e.g. "big junctions are always undershot") and
+points instead at the calibration method itself: fitting one global demand scale
+against city-wide mean speed constrains total demand, not where it concentrates, so
+the model can match the city on average while being wrong — in either direction — at
+a specific real intersection.
+
+**What this means for the results above:** the *absolute* delay and speed numbers in
+Baseline/Bottlenecks should be read as the model's own internally consistent values,
+not as measured Kathmandu quantities. A single-seed spot-check at two of the failing
+nodes — Koteshwor (the clearest undershoot) and Sorakhutte (the one node that
+overshoots instead) — found the *relative* picture is only
+**partly** robust to this gap: pricing and the combined lever reduce delay at both
+nodes, in the same direction as the aggregate H2/H3 result, but **adaptive signal
+control alone makes Koteshwor's delay 214% worse**, the opposite direction from the
+aggregate H1 result (−24.5%) — at exactly the node where the baseline itself
+undershoots observed volume by ~5x. This is a real caveat on H1's generalizability,
+not just a baseline-calibration footnote: see `lab/experiments/E6.md` for the full
+numbers. Validation was not extended to all 233 nodes because the observed-count
+sources require manual transcription of scanned survey tables.
+
 ## Attribution
 
 Map data © OpenStreetMap contributors, available under the
@@ -221,6 +278,8 @@ Any derived network or published result must carry this attribution.
 
 ## Scope note
 
-The geometry is real; the demand is not. Nothing here has been calibrated against
-observed traffic, so results describe the model rather than the city until surveyed
-counts are available to validate against.
+The geometry is real; the demand is not. The model has been checked against observed
+traffic counts at 6 intersections (see Validation above) and passes at only 2 of 6 -
+so results describe the model's own internally consistent behaviour, and the
+relative comparisons between control levers more than the absolute numbers, until
+broader surveyed counts are available.
