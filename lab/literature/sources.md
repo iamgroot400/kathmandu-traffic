@@ -28,3 +28,9 @@
 |---|---|---|---|---|
 | jica2012 | Japan International Cooperation Agency (JICA) & Department of Roads, Nepal. (2012). *Data Collection Survey on Traffic Improvement in Kathmandu Valley*. Final Report, October 2012. | https://openjicareport.jica.go.jp/pdf/12082459_01.pdf (and companion volumes _02 through _06) | full text (downloaded and extracted via pdftotext directly, not a search snippet — see `lab/experiments/E6.md`, D7) | yes |
 | jica2017 | Japan International Cooperation Agency (JICA), Department of Roads, & Kathmandu Valley Development Authority. (2017). *The Project on Urban Transport Improvement for Kathmandu Valley*. Final Report, Volume II: Master Plan and Pilot Project, May 2017 (report 17-068). | https://openjicareport.jica.go.jp/pdf/12289682_01.pdf | full text (downloaded and extracted via pdftotext directly — see `lab/experiments/E6.md`) | yes |
+
+## Added 2026-10-19 (pricing feasibility discussion, paper's Discussion section)
+
+| Key | Citation | Link | What was opened | Verified |
+|---|---|---|---|---|
+| jakartapost2013 | The Jakarta Post. (2013, October 2). Dead end: Jakarta's jockeys. | https://www.thejakartapost.com/news/2013/10/02/dead-end-jakarta-s-jockeys.html | search-result synthesis only, not the full article text directly opened | partial — content (3-in-1 rule, hired jockeys, children used, Rp 15,000-20,000 fee) corroborated by a second independent search pass during the hackathon-scoping discussion (same session), not a direct full-text read |

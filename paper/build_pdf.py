@@ -514,6 +514,23 @@ def main():
         "schedule shifts, and the decentralized attraction result is mixed with a genuine "
         "demand reduction that this study did not isolate with a dedicated control.", BODY))
     s.append(Paragraph(
+        "A separate concern applies to congestion pricing specifically, beyond the modeling "
+        "limitations above: its practical deployability in a setting like Kathmandu. No "
+        "well documented case was found of congestion pricing being implemented and measured "
+        "in a lower or middle income country under institutional capacity comparable to "
+        "Nepal's. The closest real world precedent is Jakarta, where a proposed electronic "
+        "road pricing scheme never launched after roughly a decade of attempts, and the "
+        "occupancy based restriction used in its place, a rule requiring three occupants on "
+        "certain roads during peak hours, was defeated by drivers hiring strangers, sometimes "
+        "children, to sit in the vehicle and satisfy the rule without genuinely sharing the "
+        "trip (The Jakarta Post, 2013). This points to a structural weakness in any congestion control scheme that "
+        "depends on manual, discretionary enforcement rather than automated detection: it is "
+        "vulnerable to exactly the kind of workaround observed in Jakarta. Adaptive signal "
+        "control, by contrast, requires no enforcement of driver behavior at all, which is a "
+        "practical advantage this study's simulation results alone do not capture, and which "
+        "should weigh against pricing's larger simulated effect when considering which "
+        "intervention to pursue first in this setting.", BODY))
+    s.append(Paragraph(
         "Trips originating or ending outside the modeled network boundary are not "
         "represented in the main results, and the one attempt to add such demand reduced "
         "rather than improved face validity, for reasons only partly diagnosed. Deep "
@@ -556,6 +573,8 @@ def main():
         "Japan International Cooperation Agency, Department of Roads, and Kathmandu Valley "
         "Development Authority (2017). The project on urban transport improvement for "
         "Kathmandu Valley. Final report, volume two: master plan and pilot project.",
+        "The Jakarta Post (2013, October 2). Dead end: Jakarta's jockeys. Available at "
+        "thejakartapost.com.",
         "Luitel, S., Subedi, A. K., Nepal, S., and Tiwari, H. (2025). A multi faceted approach "
         "to urban congestion in developing nations: theory, practice, and the Kathmandu "
         "experience. Journal of Advanced College of Engineering and Management, 11(1), 139 "
