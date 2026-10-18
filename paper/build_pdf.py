@@ -132,26 +132,34 @@ def sensitivity_table_data():
 # ---------------------------------------------------------------- styles --
 
 styles = getSampleStyleSheet()
-TITLE = ParagraphStyle("TitleStyle", parent=styles["Title"], fontSize=16, leading=20, spaceAfter=10)
-AUTHORS = ParagraphStyle("Authors", parent=styles["Normal"], fontSize=12, alignment=1, spaceAfter=4)
-AFFIL = ParagraphStyle("Affil", parent=styles["Normal"], fontSize=10, alignment=1, spaceAfter=16,
-                       textColor=colors.HexColor("#333333"))
-H1 = ParagraphStyle("H1", parent=styles["Heading1"], fontSize=13, spaceBefore=16, spaceAfter=8)
-H2 = ParagraphStyle("H2", parent=styles["Heading2"], fontSize=11.5, spaceBefore=12, spaceAfter=6)
-BODY = ParagraphStyle("Body", parent=styles["BodyText"], fontSize=10.5, leading=15, spaceAfter=8,
+TITLE = ParagraphStyle("TitleStyle", fontName="Times-Bold", fontSize=16, leading=20,
+                       alignment=1, spaceAfter=14)
+AUTHORS = ParagraphStyle("Authors", fontName="Times-Italic", fontSize=12,
+                        alignment=1, spaceAfter=20, textColor=colors.HexColor("#595959"))
+H1 = ParagraphStyle("H1", fontName="Times-Bold", fontSize=13, leading=16, spaceBefore=16, spaceAfter=8)
+H2 = ParagraphStyle("H2", fontName="Times-Bold", fontSize=11.5, leading=14, spaceBefore=12, spaceAfter=6)
+BODY = ParagraphStyle("Body", fontName="Times-Roman", fontSize=10.5, leading=15, spaceAfter=8,
                       alignment=4)  # justified
 ABSTRACT = ParagraphStyle("Abstract", parent=BODY, fontSize=10, leading=14, leftIndent=18, rightIndent=18)
-CAPTION = ParagraphStyle("Caption", parent=styles["Normal"], fontSize=9, leading=12, spaceAfter=10,
+CAPTION = ParagraphStyle("Caption", fontName="Times-Italic", fontSize=9, leading=12, spaceAfter=10,
                          textColor=colors.HexColor("#333333"))
-REF = ParagraphStyle("Ref", parent=styles["Normal"], fontSize=9.5, leading=13, spaceAfter=4,
+REF = ParagraphStyle("Ref", fontName="Times-Roman", fontSize=9.5, leading=13, spaceAfter=4,
                      leftIndent=18, firstLineIndent=-18)
+
+
+def add_page_number(canvas, doc):
+    canvas.saveState()
+    canvas.setFont("Times-Roman", 9)
+    canvas.drawCentredString(A4[0] / 2, 0.5 * inch, str(doc.page))
+    canvas.restoreState()
 
 
 def make_table(data, col_widths=None):
     t = Table(data, colWidths=col_widths, repeatRows=1)
     t.setStyle(TableStyle([
         ("FONTSIZE", (0, 0), (-1, -1), 8.5),
-        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTNAME", (0, 0), (-1, -1), "Times-Roman"),
+        ("FONTNAME", (0, 0), (-1, 0), "Times-Bold"),
         ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#e8e8e8")),
         ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#999999")),
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
@@ -180,7 +188,6 @@ def main():
     s.append(Paragraph("Signal Retiming and Congestion Pricing on Kathmandu's "
                         "Arterial Network: A Paired Seed Simulation Study", TITLE))
     s.append(Paragraph("Aashik Khatri, Pratik Sharma", AUTHORS))
-    s.append(Paragraph("Independent Research", AFFIL))
 
     s.append(Paragraph("Abstract", H1))
     s.append(Paragraph(
@@ -575,7 +582,7 @@ def main():
     for r in refs:
         s.append(Paragraph(r, REF))
 
-    doc.build(s)
+    doc.build(s, onFirstPage=add_page_number, onLaterPages=add_page_number)
     print(f"wrote {ROOT / 'paper' / 'kathmandu_traffic_paper.pdf'}")
 
 
