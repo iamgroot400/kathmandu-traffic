@@ -52,3 +52,12 @@ Scope: cross-city evidence on traffic interventions relevant to Kathmandu, scope
 | 18 | Singapore Electronic Road Pricing ERP effectiveness cost evaluation results | WebSearch standard | Clarke & Wong 1998 on pre-ERP package; traffic-reduction figures only from a secondary student blog |
 | 19 | Pokhara Nepal traffic congestion management | WebSearch standard | Installed signals reported not in use; bus stops used as informal parking |
 | 20 | Colombo Sri Lanka traffic management bus priority congestion | WebSearch standard | 2017 pilot bus lane positive; an earlier Galle Road bus lane scrapped for weak enforcement |
+
+## Added 2026-10-19 (second pass) - Southeast Asian / African expansion
+
+| # | Query | Tool/mode | Key hit |
+|---|---|---|---|
+| 21 | Hanoi Vietnam motorcycle traffic management policy results | WebSearch standard | 2004-05 registration suspension defeated by non-Hanoi-registered bikes flooding in; 2030 full ban planned, not yet enforced |
+| 22 | Manila Philippines EDSA traffic management bus lane results | WebSearch standard | 2017 enforcement push showed improvement; 2020-21 Busway's "3hr to 45min" figure is confounded by pandemic lockdown traffic reduction |
+| 23 | Bangkok Thailand traffic management BTS skytrain congestion results | WebSearch standard | High rail ridership (700k+/day) but cars/motorbikes still 57% of trips; no measured congestion-reduction result found |
+| 24 | Nairobi Kenya traffic management matatu BRT results | WebSearch standard | BRT still in planning/data-prep as of sources found, no operating results to measure |
