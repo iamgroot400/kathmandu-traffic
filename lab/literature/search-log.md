@@ -35,3 +35,20 @@ Tool: WebSearch (web, no access restriction), WebFetch for opening specific page
 | swov.nl (York/Cambridge road pricing + signal control) | Failed — HTTP 403 |
 | sciencedirect.com (Zero-queue traffic control) | Failed — HTTP 403 |
 | eprints.whiterose.ac.uk/184551 (Zero-queue traffic control, open-access mirror) | Success — full abstract |
+
+## Added 2026-10-19 — comparative urban traffic-management research (user brief: 35 cities, scoped down per lab/literature/comparative_review.md's scope note)
+
+Scope: cross-city evidence on traffic interventions relevant to Kathmandu, scoped to Priority-1 South Asian mixed-traffic cities (Dhaka, Delhi, Lahore, Karachi, Colombo, Pokhara) plus the most-evidenced Priority-3 innovations (Curitiba, Bogota, Seoul, Singapore BRT/pricing; Jakarta reused from the existing `jakartapost2013` entry). Tool: WebSearch (standard mode) only — no WebFetch in this pass, so every result below is search-result synthesis, not a directly opened full source; this is weaker verification than the project's jica2012/jica2017 standard and is flagged as such in sources.md.
+
+| # | Query | Tool/mode | Key hit |
+|---|---|---|---|
+| 11 | Dhaka Bangladesh traffic management motorcycle lane enforcement results | WebSearch standard | No motorcycle-lane evaluation found; only enforcement-drive tallies, compliance still weak |
+| 12 | Delhi BRT corridor failure removed evaluation | WebSearch standard | CRRI 2012 evaluation found reduced speeds; corridor dismantled 2015-16 |
+| 13 | Lahore Metrobus Orange Line BRT ridership results evaluation | WebSearch standard | No independent evaluation found; ridership figures are operator-reported only |
+| 14 | Karachi Green Line BRT results ridership cost | WebSearch standard | Cost overrun (~Rs16.85bn to ~Rs35bn, 1yr to ~6yr); ridership well below projection |
+| 15 | Bogota TransMilenio BRT evaluation results travel time cost per km | WebSearch standard | Hidalgo et al. 2013 ex-post evaluation (positive, numbers not retrieved); BRTData operating figures |
+| 16 | Curitiba BRT history results cost per km bus rapid transit | WebSearch standard | ~$200-214k/km construction (secondary sourcing); long positive track record, recent ridership decline |
+| 17 | Seoul bus system reform 2004 results evaluation | WebSearch standard | Kim/Cheon/Lim 2011 and Pucher et al. 2005 evaluations; positive on speed/ridership, cost caveat unresolved |
+| 18 | Singapore Electronic Road Pricing ERP effectiveness cost evaluation results | WebSearch standard | Clarke & Wong 1998 on pre-ERP package; traffic-reduction figures only from a secondary student blog |
+| 19 | Pokhara Nepal traffic congestion management | WebSearch standard | Installed signals reported not in use; bus stops used as informal parking |
+| 20 | Colombo Sri Lanka traffic management bus priority congestion | WebSearch standard | 2017 pilot bus lane positive; an earlier Galle Road bus lane scrapped for weak enforcement |

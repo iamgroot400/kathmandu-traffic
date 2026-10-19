@@ -79,6 +79,13 @@ def add_model_args(ap: argparse.ArgumentParser) -> None:
     # UXsim is single-class, so the mix enters as weighted demand, not vehicle types.
     ap.add_argument("--pcu-factor", type=float, default=0.625,
                     help="passenger-car equivalents per vehicle (1.0 = all cars)")
+    # Default 1.0 (no change) to leave every already-published run untouched.
+    # Separate from demand_scale/pcu_factor, which are the calibrated split of a
+    # single identified "effective load" (A4) - this is an independent multiplier
+    # for projecting that same load forward in time.
+    ap.add_argument("--demand-growth", type=float, default=1.0,
+                    help="multiplier on top of demand-scale x pcu-factor, e.g. "
+                         "for a future-year demand projection")
     ap.add_argument("--deltan", type=int, default=5, help="vehicles per simulated platoon")
     # Demand is injected over the peak hour, but the clock runs on so the network can
     # drain. Stopping at the end of the demand window would mark every late-departing
@@ -200,7 +207,8 @@ def build_world(args, verbose: bool = True):
     with od_file.open(encoding="utf-8") as fh:
         for row in csv.DictReader(fh):
             o, d = zones.get(row["origin_id"]), zones.get(row["dest_id"])
-            vol = int(int(row["demand"]) * args.demand_scale * args.pcu_factor)
+            vol = int(int(row["demand"]) * args.demand_scale * args.pcu_factor
+                     * args.demand_growth)
             if o is None or d is None or o == d or vol < args.deltan:
                 skipped += vol
                 continue

@@ -34,3 +34,36 @@
 | Key | Citation | Link | What was opened | Verified |
 |---|---|---|---|---|
 | jakartapost2013 | The Jakarta Post. (2013, October 2). Dead end: Jakarta's jockeys. | https://www.thejakartapost.com/news/2013/10/02/dead-end-jakarta-s-jockeys.html | search-result synthesis only, not the full article text directly opened | partial — content (3-in-1 rule, hired jockeys, children used, Rp 15,000-20,000 fee) corroborated by a second independent search pass during the hackathon-scoping discussion (same session), not a direct full-text read |
+
+## Added 2026-10-19 (comparative urban traffic-management research — all search-result synthesis, not directly opened; weaker verification than this project's jica2012/jica2017 standard)
+
+| Key | Citation | Link | What was opened | Verified |
+|---|---|---|---|---|
+| delhibrt2012 | Central Road Research Institute (CRRI). (2012, June). Evaluating Bus Rapid Transit (BRT) corridor performance from Ambedkar Nagar to Moolchand, Delhi: final report. | https://indiaenvironmentportal.org.in/reports-and-documents/evaluating-bus-rapid-transit-brt-corridor-performance-from-ambedkar-nagar-to-moolchand-delhi-final-report | search-result synthesis only (news coverage of the report's finding that speeds were considerably affected, and the 2015-16 dismantling decision), not the report itself | partial |
+| karachigreenline2022 | Dawn / ARY News / PropPakistani reporting on Karachi Green Line BRT cost and ridership (2021-2023 coverage, no single authored report). | https://arynews.tv/ecnec-approves-karachi-green-line-metro-bus/ ; https://propakistani.pk/2022/02/10/karachis-green-line-bus-transported-1-million-passengers-in-its-first-month/ | search-result synthesis of multiple news reports | partial |
+| lahoremetrobus_thesis | Erasmus University thesis on Lahore Metro Bus Service (no formal performance evaluation found by the thesis author; author/year not confirmed from the snippet). | https://thesis.eur.nl/pub/56561 | search-result synthesis only | unverified — author/year/title not confirmed, treat as a lead |
+| bogota_hidalgo2013 | Hidalgo, D. et al. (2013). TransMilenio BRT system in Bogota, high performance and positive impact — main results of an ex-post evaluation. *Research in Transportation Economics*, 39(1). | https://worldtransitresearch.info/research/4437 | search-result synthesis only — abstract-level claims (positive, robust cost-benefit results; declining user perception), no numeric results retrieved | partial |
+| curitiba_brt_history | Multiple secondary sources on Curitiba BRT history and cost (Asian Development Bank case study, Streetsblog, Lindau/Hidalgo/Facchini 2010 cited secondhand). | https://www.development.asia/case-study/what-worlds-first-bus-rapid-transit-system-can-teach-us ; https://cal.streetsblog.org/2024/10/17/curitiba-50-years-of-lessons-from-the-worlds-first-bus-rapid-transit | search-result synthesis only; cost figures (~$200-214k/km) explicitly flagged by the search itself as secondary, not primary budget records | partial |
+| seoul_busreform2004 | Kim, Cheon & Lim (2011) journal evaluation of Seoul bus reform; Pucher et al. (2005) evaluation (both cited secondhand via search snippets, not opened directly). | https://worldtransitresearch.info/research/4002 | search-result synthesis only | partial — treat both citations as leads, not confirmed existence/details |
+| singapore_erp_clarke1998 | Clarke & Wong (1998) on Singapore's pre-ERP traffic control package (cited secondhand, title/year from a student blog's citation, not confirmed against the original). | https://blogs.ubc.ca/smilelaura | search-result synthesis only, one level further removed (a blog's citation of the paper, not the paper itself) | unverified — treat as a lead only |
+| pokhara_signals_unused | Rising Nepal Daily report that installed traffic signals in Pokhara are not in use (exact date unclear from search excerpt). | https://risingnepaldaily.com/news/47274 | search-result synthesis only | partial |
+| colombo_buslane2017 | Daily Mirror / Sunday Observer 2017 reporting on Colombo's Rajagiriya-Borella priority bus lane pilot and the earlier scrapped Galle Road bus lane. | https://dailymirror.lk/Breaking-News/Priority-bus-lanes-in-force-in-Colombo-from-August/108-134057 | search-result synthesis only | partial |
+
+## Leads to verify (added 2026-10-19, not opened — do not cite as support)
+
+- Dhaka AI-based traffic-camera violation detection (2026 reporting) — single traffic sergeant's account only, not an evaluation.
+- Karachi Orange Line ridership figures (3,000 to projected 25,000/day) — operator projection, not yet realized or independently checked.
+- Lahore 2014 ridership figures sourced from "largely ministerial tweets" per the search itself — explicitly unreliable, never cite as a number.
+- Singapore ERP "15% further traffic reduction" figure — from a student blog citing an unnamed presentation, two levels removed from any primary source.
+
+## Added 2026-10-19 (user-supplied PDF, Satdobato/Gwarko signal optimization — full text read directly, strongest verification level in this project)
+
+| Key | Citation | Link | What was opened | Verified |
+|---|---|---|---|---|
+| tiwari2024satdobato | Tiwari, S., Khadka, R., Poudel, R., Giri, S., Malla, R.B., Aryal, P., & Pradhananga, R. (2024). Signal Optimization to Improve Traffic Conditions: A Case Study of Satdobato and Gwarko Intersections, Kathmandu Valley. *Nepal Journal of Civil Engineering*, 4(1), 26-38. | user-supplied PDF (NepJOL article id suggested by filename: 672-3-10) | full text (all 13 pages read directly) | yes — directly read, not search synthesis |
+
+Key findings extracted directly from the paper (page references approximate, PDF has no visible page numbers beyond running headers):
+- Existing (uncoordinated, field-measured) average delay: **226.5 s/veh at Satdobato, 201.1 s/veh at Gwarko**, both LoS F. After isolated signal-phasing/cycle-time optimization (no new infrastructure): **51.8 s/veh and 52.5 s/veh**, both LoS D — a 77%/74% reduction, independently measured at two real, named Kathmandu Ring Road intersections.
+- Calibrated/validated using the same **GEH < 5** criterion this project uses (`scripts/geh_check.py`), applied to basic saturation flow rather than intersection volume — same statistic, different application.
+- Field-measured saturation flow rates ranged **1203-2160 veh/hr/lane** across the two intersections' approaches — a real, local cross-check point for this project's own per-link capacity assumptions (A9/A10), not yet used to adjust anything here.
+- **Signal coordination between the two intersections was found *less* effective than isolated per-intersection optimization** (network total queue: 578.9 m isolated vs. 606 m coordinated) — the paper's own stated reason is the physical spacing between the intersections reduces platooning benefit. This is an independent, real-world precedent for the same *shape* of finding as this project's own D21 correction: combining two individually-good interventions is not guaranteed to beat the sum of their separate effects, and can be worse.

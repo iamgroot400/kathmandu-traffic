@@ -18,6 +18,7 @@ Note: `# ASSUME A<n>` tags have **not** been inserted into the scripts below —
 | A8 | Queue-actuated adaptive control is a heuristic (hysteresis via lost-time), not true max-pressure — no turn-movement data exists in this mesoscopic model | `scripts/adaptive_signals.py` | untested | H1 — the *mechanism* claim, not just the effect size |
 | A9 | Cordon (external) demand: 25% of internal trips, 30% of those pass straight through; entry points are the highest-capacity node per compass sector | `scripts/add_cordon.py --external-share`/`--through-share` | **violated (E5)** | Face-validity against named landmarks got *worse* under cordon demand (2/7→1/7), not better. Kalanki's failure traced to a map-boundary limit (the real feeder road is outside the OSM extract); Chabahil's is unexplained. Not used in H1-H3's main results (D6). |
 | A10 | Jam density 0.2 veh/m/lane (~5m/vehicle) at standstill | `scripts/run_baseline.py --jam-density` default | untested | Congestion onset timing/shape |
+| A12 | 5-year demand projection assumes the 1991-2011 vehicle-registration growth rate (~16%/yr, jica2012) continues unchanged for 5 more years, and that peak-hour trips scale 1:1 with fleet size | `scripts/compare_future_demand.py` (`--demand-growth` on `run_baseline.py`) | untested | Any "future demand" / "N years from now" claim |
 
 ## Open gaps (not yet an assumption with a row — nothing to test against)
 
