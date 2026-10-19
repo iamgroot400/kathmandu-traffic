@@ -389,10 +389,11 @@ def main():
         "study's direction. The same paper found coordinating the two intersections performed "
         "worse than optimizing each in isolation, an independent precedent for this paper's "
         "own interaction-term correction: combining two effective measures is not guaranteed "
-        "to outperform optimizing them separately. This study's own calibrated per-lane "
-        "capacity (~2400 veh/h, measured empirically) runs above the 1203-2160 veh/h/lane "
-        "Tiwari et al. measured at the same two intersections, suggesting the baseline may "
-        "allow slightly more per-lane throughput than Kathmandu's roads actually sustain.", BODY))
+        "to outperform optimizing them separately. This study's own per-lane capacity, not "
+        "measured but computed from its calibrated free flow speed and jam density settings "
+        "(approximately 2400 veh/h), runs above the 1203-2160 veh/h/lane that Tiwari et al. "
+        "actually measured in the field at the same two intersections, suggesting the baseline "
+        "may allow slightly more per-lane throughput than Kathmandu's roads actually sustain.", BODY))
     s.append(Paragraph(
         "Trips originating or ending outside the modeled boundary are not represented; the "
         "one attempt to add such demand reduced, not improved, face validity. Deep "

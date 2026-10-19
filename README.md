@@ -35,6 +35,10 @@ python scripts/add_cordon.py        # external demand - tried, made validation w
 python scripts/validate_hotspots.py # face-validity check against named landmarks
 python scripts/geh_check.py         # GEH validation against observed counts
 python scripts/sensitivity.py       # +/-20% sensitivity of the baseline's fitted knobs
+python scripts/find_bridges.py      # recover OSM bridge tags; flag Ring Road bridges
+python scripts/congestion_report.py # per-link density/severity + bridge jam chain-reaction
+python scripts/compare_future_demand.py   # 5-year exponential demand projection (paired seeds)
+python scripts/compare_capacity_sweep.py  # robustness: H1-H3 across 1200-2400 veh/h/lane
 ```
 
 ## The map
@@ -269,6 +273,44 @@ undershoots observed volume by ~5x. This is a real caveat on H1's generalizabili
 not just a baseline-calibration footnote: see `lab/experiments/E6.md` for the full
 numbers. Validation was not extended to all 233 nodes because the observed-count
 sources require manual transcription of scanned survey tables.
+
+**Independent field confirmation:** Tiwari et al. (2024) measured real delay at two
+named Ring Road intersections (Satdobato, Gwarko) using the same GEH statistic, and
+found signal optimization alone cut delay from 226.5s/201.1s to 51.8s/52.5s per
+vehicle — independent, field-measured support for H1's direction, from outside this
+project entirely. See the paper's Discussion section.
+
+## Density, bridges, and jam chain-reaction
+
+```bash
+python scripts/find_bridges.py      # recover OSM bridge tags, flag Ring Road ones
+python scripts/congestion_report.py # per-link density/severity, bridge-to-upstream jam lag
+```
+
+UXsim's kinematic-wave links already model density and queue spillback physically -
+these scripts surface that at real locations rather than adding a new mechanism.
+13 of 71 raw OSM bridge ways resolve to a distinct link in the merged network (2 on
+the Ring Road); the rest were absorbed into intersection nodes by the node-merge step
+or fall outside the network extract (see `lab/decisions.md` D22). At calibrated
+demand, no link reaches "jammed" severity; chain-reaction propagation (a bridge
+saturating before its upstream approach does) is measurable but modest.
+
+## What if demand keeps growing?
+
+```bash
+python scripts/compare_future_demand.py   # 5-year exponential demand projection
+python scripts/compare_capacity_sweep.py  # robustness check across assumed road capacity
+```
+
+Projecting forward 5 years at the JICA-reported 16%/year vehicle-registration growth
+rate (1991-2011; A12, untested extrapolation) gives 2.1x today's peak-hour demand.
+The network does not just get slower - **completion collapses to 36.8%** and mean
+speed falls to near zero and stays there, i.e. outright gridlock, with 97 of 590
+links (16.4%) reaching "jammed" severity. A separate robustness sweep tests whether
+H1-H3's conclusions survive if the model's per-lane capacity assumption (never
+directly measured for this network) is lower than calibrated, spanning the
+1203-2160 veh/h/lane Tiwari et al. measured in the field; in progress as of this
+writing (`lab/notebook/2026-10-19.md`).
 
 ## Attribution
 
