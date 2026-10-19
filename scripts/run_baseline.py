@@ -84,6 +84,15 @@ def add_model_args(ap: argparse.ArgumentParser) -> None:
     # drain. Stopping at the end of the demand window would mark every late-departing
     # trip as incomplete and bias travel times toward short trips.
     ap.add_argument("--demand-window", type=int, default=3600, help="peak-hour length")
+    # Default 0 to leave every already-published run's timing untouched. A nonzero
+    # warmup delays demand's start so the network isn't literally empty when the
+    # "peak hour" being measured begins - real roads already carry pre-peak traffic
+    # at that moment, ours starts cold. Tried at 3600s for geh_check.py (D23): it
+    # did not improve the GEH fit (made it worse network-wide, see decisions.md),
+    # so geh_check.py does not use it either - kept here only as an opt-in building
+    # block for whoever revisits that finding.
+    ap.add_argument("--warmup", type=int, default=0,
+                    help="seconds of empty-network run-up before demand starts")
     # 10800 not 7200: signals slow the network enough that a 2 h horizon leaves ~20%
     # of trips unfinished, which biases every statistic toward short trips.
     ap.add_argument("--tmax", type=int, default=10800, help="simulation horizon")
@@ -195,7 +204,8 @@ def build_world(args, verbose: bool = True):
             if o is None or d is None or o == d or vol < args.deltan:
                 skipped += vol
                 continue
-            W.adddemand(str(o), str(d), 0, args.demand_window, volume=vol)
+            W.adddemand(str(o), str(d), args.warmup, args.warmup + args.demand_window,
+                       volume=vol)
             loaded += vol
     say(f"demand:       {loaded:,} trips loaded, {skipped:,} skipped "
           f"(intrazonal or below deltan={args.deltan})")
