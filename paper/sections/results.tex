@@ -103,3 +103,43 @@ entirely, a scope limitation rather than a demand-parameter error. A second fail
 above.
 
 \input{../figures/table_additional}
+
+\subsection{Robustness to capacity assumptions}
+\label{sec:capacity-robustness}
+Per-lane road capacity was never measured for this network; the calibrated
+default (Section~\ref{sec:calibration}) empirically runs ($\approx$2400~veh/h/lane)
+above the 1203--2160~veh/h/lane that Tiwari et al. (2024) measured in the field at
+two real Kathmandu intersections (Section~\ref{sec:related}). To test whether this
+paper's core result depends on that untested assumption, every configuration was
+re-run at four per-lane capacities -- 1200, 1600, 2000, and 2400~veh/h/lane,
+bracketing and below the field-measured range -- with 5 seeds per cell rather than
+the core result's 15, the same reduced-power role sensitivity testing plays in
+Section~\ref{sec:sensitivity}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{../figures/fig_capacity_sweep.png}
+\caption{Delay change vs.\ fixed-time at each tested per-lane capacity, 5 seeds per
+cell. Error bars: 95\% CI.}
+\label{fig:capacity-sweep}
+\end{figure}
+
+At the calibrated default (2400~veh/h/lane), all three levers reproduce this
+paper's main result in direction: adaptive $-25.9\% \pm 6.4\%$, pricing
+$-29.7\% \pm 14.7\%$, combined $-67.3\% \pm 4.3\%$ (all significant at this $n$).
+Below that capacity, the two individual levers degrade and can reverse sign: at
+2000~veh/h/lane, pricing alone is $+38.2\% \pm 16.5\%$ (significantly \emph{worse}
+delay, not better), and adaptive signals alone are $+9.6\% \pm 11.1\%$ (no longer a
+significant improvement). The combined lever alone stays directionally beneficial
+at every capacity tested ($-35.0\% \pm 6.7\%$ at 2000~veh/h/lane, negative at 1200
+and 1600 as well, significant at 3 of the 4 capacities), though with wide
+confidence intervals at the two lowest capacities given the reduced seed count.
+
+This is a genuine strengthening of this paper's case for the combined lever
+specifically, found by testing a real, named uncertainty rather than searching for
+whichever capacity assumption best fits validation data, which this project's own
+review process treats as invalid (Section~\ref{sec:stats}). It also means the
+standalone adaptive-signal and pricing results (Section~\ref{sec:core}) should be
+read as conditional on this study's calibrated capacity assumption holding, not as
+findings that are robust on their own; the combined result is the more
+capacity-robust claim this paper makes.
