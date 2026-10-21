@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
-"""Paired-seed test: calibrated baseline vs. a 5-year exponential demand projection.
+"""Paired-seed test: calibrated baseline vs. an exponential demand projection at
+a chosen horizon (years from now).
 
 Growth rate source: the JICA/DoR 2012 survey's own 1991-2011 comparison table,
 already cited in this project (paper/sections/introduction.tex, `jica2012`) -
 vehicle registrations grew roughly 19.8x over that ~20-year span, an average
 annual rate near 16%. This is a *registration* growth rate, not a measured
-trip-generation rate, and projecting it forward 5 more years assumes it
-continues unchanged and that peak-hour trips scale 1:1 with the vehicle fleet -
-both untested extrapolations (registered as A12, assumptions.md). The 16%/year
-figure itself is the project's own already-verified source, not re-derived here.
+trip-generation rate, and projecting it forward assumes it continues unchanged
+and that peak-hour trips scale 1:1 with the vehicle fleet - both untested
+extrapolations (registered as A12, assumptions.md). The 16%/year figure itself
+is the project's own already-verified source, not re-derived here. The horizon
+(--years) must be decided before looking at any result, same as every other
+robustness check in this project - never picked afterward to make a finding
+land somewhere specific.
 
-    demand_growth = 1.16 ** 5 = 2.1003  (registered trips/km unaffected; this
-    only scales total peak-hour volume)
-
-    python scripts/compare_future_demand.py --seeds 15 --jobs 3
+    python scripts/compare_future_demand.py --years 5 --seeds 15 --jobs 3
+    python scripts/compare_future_demand.py --years 4.19 --label projected_2030 \\
+        --seeds 15 --jobs 1   # "by end of 2030" from 2026-10-22
 """
 from __future__ import annotations
 
@@ -62,13 +65,6 @@ def ram_capped_jobs(max_ram_fraction: float) -> int:
 
 
 ANNUAL_GROWTH_RATE = 0.16   # jica2012, 1991-2011 vehicle registration growth
-PROJECTION_YEARS = 5
-GROWTH_FACTOR = (1 + ANNUAL_GROWTH_RATE) ** PROJECTION_YEARS   # 2.1003...
-
-CONFIGS = {
-    "baseline":     {},
-    "projected_5yr": {"demand_growth": GROWTH_FACTOR},
-}
 
 
 def worker(payload: dict) -> dict:
@@ -98,19 +94,33 @@ def worker(payload: dict) -> dict:
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Baseline vs 5-year demand projection")
+    ap = argparse.ArgumentParser(description="Baseline vs an N-year exponential demand projection")
+    ap.add_argument("--years", type=float, default=5.0,
+                    help="projection horizon in years (default 5, matching the "
+                         "paper's own cited projection; pass a different value, "
+                         "e.g. 4.19 for 'by end of 2030' from 2026-10-22, for a "
+                         "different target date - never re-fit after the fact)")
+    ap.add_argument("--label", type=str, default=None,
+                    help="config/output-file label, default derived from --years "
+                         "(e.g. 'projected_5y' or 'projected_2030')")
     ap.add_argument("--seeds", type=int, default=15)
     ap.add_argument("--jobs", type=int, default=None,
                     help="default: as many as fit in --max-ram-fraction of total RAM")
     ap.add_argument("--max-ram-fraction", type=float, default=0.5,
                     help="cap parallel workers to this fraction of total system RAM")
-    ap.add_argument("--out", type=Path, default=Path("results/future_demand.csv"))
+    ap.add_argument("--out", type=Path, default=None)
     args = ap.parse_args()
     if args.jobs is None:
         args.jobs = ram_capped_jobs(args.max_ram_fraction)
 
-    print(f"growth: {ANNUAL_GROWTH_RATE:.0%}/yr x {PROJECTION_YEARS}yr = "
-          f"{GROWTH_FACTOR:.4f}x peak-hour demand\n")
+    growth_factor = (1 + ANNUAL_GROWTH_RATE) ** args.years
+    label = args.label or f"projected_{args.years:.2g}y".replace(".", "_")
+    if args.out is None:
+        args.out = Path(f"results/future_demand_{label}.csv")
+    configs = {"baseline": {}, label: {"demand_growth": growth_factor}}
+
+    print(f"growth: {ANNUAL_GROWTH_RATE:.0%}/yr x {args.years:.2f}yr = "
+          f"{growth_factor:.4f}x peak-hour demand\n")
     print(f"jobs: {args.jobs} (capped to {args.max_ram_fraction:.0%} of total RAM, "
           f"~{EST_MB_PER_WORKER} MB/worker)\n")
 
@@ -133,7 +143,7 @@ def main() -> None:
         print(f"resuming: {len(done_keys)} runs already in {partial}\n")
 
     tasks = [{"config": name, "seed": s, "overrides": ov}
-              for name, ov in CONFIGS.items() for s in range(1, args.seeds + 1)
+              for name, ov in configs.items() for s in range(1, args.seeds + 1)
               if (name, s) not in done_keys]
     print(f"{len(tasks)} runs remaining, {args.jobs} at a time\n")
     with ProcessPoolExecutor(max_workers=args.jobs) as pool:
@@ -163,7 +173,7 @@ def main() -> None:
         by_config.setdefault(r["config"], {})[r["seed"]] = r
     base = by_config.get("baseline", {})
     print(f"\n{'config':<14} {'delay (mean)':>14} {'vs baseline':>22} {'completed':>10}")
-    for name in CONFIGS:
+    for name in configs:
         runs = by_config.get(name, {})
         if not runs:
             continue
