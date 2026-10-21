@@ -84,7 +84,13 @@ def main() -> None:
     ap.add_argument("--seeds", type=int, default=5)
     ap.add_argument("--jobs", type=int, default=1)
     ap.add_argument("--out", type=Path, default=Path("results/capacity_sweep.csv"))
+    ap.add_argument("--capacities", type=str, default=None,
+                    help="comma-separated subset of capacity labels to (re)run, "
+                         "e.g. '1600,2000' to sharpen just the levels where the "
+                         "individual levers' benefit disappears (default: all 4)")
     args = ap.parse_args()
+    capacities = {k: v for k, v in CAPACITIES.items()
+                  if args.capacities is None or k in args.capacities.split(",")}
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     partial = args.out.with_suffix(".partial.csv")
@@ -100,13 +106,13 @@ def main() -> None:
         print(f"resuming: {len(done_keys)} runs already in {partial}\n")
 
     tasks = [{"capacity": cap, "jam_density": jd, "lever": lever, "seed": s, "overrides": ov}
-             for cap, jd in CAPACITIES.items()
+             for cap, jd in capacities.items()
              for lever, ov in LEVERS.items()
              for s in range(1, args.seeds + 1)
              if (cap, lever, s) not in done_keys]
-    print(f"{len(CAPACITIES)} capacities x {len(LEVERS)} levers x {args.seeds} seeds "
-          f"= {len(CAPACITIES) * len(LEVERS) * args.seeds} total, {len(tasks)} remaining, "
-          f"{args.jobs} at a time\n")
+    print(f"{len(capacities)} capacities x {len(LEVERS)} levers x {args.seeds} seeds "
+          f"= {len(capacities) * len(LEVERS) * args.seeds} total for this run's scope, "
+          f"{len(tasks)} remaining, {args.jobs} at a time\n")
 
     with ProcessPoolExecutor(max_workers=args.jobs) as pool:
         futures = [pool.submit(worker, t) for t in tasks]
