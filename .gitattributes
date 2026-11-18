@@ -4,3 +4,6 @@
 
 # Binary documents: never convert line endings (a CRLF rewrite corrupts a PDF on checkout).
 *.pdf binary
+
+# Shell scripts: always LF, or bash fails on the carriage returns.
+*.sh text eol=lf
