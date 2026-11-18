@@ -37,16 +37,15 @@ total demand cut uniformly rather than concentrated at the core — is simple to
 and was never actually run. This is the single most "shovel-ready" piece of unfinished
 work this project leaves behind.
 
-### More seeds, specifically where the capacity-sweep reversal happens
+### A completion-independent metric for the capacity sweep
 
-Chapter 38's capacity-sensitivity sweep found a reversal in the individual levers'
-benefit somewhere between 1,600 and 2,000 vehicles per hour per lane, but at only 5
-seeds per capacity level, this project's own confidence intervals are wide enough,
-particularly at 1,600, that "not significant" there cannot be read as "no effect" —
-only as "not detected at this sample size." A follow-up extending specifically this
-range to the project's full, 15-seed standard would sharpen exactly where and how
-sharply this reversal occurs — work that was, in fact, already underway (and
-deliberately paused mid-run, to be resumed later) at the time this manual was written.
+Chapter 38's sweep was extended to 15 seeds at 1,600 and 2,000 vehicles per hour per
+lane. The extra seeds did not reveal a reversal; the final audit showed the apparent
+reversal was completion bias (D27). What is still missing is a way to compare arms
+that complete different shares of their trips. Recording total system delay,
+including the time stranded vehicles spend in the network, or running a horizon
+long enough for every arm to drain, would turn "undetermined" into an answer for
+the individual levers below the calibrated capacity.
 
 ## Chapter 48: Open Questions
 
@@ -65,9 +64,10 @@ chapter:
 - **Is the decentralized-attraction result a genuine redistribution effect, a pure
   demand-reduction effect, or some mixture of the two?** (Chapter 23) — the
   volume-matched control that would answer this was never run.
-- **Exactly where, between 1,600 and 2,000 vehicles per hour per lane, does the
-  individual-lever reversal (Chapter 38) actually occur, and how sharp is the
-  transition?** — a follow-up with more seeds in this specific range is underway.
+- **Do adaptive signals or pricing, used alone, still help when per-lane capacity is
+  below the calibrated default?** (Chapter 38) — undetermined. The completed-trip
+  delay metric cannot answer it, because the arms complete different shares of
+  their trips (D27).
 - **Would a congestion-pricing scheme with genuinely automated, enforcement-free
   detection (rather than this project's assumed, implicit human-enforced model)
   avoid the deployability concerns raised in Chapter 41?** — an open design question

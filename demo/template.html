@@ -1,0 +1,303 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kathmandu Peak Hour</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: headline, then a sticky transport bar (play, speed, clock, scrub-able timeline of both runs),
+   then two identical maps of the same peak hour, then the result and its limits. */
+:root {
+  --bg: #f3f4f1; --panel: #ffffff; --ink: #1c2321; --muted: #5d6965; --line: #d5d9d4;
+  --accent: #1f5f8b; --fixed: #b3401a; --dot: rgba(20, 26, 24, .5); --glow: 0;
+  --flow-free: #8fa39a; --flow-slow: #d9a21b; --flow-jam: #d2571c; --flow-stop: #a3122a;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "Barlow", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111615; --panel: #19201e; --ink: #e9eeeb; --muted: #94a19c; --line: #2c3633;
+  --accent: #7db8de; --fixed: #f08a52; --dot: rgba(255, 255, 255, .62); --glow: 5;
+  --flow-free: #46544f; --flow-slow: #e3b33a; --flow-jam: #f07a2e; --flow-stop: #ff3b4e;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111615; --panel: #19201e; --ink: #e9eeeb; --muted: #94a19c; --line: #2c3633;
+  --accent: #7db8de; --fixed: #f08a52; --dot: rgba(255, 255, 255, .62); --glow: 5;
+  --flow-free: #46544f; --flow-slow: #e3b33a; --flow-jam: #f07a2e; --flow-stop: #ff3b4e;
+  color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.5 var(--body);
+  padding-block: 24px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg) }
+.wrap { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px }
+h1 { font: 600 clamp(28px, 4.4vw, 42px)/1.05 var(--display); margin: 0; letter-spacing: .01em; text-wrap: balance }
+.lede { margin: 6px 0 0; color: var(--muted); max-width: 65ch }
+
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 6px; padding: 10px 14px 6px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 6px 14px -12px var(--ink) }
+.transport { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px }
+button { font: 600 15px var(--display); letter-spacing: .06em; text-transform: uppercase; border-radius: 4px; padding: 7px 14px; cursor: pointer }
+#play { color: var(--bg); background: var(--ink); border: 1px solid var(--ink); min-width: 86px }
+#speed { color: var(--ink); background: transparent; border: 1px solid var(--line); min-width: 52px; font-variant-numeric: tabular-nums }
+button:focus-visible, input:focus-visible, #chart:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+#time { font: 600 22px var(--display); font-variant-numeric: tabular-nums; min-width: 6ch }
+.phase { color: var(--muted); font-size: 14px; flex: 1 1 200px; min-width: 0 }
+.keys { color: var(--muted); font-size: 12px }
+.scrub { position: relative }
+#chart { display: block; width: 100%; height: 84px; cursor: ew-resize; touch-action: none }
+#t { position: absolute; inset: auto 0 0; width: 100%; opacity: 0; height: 100%; margin: 0; pointer-events: none }
+
+.maps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px }
+.map { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; min-width: 0; display: flex; flex-direction: column }
+.map h2 { font: 600 20px/1.2 var(--display); letter-spacing: .04em; text-transform: uppercase; margin: 0; padding: 12px 14px 0; display: flex; align-items: center; gap: 8px }
+.map h2::before { content: ""; width: 14px; height: 4px; border-radius: 2px; background: var(--swatch) }
+.map p { margin: 0; padding: 0 14px; color: var(--muted); font-size: 14px }
+.map canvas { display: block; width: 100%; aspect-ratio: 1.08; max-width: 100% }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line) }
+.stats div { padding: 10px 14px; min-width: 0 }
+.stats div + div { border-left: 1px solid var(--line) }
+.stats b { display: block; font: 600 26px/1.1 var(--display); font-variant-numeric: tabular-nums }
+.stats span { font-size: 12px; color: var(--muted); letter-spacing: .03em }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: var(--muted) }
+.legend i { display: inline-block; width: 150px; max-width: 40vw; height: 8px; border-radius: 4px;
+  background: linear-gradient(90deg, var(--flow-stop), var(--flow-jam), var(--flow-slow), var(--flow-free)) }
+
+.result { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 8px }
+.result div { border-top: 3px solid var(--ink); padding-top: 10px }
+.result b { font: 600 40px/1 var(--display); font-variant-numeric: tabular-nums; display: block }
+.result b small { font-size: 22px; font-weight: 500; color: var(--muted) }
+.result span { color: var(--muted); font-size: 14px }
+.limits { color: var(--muted); font-size: 14px; max-width: 75ch; border-top: 1px solid var(--line); padding-top: 14px; margin: 0 }
+.limits strong { color: var(--ink); font-weight: 600 }
+@media (max-width: 520px) { .keys, .phase { display: none } #chart { height: 64px } .bar { padding: 8px 10px 4px } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>The same Kathmandu peak hour, with and without smarter signals and road pricing</h1>
+    <p class="lede">Both maps show one simulated peak on the Ring Road and city-core arterials: identical roads, identical trips, identical random seed. Only the traffic management differs.</p>
+  </header>
+
+  <div class="bar">
+    <div class="transport">
+      <button id="play" type="button">Play</button>
+      <button id="speed" type="button" aria-label="Playback speed">1×</button>
+      <output id="time" for="t">0:00</output>
+      <div class="phase" id="phase"></div>
+      <span class="keys">Space plays, ← → step, drag the chart to scrub</span>
+    </div>
+    <div class="scrub">
+      <canvas id="chart" tabindex="0" role="img" aria-label="Vehicles on the road over time in both runs; drag to scrub"></canvas>
+      <input id="t" type="range" min="0" max="1" step="0.001" value="0" tabindex="-1" aria-hidden="true">
+    </div>
+  </div>
+
+  <div class="maps">
+    <section class="map" style="--swatch: var(--fixed)">
+      <h2>Today: fixed-time signals</h2>
+      <p>128 signalised junctions on a fixed 90 second cycle.</p>
+      <canvas id="c-fixed" aria-label="Map of congestion with fixed-time signals"></canvas>
+      <div class="stats">
+        <div><b id="fixed-kmh">–</b><span>km/h average</span></div>
+        <div><b id="fixed-road">–</b><span>vehicles on the road</span></div>
+        <div><b id="fixed-done">–</b><span>trips finished</span></div>
+      </div>
+    </section>
+    <section class="map" style="--swatch: var(--accent)">
+      <h2>Adaptive signals + pricing</h2>
+      <p>Signals follow the queues; congested links carry a peak-hour toll.</p>
+      <canvas id="c-combined" aria-label="Map of congestion with adaptive signals and pricing"></canvas>
+      <div class="stats">
+        <div><b id="combined-kmh">–</b><span>km/h average</span></div>
+        <div><b id="combined-road">–</b><span>vehicles on the road</span></div>
+        <div><b id="combined-done">–</b><span>trips finished</span></div>
+      </div>
+    </section>
+  </div>
+  <div class="legend"><span>Road colour and thickness:</span><span>stopped</span><i></i><span>free flow</span></div>
+
+  <div class="result">
+    <div><b><span id="r-fixed">–</span> <small>→</small> <span id="r-combined">–</span> <small>min</small></b><span>delay per trip in this run, fixed-time signals against adaptive signals with pricing</span></div>
+    <div><b id="r-clear">–</b><span>earlier that 99% of trips have arrived in this run</span></div>
+    <div><b>65%</b><span>less delay on average across 15 paired runs (±4.5%), lower in all 15</span></div>
+  </div>
+
+  <p class="limits"><strong>What this is and is not.</strong> A mesoscopic simulation (UXsim) on the real OpenStreetMap road network with a synthetic demand model, showing run 11 of 15, the run closest to the average result. Against real 2011-12 counts at 9 intersections the model carries about half the observed traffic, so read the comparison between the two maps, not the absolute speeds. Pricing here only re-routes trips; no trips are priced off the road. Map data © OpenStreetMap contributors.</p>
+</div>
+
+<script>
+const D = /*DATA*/null;
+const NB = D.fixed.speed[0].length, HOURS = NB * D.bin_s / 3600, PEAK = 1 / HOURS;
+const $ = id => document.getElementById(id);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+let stops, C = {};
+function readTheme() {
+  stops = ['--flow-stop', '--flow-jam', '--flow-slow', '--flow-free'].map(n => hex(css(n)));
+  for (const k of ['ink', 'panel', 'muted', 'line', 'accent', 'fixed', 'dot']) C[k] = css('--' + k);
+  C.glow = +css('--glow');
+}
+// r: 0 = stopped, 1 = free flow. Stops sit at 0, .35, .7, 1 so most of the scale is spent on trouble.
+function colour(r) {
+  const at = [0, .35, .7, 1];
+  const i = r >= .7 ? 2 : r >= .35 ? 1 : 0;
+  const f = (r - at[i]) / (at[i + 1] - at[i]), a = stops[i], b = stops[i + 1];
+  return `rgb(${a.map((v, k) => Math.round(v + (b[k] - v) * f)).join(',')})`;
+}
+function fit(cv) {
+  const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+  const g = cv.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+  return [g, w, h];
+}
+
+// equirectangular projection, fine at city scale
+const lon = D.links.flatMap(l => [l[0], l[2]]), lat = D.links.flatMap(l => [l[1], l[3]]);
+const x0 = Math.min(...lon), x1 = Math.max(...lon), y0 = Math.min(...lat), y1 = Math.max(...lat);
+const kx = Math.cos((y0 + y1) / 2 * Math.PI / 180);
+
+const phase = { fixed: new Float32Array(D.links.length).map(() => Math.random() * 12),
+                combined: new Float32Array(D.links.length) };
+phase.combined.set(phase.fixed);                         // same starting pattern in both maps
+let flowDt = 0;                                          // ms of traffic movement to draw this frame
+function drawMap(id, frame) {
+  const [g, w, h] = fit($('c-' + id));
+  const pad = 18, s = Math.min((w - 2 * pad) / ((x1 - x0) * kx), (h - 2 * pad) / (y1 - y0));
+  const ox = (w - (x1 - x0) * kx * s) / 2, oy = (h - (y1 - y0) * s) / 2;
+  const px = x => ox + (x - x0) * kx * s, py = y => h - oy - (y - y0) * s;
+  const b = Math.min(NB - 1, Math.floor(frame)), b2 = Math.min(NB - 1, b + 1), f = frame - b;
+  const sp = D[id].speed;
+  g.lineCap = 'round';
+  // free-flowing links first so congested ones are drawn on top
+  const order = D.links.map((l, i) => {
+    const a = +sp[i][b], c = +sp[i][b2];
+    return [i, (a + (c - a) * f) / 9];
+  }).sort((p, q) => q[1] - p[1]);
+  const seg = [];
+  for (const [i, r] of order) {
+    const l = D.links[i];
+    const ax = px(l[0]), ay = py(l[1]), bx = px(l[2]), by = py(l[3]);
+    const len = Math.hypot(bx - ax, by - ay) || 1, nx = (by - ay) / len * 1.3, ny = -(bx - ax) / len * 1.3;
+    g.strokeStyle = g.shadowColor = colour(r);
+    g.shadowBlur = r < .3 ? C.glow * (1 - r / .3) : 0;
+    g.lineWidth = .8 + .35 * l[4] + (1 - r) * 3.2;       // slower = thicker, so it reads without colour
+    g.beginPath(); g.moveTo(ax + nx, ay + ny); g.lineTo(bx + nx, by + ny); g.stroke();
+    if (len > 9) seg.push([i, r, ax + nx, ay + ny, bx + nx, by + ny]);
+  }
+  // traffic: dots run along each link in its direction of travel, as fast as that link is moving
+  g.shadowBlur = 0; g.strokeStyle = C.dot; g.lineWidth = 1.7; g.setLineDash([.01, 12]);
+  const ph = phase[id];
+  for (const [i, r, ax, ay, bx, by] of seg) {
+    ph[i] = (ph[i] + flowDt * r * .05) % 12;             // 50 px/s at free flow, still when stopped
+    g.lineDashOffset = -ph[i];
+    g.beginPath(); g.moveTo(ax, ay); g.lineTo(bx, by); g.stroke();
+  }
+  g.setLineDash([]);
+  g.font = '600 12px Barlow, sans-serif'; g.textBaseline = 'middle';
+  const placed = [];
+  for (const [name, lo, la] of D.landmarks) {
+    const x = px(lo), y = py(la);
+    // right of the dot, else left, else skip the landmark: neighbouring chowks must not overprint
+    const tw = g.measureText(name).width;
+    const spot = [x + 8, x - 8 - tw].find(lx => lx > 2 && lx + tw < w - 2 &&
+      !placed.some(([px0, py0, pw]) => lx < px0 + pw + 12 && lx + tw + 12 > px0 && Math.abs(y - py0) < 14));
+    if (spot === undefined) continue;
+    placed.push([spot, y, tw]);
+    g.fillStyle = C.panel; g.strokeStyle = C.ink; g.lineWidth = 1.5;
+    g.beginPath(); g.arc(x, y, 3.5, 0, 6.3); g.fill(); g.stroke();
+    g.lineWidth = 3; g.strokeStyle = C.panel; g.fillStyle = C.ink;
+    g.strokeText(name, spot, y); g.fillText(name, spot, y);
+  }
+  const lerp = k => { const a = D[id][k][b], c = D[id][k][b2]; return a == null || c == null ? a ?? c : a + (c - a) * f; };
+  const kmh = lerp('kmh');
+  $(id + '-kmh').textContent = kmh == null ? '–' : kmh.toFixed(1);
+  $(id + '-road').textContent = Math.round(lerp('onroad')).toLocaleString('en-US');
+  $(id + '-done').textContent = Math.round(lerp('done') * 100) + '%';
+}
+
+// timeline: vehicles on the road in both runs, one scale, playhead on top
+const TOP = Math.max(...D.fixed.onroad, ...D.combined.onroad);
+const yMax = Math.ceil(TOP / 5000) * 5000, LEFT = 40, RIGHT = 8;
+function drawChart() {
+  const [g, w, h] = fit($('chart'));
+  const top = 8, bot = h - 16, X = v => LEFT + v * (w - LEFT - RIGHT), Y = n => bot - n / yMax * (bot - top);
+  g.font = '500 11px Barlow, sans-serif'; g.textBaseline = 'middle'; g.fillStyle = C.muted; g.strokeStyle = C.line; g.lineWidth = 1;
+  for (const n of [0, yMax / 2, yMax]) {
+    g.beginPath(); g.moveTo(LEFT, Y(n)); g.lineTo(w - RIGHT, Y(n)); g.stroke();
+    g.textAlign = 'right'; g.fillText(n ? n / 1000 + 'k' : '0', LEFT - 6, Y(n));
+  }
+  g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  for (let hr = 0; hr <= HOURS; hr++) g.fillText(hr + ' h', Math.min(w - RIGHT - 8, Math.max(LEFT + 8, X(hr / HOURS))), h - 3);
+  g.setLineDash([3, 3]); g.beginPath(); g.moveTo(X(PEAK), top); g.lineTo(X(PEAK), bot); g.stroke(); g.setLineDash([]);
+  g.textAlign = 'left'; g.fillText('peak ends', X(PEAK) + 4, top + 9);
+  for (const [id, col] of [['fixed', C.fixed], ['combined', C.accent]]) {
+    g.beginPath();
+    D[id].onroad.forEach((n, i) => g[i ? 'lineTo' : 'moveTo'](X(i / (NB - 1)), Y(n)));
+    g.strokeStyle = col; g.lineWidth = 2; g.lineJoin = 'round'; g.stroke();
+    g.lineTo(X(1), Y(0)); g.lineTo(X(0), Y(0)); g.closePath(); g.globalAlpha = .1; g.fillStyle = col; g.fill(); g.globalAlpha = 1;
+  }
+  const v = cur, f = v * (NB - 1), b = Math.floor(f), b2 = Math.min(NB - 1, b + 1);
+  g.strokeStyle = C.ink; g.lineWidth = 1.5; g.beginPath(); g.moveTo(X(v), top - 4); g.lineTo(X(v), bot); g.stroke();
+  for (const [id, col] of [['fixed', C.fixed], ['combined', C.accent]]) {
+    const n = D[id].onroad[b] + (D[id].onroad[b2] - D[id].onroad[b]) * (f - b);
+    g.fillStyle = col; g.strokeStyle = C.panel; g.lineWidth = 2; g.beginPath(); g.arc(X(v), Y(n), 4, 0, 6.3); g.fill(); g.stroke();
+  }
+}
+
+const slider = $('t'), playBtn = $('play'), speedBtn = $('speed'), chart = $('chart');
+const SPEEDS = [1, 2, 4];
+const CALM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let playing = false, last = 0, speed = 1, cur = 0, looping = false;   // slider.value is the target, cur is what is drawn
+function render() {
+  const frame = cur * (NB - 1), mins = Math.round(cur * HOURS * 60);
+  drawMap('fixed', frame); drawMap('combined', frame); drawChart();
+  $('time').textContent = Math.floor(mins / 60) + ':' + String(mins % 60).padStart(2, '0') + ' h';
+  $('phase').textContent = mins < 60 ? 'Peak hour: trips are still entering the network.'
+    : 'After the peak: no new trips, the network is draining.';
+}
+function seek(v) { slider.value = Math.min(1, Math.max(0, v)); wake(); }
+function wake() { if (!looping) { looping = true; last = performance.now(); requestAnimationFrame(loop); } }
+function loop(now) {
+  const dt = Math.min(100, now - last); last = now;
+  let target = +slider.value;
+  if (playing) {
+    target += dt / 24000 * speed;                        // whole run in 24 seconds at 1×
+    if (target >= 1) { target = 1; setPlaying(false); }
+    slider.value = cur = target; flowDt = dt * speed;
+  } else {
+    cur = CALM || Math.abs(target - cur) < 5e-4 ? target : cur + (target - cur) * (1 - Math.exp(-dt / 90));
+    flowDt = 0;                                          // paused traffic stands still
+  }
+  render();
+  looping = playing || cur !== +slider.value;
+  if (looping) requestAnimationFrame(loop);
+}
+function setPlaying(on) {
+  if (on && +slider.value >= 1) slider.value = cur = 0;
+  playing = on; playBtn.textContent = on ? 'Pause' : (+slider.value >= 1 ? 'Replay' : 'Play');
+  if (on) wake();
+}
+playBtn.addEventListener('click', () => setPlaying(!playing));
+speedBtn.addEventListener('click', () => { speed = SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length]; speedBtn.textContent = speed + '×'; });
+const scrubTo = e => { const r = chart.getBoundingClientRect(); setPlaying(false); seek((e.clientX - r.left - LEFT) / (r.width - LEFT - RIGHT)); };
+chart.addEventListener('pointerdown', e => { chart.setPointerCapture(e.pointerId); scrubTo(e); });
+chart.addEventListener('pointermove', e => { if (chart.hasPointerCapture(e.pointerId)) scrubTo(e); });
+addEventListener('keydown', e => {
+  if (e.target.closest?.('button, a, input:not(#t)')) return;
+  if (e.key === ' ') { e.preventDefault(); setPlaying(!playing); }
+  else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); setPlaying(false); seek(+slider.value + (e.key === 'ArrowRight' ? 1 : -1) / (NB - 1)); }
+});
+addEventListener('resize', render);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readTheme(); render(); });
+new MutationObserver(() => { readTheme(); render(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+$('r-fixed').textContent = D.fixed.delay_min.toFixed(0);
+$('r-combined').textContent = D.combined.delay_min.toFixed(0);
+const clear = id => (D[id].done.findIndex(d => d >= .99) + 1) * D.bin_s / 60;   // minutes until 99% have arrived
+$('r-clear').innerHTML = Math.round(clear('fixed') - clear('combined')) + ' <small>min</small>';
+readTheme();
+slider.value = cur = PEAK;                               // rest on the end of the peak hour
+render();
+document.fonts && document.fonts.ready.then(render);
+if (!CALM) setPlaying(true);
+</script>

@@ -103,6 +103,9 @@ def main() -> None:
     ap.add_argument("--label", type=str, default=None,
                     help="config/output-file label, default derived from --years "
                          "(e.g. 'projected_5y' or 'projected_2030')")
+    ap.add_argument("--annual-growth", type=float, default=ANNUAL_GROWTH_RATE,
+                    help="annual demand growth rate; default 0.16 (jica2012 motorcycles, A12). "
+                         "0.045 is the JICA 2024 Koteshwor forecast for the main section (D32)")
     ap.add_argument("--seeds", type=int, default=15)
     ap.add_argument("--jobs", type=int, default=None,
                     help="default: as many as fit in --max-ram-fraction of total RAM")
@@ -113,13 +116,13 @@ def main() -> None:
     if args.jobs is None:
         args.jobs = ram_capped_jobs(args.max_ram_fraction)
 
-    growth_factor = (1 + ANNUAL_GROWTH_RATE) ** args.years
+    growth_factor = (1 + args.annual_growth) ** args.years
     label = args.label or f"projected_{args.years:.2g}y".replace(".", "_")
     if args.out is None:
         args.out = Path(f"results/future_demand_{label}.csv")
     configs = {"baseline": {}, label: {"demand_growth": growth_factor}}
 
-    print(f"growth: {ANNUAL_GROWTH_RATE:.0%}/yr x {args.years:.2f}yr = "
+    print(f"growth: {args.annual_growth:.1%}/yr x {args.years:.2f}yr = "
           f"{growth_factor:.4f}x peak-hour demand\n")
     print(f"jobs: {args.jobs} (capped to {args.max_ram_fraction:.0%} of total RAM, "
           f"~{EST_MB_PER_WORKER} MB/worker)\n")
@@ -192,9 +195,8 @@ def main() -> None:
         print(f"{name:<14} {d_mean:>13.1f}s {mean_r:>+8.2f}% +/- {ci_r:5.2f}% {c_mean:>9.1%}  "
               f"[{pos}/{len(diffs)} pos]  {sig}")
     print(f"\nwrote {args.out}")
-    print("\nCaveat: assumes 16%/yr vehicle-registration growth (1991-2011, jica2012) "
-          "continues unchanged and that peak-hour trips scale 1:1 with fleet size - "
-          "neither is tested here. See assumptions.md A12.")
+    print(f"\nCaveat: assumes {args.annual_growth:.1%}/yr growth continues and that peak-hour "
+          "trips scale 1:1 with it - not tested here. See assumptions.md A12 and D32.")
 
 
 if __name__ == "__main__":

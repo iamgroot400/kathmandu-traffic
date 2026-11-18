@@ -1,0 +1,12 @@
+bridge_link,upstream_link,is_ring_road_bridge,bridge_jammed_at_s,upstream_jammed_at_s,lag_s
+बागमती पुल-52799481,एला सडक-137312035_renamedp20LzWyl,False,2160,2280,120
+Kathmandu Ringroad-180152353,विश्वविद्यालयको मार्ग-517542117,True,1320,4440,3120
+Kathmandu Ringroad-180152353,Kathmandu Ringroad-231786208,True,1320,3960,2640
+बिष्णुमती पुल-248967188,बिष्णुमती ट्रयाक सडक-199430771,False,1680,2760,1080
+बिष्णुमती पुल-248967188,बिष्णुमती ट्रयाक रोड-112449586_renamed8jYfC8DP,False,1680,2760,1080
+Kathmandu Ringroad-670112953,Kathmandu Ringroad-180152353,True,360,1320,960
+Kathmandu Ringroad-670112953,_renamedWpQbUOcz,True,360,3360,3000
+Kathmandu Ringroad-670112953,Kathmandu Ringroad-777629770,True,360,600,240
+Manohara Pul-903302818,Chyasa Dwakha Marga-124188112,False,360,2760,2400
+Manohara Pul-903302818,Balumari Marga North-124188162_renamedEVLVxIvk,False,360,2640,2280
+बालाजु-सौरखुट्टे सडक-1518635760,लेखनाथ सडक-27033730,False,1320,1680,360

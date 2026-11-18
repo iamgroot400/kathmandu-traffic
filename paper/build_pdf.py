@@ -31,59 +31,88 @@ from reportlab.platypus import (BaseDocTemplate, PageTemplate, Frame, FrameBreak
 
 ROOT = Path(__file__).parent.parent
 RESULTS = ROOT / "results"
+CLEAN = RESULTS / "clean"   # the public Kaggle run, all stages
 FIGDIR = ROOT / "paper" / "figures"
 sys.path.insert(0, str(ROOT / "scripts"))
 from compare import ci95  # noqa: E402
 
 # ---------------------------------------------------------------- numbers --
 
-def core_numbers():
-    rows = list(csv.DictReader(open(RESULTS / "comparison.partial.csv", encoding="utf-8")))
+def load_by(path):
     by = {}
-    for r in rows:
+    for r in csv.DictReader(open(path, encoding="utf-8")):
         by.setdefault(r["config"], {})[int(r["seed"])] = r
-    return by, by["fixed_time"]
+    return by
 
 
-def interaction_term(by, base):
-    adaptive, pricing, combined = by["adaptive"], by["pricing"], by["adaptive_pricing"]
-    shared = sorted(set(base) & set(adaptive) & set(pricing) & set(combined))
-    terms = []
-    for s in shared:
-        b = float(base[s]["delay_s"])
-        a, p, c = float(adaptive[s]["delay_s"]), float(pricing[s]["delay_s"]), float(combined[s]["delay_s"])
-        terms.append((c - b) - ((a - b) + (p - b)))
-    mean_i, ci_i = ci95(terms)
-    neg = sum(1 for t in terms if t < 0)
-    return mean_i, ci_i, neg, len(terms)
+TESTS = [("H1", "adaptive", "baseline"), ("H2", "pricing", "baseline"),
+         ("H3", "adaptive_pricing", "baseline"), ("H4", "am_tidal", "am_no_tidal"),
+         ("H5", "parking", "baseline"), ("H6", "staggered", "baseline"),
+         ("H7", "decentralized", "baseline"), ("H7u", "decentralized", "uniform_cut")]
 
 
-def capacity_sweep_numbers():
-    """Per (capacity, lever), paired % change vs fixed_time at that capacity."""
-    rows = list(csv.DictReader(open(RESULTS / "capacity_sweep.csv", encoding="utf-8")))
-    by = {}
-    for r in rows:
-        by.setdefault(r["capacity"], {}).setdefault(r["lever"], {})[int(r["seed"])] = r
+def jica_numbers():
+    """Paired % change per test (time in system, completed-trip delay) and completion points,
+    from the public clean run. Also the Bonferroni-widened time-in-system interval over the 8 tests."""
+    from scipy.stats import t as tdist
+    by = load_by(CLEAN / "jica_h1h7.csv")
     out = {}
-    for cap, levers in by.items():
-        base = levers.get("fixed_time", {})
-        for lever in ["adaptive", "pricing", "adaptive_pricing"]:
-            runs = levers.get(lever, {})
-            shared = sorted(set(base) & set(runs))
-            if len(shared) < 2:
-                continue
-            diffs = [float(runs[s]["delay_s"]) - float(base[s]["delay_s"]) for s in shared]
-            rels = [d / float(base[s]["delay_s"]) * 100 for d, s in zip(diffs, shared)]
-            mean_r, ci_r = ci95(rels)
-            neg = sum(1 for d in diffs if d < 0)
-            out[(cap, lever)] = (mean_r, ci_r, neg, len(shared))
+    for h, c, b in TESTS:
+        if h != "H7":   # H7 removes trips by design; H7u is its volume-matched control
+            assert {r["trips"] for r in by[c].values()} == {r["trips"] for r in by[b].values()}, f"{h}: arms differ in vehicles"
+        shared = sorted(set(by[c]) & set(by[b]))
+        rel = lambda k: [(float(by[c][s][k]) - float(by[b][s][k])) / float(by[b][s][k]) * 100 for s in shared]
+        tis = rel("tis_s")
+        m, hw = ci95(tis)
+        df = len(shared) - 1
+        bonf = hw * tdist.ppf(1 - 0.05 / (2 * len(TESTS)), df) / tdist.ppf(0.975, df)
+        out[h] = {"tis": (m, hw), "delay": ci95(rel("delay_s")), "bonf": bonf,
+                  "comp": ci95([(float(by[c][s]["completed"]) - float(by[b][s]["completed"])) * 100 for s in shared]),
+                  "neg": sum(x < 0 for x in tis), "n": len(shared)}
+    base = by["baseline"]
+    seeds = sorted(base)
+    inter = [(float(by["adaptive_pricing"][s]["tis_s"]) - float(by["adaptive"][s]["tis_s"])
+              - float(by["pricing"][s]["tis_s"]) + float(base[s]["tis_s"])) / float(base[s]["tis_s"]) * 100 for s in seeds]
+    out["inter"] = (*ci95(inter), sum(x < 0 for x in inter), len(inter))
+    out["base"] = {k: statistics.fmean(float(r[k]) for r in base.values())
+                   for k in ("tis_s", "delay_s", "completed", "speed_kmh", "trips")}
     return out
 
 
-def geh_numbers():
-    rows = list(csv.DictReader(open(RESULTS / "geh.csv", encoding="utf-8")))
-    n_pass = sum(1 for r in rows if r["pass"] == "True")
-    return n_pass, len(rows)
+def sweep_numbers():
+    """Baseline seed sweep (D36): speeds against the JICA survey and fit to the counts."""
+    rows = [r for r in csv.DictReader(open(CLEAN / "jica_sweep_summary.csv", encoding="utf-8"))
+            if r["config"] == "main_y0.2"]
+    out = {k: ci95([float(r[k]) for r in rows]) for k in
+           ("ring_kmh", "inner_kmh", "completed_pct", "share", "corr", "within_1_5", "geh_pass")}
+    out["n"] = len(rows)
+    return out
+
+
+def projection_numbers():
+    """Demand growth projection: completion and paired time-in-system change per growth factor."""
+    by = load_by(CLEAN / "jica_projection.csv")
+    base = by["baseline"]
+    out = {}
+    for c, rs in by.items():
+        out[c] = {"trips": int(next(iter(rs.values()))["trips"]),
+                  "comp": ci95([float(r["completed"]) * 100 for r in rs.values()]),
+                  "tis": ci95([(float(rs[s]["tis_s"]) - float(base[s]["tis_s"])) / float(base[s]["tis_s"]) * 100
+                               for s in sorted(set(rs) & set(base))]) if c != "baseline" else None,
+                  "n": len(rs)}
+    return out
+
+
+def old_numbers():
+    """Completed-trip delay change on the earlier gravity-demand arterial model (comparison.partial.csv)."""
+    by = load_by(RESULTS / "comparison.partial.csv")
+    base = by["fixed_time"]
+    out = {}
+    for c in ("adaptive", "pricing", "adaptive_pricing"):
+        shared = sorted(set(base) & set(by[c]))
+        out[c] = ci95([(float(by[c][s]["delay_s"]) - float(base[s]["delay_s"])) / float(base[s]["delay_s"]) * 100
+                       for s in shared])
+    return out
 
 
 # ---------------------------------------------------------------- styles --
@@ -152,37 +181,45 @@ def build_templates():
 
 
 def main():
-    core_by, core_base = core_numbers()
-    mean_i, ci_i, neg_i, n_i = interaction_term(core_by, core_base)
-    geh_pass, geh_n = geh_numbers()
-    cap_sweep = capacity_sweep_numbers()
+    J = jica_numbers()
+    S = sweep_numbers()
+    O = old_numbers()
+    P = projection_numbers()
+    B = J["base"]
+    pc = lambda h, k="tis": f"{J[h][k][0]:+.1f}% +/- {J[h][k][1]:.1f}%"
+    pts = lambda h: f"{J[h]['comp'][0]:+.1f} +/- {J[h]['comp'][1]:.1f} points"
+    sig = lambda h: abs(J[h]["tis"][0]) > J[h]["bonf"]
+    im, ih, ineg, inn = J["inter"]
 
     doc = BaseDocTemplate(str(ROOT / "paper" / "kathmandu_traffic_paper.pdf"),
-                          pagesize=A4, title="Signal Retiming and Congestion Pricing "
-                          "on Kathmandu's Arterial Network")
+                          pagesize=A4, title="Signal Control, Pricing and Demand Management "
+                          "in Kathmandu")
     doc.addPageTemplates(build_templates())
 
     s = []
 
     # ---- full-width top: title + abstract box + keywords ----
-    s.append(Paragraph("Signal Retiming and Congestion Pricing on Kathmandu's "
-                        "Arterial Network: A Paired Seed Simulation Study", TITLE))
+    s.append(Paragraph("Signal Control, Pricing and Demand Management in Kathmandu: "
+                        "A Paired Seed Simulation on Survey Based Demand", TITLE))
     abstract_body = Paragraph(
-        "<b>Abstract.</b> Kathmandu's peak hour arterial congestion has grown far faster than "
-        "road capacity. This paper tests two deployable interventions, adaptive signal control "
-        "and marginal congestion pricing, on a calibrated mesoscopic simulation of the city's "
-        "Ring Road and arterial network (233 nodes, 590 links), with every comparison tested "
-        "across 15 paired random seeds. Adaptive signal control reduces mean peak hour delay by "
-        "24.50%, congestion pricing by 31.89%, and combining both reduces it by 65.30%, the "
-        f"strongest result in this study; a direct test finds no significant super additive "
-        f"interaction between the two levers. A robustness check across a range of per-lane "
-        f"road capacities, since this study's own capacity assumption was never measured "
-        f"against the city, finds the combined result holds at every capacity tested while the "
-        f"two individual levers degrade and can reverse sign below the calibrated default. The "
-        f"baseline is validated against six named Kathmandu intersections, passing {geh_pass} "
-        f"of {geh_n}. Four further interventions are tested with the same rigor: staggered "
-        "departures and decentralized attraction are supported, a tidal-flow lane scheme and a "
-        "parking enforcement proxy are rejected.", ABSTRACT)
+        "<b>Abstract.</b> This paper tests seven candidate interventions for peak hour "
+        "congestion in Kathmandu on a mesoscopic simulation whose demand is built from the "
+        "2011 JICA vehicle and person trip origin destination survey, on a network of "
+        "arterial and tertiary roads with side streets that give way at junctions. Road speeds "
+        "are calibrated to the JICA travel speed survey only; intersection counts are held out "
+        f"for validation, where the model carries {S['share'][0]:.0%} of counted peak volume "
+        f"with a junction correlation of {S['corr'][0]:+.2f}. Every comparison uses 15 paired "
+        "random seeds and mean time in system over all vehicles, so trips that never finish "
+        f"cannot flatter a result. Staggered departure times reduce time in system by "
+        f"{-J['H6']['tis'][0]:.1f}%, adaptive signal control by {-J['H1']['tis'][0]:.1f}%, and "
+        f"adaptive signals with congestion pricing by {-J['H3']['tis'][0]:.1f}%, all well beyond "
+        f"their 95% intervals. Pricing alone gives {-J['H2']['tis'][0]:.1f}%, and the combined "
+        f"effect is the sum of its parts, not more. Decentralizing trip attraction "
+        f"helps only as much as cutting the same volume uniformly; tidal lanes and a parking "
+        f"enforcement proxy show no reliable effect. Compared with an earlier version of this "
+        f"model on synthetic demand and main roads only, the ranking of interventions holds but "
+        f"pricing loses most of its effect, a reminder that intervention estimates depend on "
+        f"how much of the street network the model represents.", ABSTRACT)
     abstract_box = Table([[abstract_body]], colWidths=[PAGE_W - 2 * MARGIN - 16])
     abstract_box.setStyle(TableStyle([
         ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#f2f2f2")),
@@ -192,7 +229,7 @@ def main():
     ]))
     s.append(abstract_box)
     s.append(Paragraph("<b>Keywords:</b> traffic simulation, signal control, congestion "
-                        "pricing, Kathmandu, mesoscopic modeling, urban transportation",
+                        "pricing, travel demand management, Kathmandu, mesoscopic modeling",
                         KEYWORDS))
     s.append(NextPageTemplate("TwoCol"))
 
@@ -200,33 +237,25 @@ def main():
     s.append(Paragraph("1. Introduction", H1))
     s.append(Paragraph(
         "Kathmandu Valley's motorization has grown far faster than its road network. A 2012 "
-        "government survey conducted by the Japan International Cooperation Agency and the "
-        "Department of Roads found that motorcycle traffic volumes had increased by roughly "
-        "19.8 times since 1991, an average annual growth rate near 16 percent, concentrated on "
-        "arterial roads that have not expanded in proportion. Two interventions are available "
-        "to a city without the years and capital that a new road or a metro line would "
-        "require: retiming existing traffic signals, and charging for road use during the "
-        "busiest hours. Both act on infrastructure that already exists, rather than requiring "
-        "new construction.", BODY))
+        "survey by the Japan International Cooperation Agency (JICA) and the Department of "
+        "Roads found that motorcycle traffic had increased roughly 19.8 times since 1991, an "
+        "average annual growth near 16 percent, concentrated on arterial roads that have not "
+        "expanded in proportion. A city without the years and capital for new roads or a metro "
+        "line can still act on the roads it has: retime signals, charge for road use at the "
+        "busiest hours, or change when and where trips are made.", BODY))
     s.append(Paragraph(
-        "This paper asks two questions. First, do signal retiming and congestion pricing each "
-        "significantly reduce delay on Kathmandu's arterial network, and does combining them "
-        "produce an effect larger than the sum of their individual effects, a claim about "
-        "mechanism rather than magnitude alone. Second, how do these results hold up against "
-        "the honest limits of a synthesized demand simulation: against observed traffic "
-        "counts, against the model's own sensitivity to its fitted parameters, and against "
-        "four further candidate interventions tested with the same rigor, two of which are "
-        "rejected.", BODY))
+        "This paper asks which of seven such interventions reliably reduce peak congestion in "
+        "a simulation of Kathmandu, and by how much. Two are signal and pricing levers and "
+        "their combination (H1 to H3); four manage capacity or demand: tidal flow lanes (H4), "
+        "parking and encroachment enforcement (H5), staggered departure times (H6), and "
+        "decentralizing trip attraction away from the city core (H7).", BODY))
     s.append(Paragraph(
-        "A calibrated mesoscopic simulation of Kathmandu's Ring Road and city core arterial "
-        "network was built for this purpose, and every comparison was tested across 15 paired "
-        "random seeds, reporting a confidence interval rather than a single run point "
-        "estimate. This design choice was motivated directly by an early observation that "
-        "small changes in the model's demand can move single run delay by several percent on "
-        "noise alone. This same paired design is what allowed an initially assumed super "
-        "additive interaction between the two levers to be tested properly and found not to "
-        "hold statistically, a correction reported here rather than carried forward "
-        "unchecked.", BODY))
+        "The study's first version used synthetic gravity model demand on main roads only, and "
+        "placed traffic poorly across real intersections. This version rebuilds "
+        "demand from the JICA 2011 origin destination survey, adds tertiary roads, calibrates "
+        "road speeds to an independent speed survey, and reruns every intervention. Section "
+        "4.4 reports how the conclusions moved between the two versions, since that movement "
+        "is itself informative about what such models can and cannot say.", BODY))
 
     s.append(Paragraph("2. Related Work", H1))
     s.append(Paragraph(
@@ -237,250 +266,241 @@ def main():
         "network. Mao, Qin, Hu, and Tan (2013) model signal settings and congestion tolls as a "
         "bilevel program. Smith, Iryo, Mounce, Satsukawa, and Watling (2022) show that using "
         "link exit prices in a combined control policy maximizes network capacity with zero "
-        "queues in steady state.", BODY))
+        "queues in steady state. No source located in this review reports a measured combined "
+        "effect tested against the sum of each lever applied alone, the question H3 asks.", BODY))
     s.append(Paragraph(
-        "These works establish that jointly deploying signal control and pricing is a studied "
-        "design. No source located during this review reports a measured combined effect "
-        "tested against the sum of each lever applied alone, the specific question this study "
-        "set out to answer. That comparison turned out, upon proper testing, not to be "
-        "supported by this project's own data either, so no novelty claim is drawn from this "
-        "gap.", BODY))
-    s.append(Paragraph(
-        "Prior Kathmandu specific traffic modeling is limited to single intersection "
-        "microsimulation. Tamang, K.C., Pandey, and Acharya (2026) model the Lainchaur "
-        "intersection in VISSIM, finding major approaches at Level of Service F. Luitel, "
-        "Subedi, Nepal, and Tiwari (2025) review Kathmandu's congestion without modeling a "
-        "specific intervention. Bhatta (2024) estimates a monetized congestion cost for one "
-        "road section. No located study models the city at network or mesoscopic scale, or "
-        "tests congestion pricing there.", BODY))
+        "Prior Kathmandu specific traffic modeling is limited to single intersections. Tamang, "
+        "K.C., Pandey, and Acharya (2026) model the Lainchaur intersection in VISSIM, finding "
+        "major approaches at Level of Service F. Tiwari et al. (2024) optimize signals at "
+        "Satdobato and Gwarko in SIDRA. Luitel, Subedi, Nepal, and Tiwari (2025) review the "
+        "city's congestion without modeling an intervention, and Bhatta (2024) estimates a "
+        "congestion cost for one road section. No located study models the city at network "
+        "scale or tests pricing or demand management there.", BODY))
 
     s.append(Paragraph("3. Methodology", H1))
-    s.append(Paragraph("3.1 Network and Demand", H2))
+    s.append(Paragraph("3.1 Simulator and Network", H2))
     s.append(Paragraph(
-        "A mesoscopic traffic simulation was built using UXsim (Seo, 2023, 2025), a link "
-        "based kinematic wave model equivalent to a mesoscopic version of Newell's simplified "
-        "car following model. The network covers Kathmandu's Ring Road and city core arterial "
-        "roads, imported from OpenStreetMap: 233 nodes and 590 directional links, fully and "
-        "strongly connected with zero dead ends. Demand is a synthetic gravity model over 109 "
-        "zones on a one kilometer grid, scaled to 260,000 peak hour trips. This demand is a "
-        "proxy for activity rather than a survey.", BODY))
-    s.append(Paragraph("3.2 Calibration", H2))
+        "The simulation uses UXsim 1.14.2 (Seo, 2023, 2025), a link based kinematic wave model "
+        "equivalent to a mesoscopic version of Newell's simplified car following model. The "
+        "network is imported from OpenStreetMap: every trunk, primary, secondary and tertiary "
+        "road in a 12 by 12.5 km box covering Kathmandu and Lalitpur inside and just beyond "
+        "the Ring Road, 472 nodes and 1,242 directional links, strongly connected. Residential "
+        "streets, unclassified roads and lanes are not modeled.", BODY))
     s.append(Paragraph(
-        "Because only major road classes are modeled, loading the full citywide demand "
-        "produces gridlock. Thirty percent of the matrix is loaded instead, decomposed as a "
-        "0.48 arterial share factor times a 0.625 passenger car equivalent factor reflecting "
-        "Kathmandu's fleet mix. Free flow speed is overridden to 30 km/h network wide, "
-        "standing in for parking, encroachment, and lane indiscipline. Only the product of "
-        "the two scaling factors is identified by the single calibration target (mean "
-        "speed), confirmed empirically in Section 4.3.", BODY))
-    s.append(Paragraph("3.3 Route Choice", H2))
+        "Tertiary roads not in the main road network (194 ways, 391 links) are modeled as "
+        "side streets: one lane, a free flow speed of 30 km/h, and an outflow capacity of "
+        "0.353 times a main road lane, the ratio of a narrow two lane road to a two lane road "
+        "inside the Ring Road in JICA's capacity table (6,000 against 17,000 PCU per day). "
+        "Main roads use 60 km/h, JICA's free speed for good asphalt. A junction where one "
+        "whole approach group is side streets gets no signal and those streets give way "
+        "(merge priority 0.2, an assumed value tested below); the other 181 junctions with "
+        "three or more approaches run fixed time signals on a 90 second cycle.", BODY))
+    s.append(Paragraph("3.2 Demand", H2))
     s.append(Paragraph(
-        "Route assignment uses within day dynamic user optimum behavior, rerouting every 600 "
-        "seconds. Day to day equilibrium was attempted and does not converge on this network. "
-        "Results therefore describe a routing process rather than a settled equilibrium.", BODY))
+        "Demand comes from the JICA 2011 survey (JICA and DoR, 2012). The vehicle origin "
+        "destination table gives daily flows between 9 large zones by vehicle type in "
+        "passenger car units (840,775 PCU per day); JICA calibrated it to counts at 50 points "
+        "within about 20 percent. Each large zone pair is split across the 51 small zones of "
+        "the person trip table in proportion to person trips, and a peak hour factor of 0.10 "
+        f"gives 58,525 PCU per hour. Small zones are located by georeferencing the survey's "
+        "zone map against geocoded village names (41 control points, median residual 0.59 km) "
+        "and load at up to four nearby junctions. The peak is held steady for two hours "
+        "(117,050 PCU in all) in a four hour horizon. The simulator releases each pair's "
+        "demand in platoons of five and, through floating point accumulation, can drop a "
+        "pair's last platoon; adding half a vehicle to each pair's requested volume removes "
+        "the loss, so every run generates exactly the vehicles requested and both arms of "
+        "every comparison generate the same number.", BODY))
+    s.append(Paragraph("3.3 Calibration and Validation", H2))
+    s.append(Paragraph(
+        "Road behavior is calibrated only to JICA's weekday morning travel speed survey "
+        "(Table 6.2.10): 24.0 km/h on the Ring Road and about 15.3 km/h on inner main routes. "
+        "Side street capacity and free flow speeds are taken from JICA's tables rather than "
+        "fitted. The give way junction rule was added after signalizing every side street "
+        "junction held Ring Road speed near 14 km/h. Intersection counts were read only after "
+        "each configuration was chosen on speed.", BODY))
+    s.append(Paragraph(
+        "Validation uses the entering peak hour volumes counted by JICA and the Department of "
+        "Roads at nine intersections in December 2011 and January 2012, transcribed from the "
+        "turning movement diagrams in the survey's appendix, each checked to balance. Model "
+        "volume is measured over the second hour of the steady peak, so the empty network at "
+        "the start does not depress it. Fit is reported as the model to observed ratio, the "
+        "correlation across junctions, and the GEH statistic.", BODY))
     s.append(Paragraph("3.4 Interventions", H2))
     s.append(Paragraph(
-        "Two primary levers are compared against a calibrated fixed time baseline of 128 "
-        "signalized intersections on a 90 second cycle. Adaptive signal control is a queue "
-        "actuated heuristic that switches phase when a competing phase's queue exceeds the "
-        "current phase's by a lost time adjusted threshold. Congestion pricing tolls each link "
-        "at 0.2 times its own observed delay, applied only during the peak window. Because "
-        "demand does not respond elastically to price here, the pricing effect should be read "
-        "as a lower bound.", BODY))
+        "H1 replaces fixed time signals with a queue actuated heuristic that switches phase "
+        "when a competing queue exceeds the current one by a lost time adjusted threshold. H2 "
+        "tolls each link at 0.2 times its own delay in an untolled baseline run (1,066 links); "
+        "demand does not respond to price, so tolls only reroute trips. H3 applies both. H4 "
+        "compares morning demand (trips toward the core raised by 40 percent, away from it "
+        "lowered) with and without one lane shifted toward the peak direction; on this network "
+        "two of the three original corridors are found. H5 raises free flow speeds by the same "
+        "35/30 ratio as originally (70 and 35 km/h). H6 spreads the same total demand over a "
+        "50 percent longer window. H7 cuts trips into the ten core zones by a quarter, and is "
+        "also compared with a volume matched control that cuts every trip uniformly to the "
+        "same total.", BODY))
     s.append(Paragraph("3.5 Statistical Design", H2))
     s.append(Paragraph(
-        "A single run cannot separate an intervention's effect from routing noise: a 0.02 "
-        "percent demand change moved single-seed delay by 2.3 percent in early testing. Every "
-        "comparison runs 15 random seeds per configuration and reports the paired difference "
-        "with a 95 percent confidence interval. All runs use a 14,400 second horizon with a "
-        "3,600 second demand window.", BODY))
-    s.append(Paragraph(
-        "This study makes 15 distinct paired seed comparisons, none individually corrected "
-        "for multiple comparisons. A stricter standard is relied on instead: every supported "
-        "finding has 12 or more of its paired seeds agreeing in direction predicted before the "
-        "run, several unanimously (p < 0.003% by chance for 15/15). The simulation is "
-        "otherwise deterministic given a seed.", BODY))
-    s.append(Paragraph("3.6 Additional Interventions", H2))
-    s.append(Paragraph(
-        "Four further candidates were tested with the same design: tidal-flow lanes (two "
-        "magnitudes) shift capacity toward the heavier direction on three radial corridors; a "
-        "parking/encroachment-enforcement proxy raises free flow speed to 35 km/h; staggered "
-        "departures spread demand over 5,400 instead of 3,600 seconds; decentralized "
-        "attraction cuts trip attraction 25% at core zones (also cutting total demand 11.4%, "
-        "a confound discussed in Section 5).", BODY))
-    s.append(Paragraph("3.7 Validation", H2))
-    s.append(Paragraph(
-        "The baseline was checked against observed counts using the GEH statistic (GEH < 5 "
-        "as a pass threshold), from a JICA/Department of Roads survey (Dec. 2011-Jan. 2012), "
-        "two intersections cross-referenced against a 2017 machine-readable follow-up. The "
-        "remaining four landmarks are OpenStreetMap-geocoded, less precise. The observed data "
-        "predates this study's network snapshot by roughly 14 years.", BODY))
+        "Each of the ten configurations runs on the same 15 random seeds, and each test reports "
+        "the paired percentage change with a 95 percent confidence interval. The primary "
+        "measure is mean time in system over all vehicles, counting unfinished trips up to the "
+        "horizon, so a lever cannot look better by stranding slow trips. Mean delay over "
+        "completed trips, the measure of the first version, is reported alongside. Eight tests "
+        "are made; a Bonferroni correction widens each interval by a factor of about 1.55, "
+        "and results are labeled by whether they survive it.", BODY))
 
     s.append(Paragraph("4. Results", H1))
-    s.append(Paragraph("4.1 Core Result", H2))
+    s.append(Paragraph("4.1 Baseline Against Observations", H2))
     s.append(Paragraph(
-        "Figure 1 reports the paired-seed comparison. Adaptive signal control reduces mean "
-        "delay by 24.50% relative to fixed-time signals (15/15 seeds agreeing). Congestion "
-        "pricing reduces delay by 31.89% (15/15). Combining both reduces delay by 65.30% "
-        "(15/15), the strongest single result in this study.", BODY))
-    s.append(fig("fig_core.png", "<b>Figure 1.</b> Paired-seed delay comparison, 15 seeds, "
-                 "14,400s horizon, vs. fixed-time baseline. Error bars: 95% CI.", COL_W))
+        f"Over {S['n']} seeds the baseline runs the Ring Road at {S['ring_kmh'][0]:.1f} +/- "
+        f"{S['ring_kmh'][1]:.1f} km/h (survey 24.0) and inner main roads at "
+        f"{S['inner_kmh'][0]:.1f} +/- {S['inner_kmh'][1]:.1f} km/h (survey 15.3). It carries "
+        f"{S['share'][0]:.0%} of the counted volume summed over the nine intersections, with a "
+        f"correlation of {S['corr'][0]:+.2f} +/- {S['corr'][1]:.2f} across them; on average "
+        f"{S['within_1_5'][0]:.1f} of 9 are within a factor of 1.5 and {S['geh_pass'][0]:.1f} "
+        "pass GEH below 5 (Figure 1). Measured the same way, over the second hour of a two hour "
+        "peak, the first version also carried about 64 percent of the counts, but with a "
+        "negative correlation across junctions (-0.23, one seed), and it gridlocked, finishing "
+        "55 percent of trips; its published 46 percent used the first hour of an empty network. "
+        "The gain is in where traffic goes and in a stable network, not in total volume. "
+        "The remaining gap is concentrated at the "
+        "four busiest junctions, Thapathali, Old and New Baneshwor and Kalanki, which receive "
+        "40 to 50 percent of their counts. Halving or doubling the assumed give way priority "
+        "(0.1 and 0.4, five seeds each) moves inner speed by under 0.3 km/h and the volume "
+        "share by under 2 points.", BODY))
+    s.append(fig("fig_jica_validation.png", "<b>Figure 1.</b> Model to observed peak entering "
+                 "volume at nine intersections (JICA 2011-12 counts), mean over the baseline "
+                 "seed sweep. Error bars: 95% CI.", COL_W))
     s.append(Paragraph(
-        "A direct test of whether the combined effect exceeds what the two levers predict "
-        f"independently (a super additive interaction) gives a per-seed interaction term of "
-        f"{mean_i:+.1f}s +/- {ci_i:.1f}s (95% CI, includes zero), {neg_i}/{n_i} seeds agreeing "
-        f"in sign. A statistically supported super additive interaction is not found. The "
-        f"combined lever's own effect is real and strong; the synergy claim specifically is "
-        f"not supported.", BODY))
-    s.append(Paragraph("4.2 Validation Against Observed Counts", H2))
-    s.append(Paragraph(
-        f"Figure 2 reports GEH at six named intersections. {geh_pass} of {geh_n} pass the "
-        "conventional threshold, with errors in both directions: one intersection undershoots "
-        "observed volume by roughly five times, another overshoots.", BODY))
-    s.append(fig("fig_geh.png", "<b>Figure 2.</b> GEH validation against observed peak-hour "
-                 "volumes at six named Kathmandu intersections. * = approximate "
-                 "(OSM-geocoded) coordinates.", COL_W))
-    s.append(Paragraph(
-        "A single-seed check at the two most discrepant intersections found that pricing and "
-        "the combined lever still reduced delay at both, but adaptive signal control alone "
-        "increased delay at the intersection with the largest discrepancy. This is reported "
-        "as a bounded, single-seed caveat, not folded into the aggregate finding.", BODY))
-    s.append(Paragraph("4.3 Sensitivity and Identifiability", H2))
-    s.append(Paragraph(
-        "A +/-20% sweep on each fitted parameter (Figure 3) found that the arterial-share and "
-        "vehicle-weighting factors, reduced together, produce output identical to many decimal "
-        "places, direct confirmation that only their product is identified by the mean-speed "
-        "calibration target. Every congestion-increasing variant dropped completion into the "
-        "75-83% range.", BODY))
-    s.append(fig("fig_sensitivity.png", "<b>Figure 3.</b> Mean network speed under +/-20% on "
-                 "each calibrated parameter, 3 seeds per variant.", COL_W))
-    s.append(Paragraph("4.4 Additional Interventions", H2))
-    s.append(Paragraph(
-        "Figure 4 reports four further interventions, checked for completion bias before "
-        "trusting the raw paired result. The tidal-flow lever caused new non-completion in up "
-        "to 5/15 seeds; the clean-seed effect was not an improvement at either magnitude. The "
-        "parking proxy's apparent 28% reduction was almost entirely a completion-bias "
-        "artifact (10/15 seeds newly incomplete); among 5 clean seeds the effect is small and "
-        "not significant.", BODY))
-    s.append(fig("fig_additional.png", "<b>Figure 4.</b> Four additional interventions, clean "
-                 "seeds only, vs. calibrated baseline.", COL_W))
-    s.append(Paragraph(
-        "Staggered departures reduced delay by 36.33%, surviving the completion check "
-        "cleanly, though a 50% longer window is a large real-world coordination request. "
-        "Decentralized attraction reduced delay by 31.13%, also surviving the check, but cuts "
-        "total demand by 11.4%; no volume-matched control isolates the two effects.", BODY))
-    s.append(Paragraph(
-        "A separate attempt to add external boundary demand reduced face-validity against "
-        "named landmarks rather than improving it. One failure traced to a map-boundary "
-        "limit; a second remains unexplained. This intervention is not used elsewhere in this "
-        "paper.", BODY))
+        f"In the four hour horizon, {B['completed']:.1%} of baseline trips finish, and mean "
+        f"time in system is {B['tis_s'] / 60:.0f} minutes. Volumes are 2011 levels; the "
+        "network is a recent OpenStreetMap snapshot.", BODY))
 
-    s.append(Paragraph("4.5 Robustness to Capacity Assumptions", H2))
-    a2400, p2400, c2400 = cap_sweep[("2400", "adaptive")], cap_sweep[("2400", "pricing")], cap_sweep[("2400", "adaptive_pricing")]
-    a2000, p2000, c2000 = cap_sweep[("2000", "adaptive")], cap_sweep[("2000", "pricing")], cap_sweep[("2000", "adaptive_pricing")]
+    s.append(Paragraph("4.2 Signal Control and Pricing", H2))
     s.append(Paragraph(
-        "Per-lane road capacity was never measured for this network; the calibrated default "
-        "(section 3.2) empirically runs above the 1203-2160 veh/h/lane that Tiwari et al. "
-        "measured in the field at two real intersections (section 5). To test whether this "
-        "paper's core result depends on that untested assumption, each configuration was "
-        "re-run at four per-lane capacities, 1200, 1600, 2000, and 2400 veh/h/lane, bracketing "
-        "and below the field-measured range, with 5 seeds per cell rather than the core "
-        "result's 15, the same reduced-power role sensitivity testing plays in section 4.3.", BODY))
-    s.append(fig("fig_capacity_sweep.png", "<b>Figure 5.</b> Delay change vs. fixed-time at "
-                 "each tested per-lane capacity, 5 seeds per cell. Error bars: 95% CI.", COL_W))
+        f"Figure 2 reports all eight tests. Adaptive signal control changes time in system by "
+        f"{pc('H1')} ({J['H1']['neg']}/15 seeds) and completed trip delay by {pc('H1', 'delay')}. "
+        f"Pricing changes time in system by {pc('H2')} ({J['H2']['neg']}/15) and delay by "
+        f"{pc('H2', 'delay')}. Both together change time in system by {pc('H3')} and delay by "
+        f"{pc('H3', 'delay')}. All three survive the Bonferroni correction.", BODY))
+    s.append(fig("fig_jica_levers.png", "<b>Figure 2.</b> Paired change in mean time in "
+                 "system, 15 seeds per configuration. H4 is against morning demand without "
+                 "tidal lanes; the last row is against the volume matched uniform cut. Grey: "
+                 "95% CI includes zero. Error bars: 95% CI.", COL_W))
     s.append(Paragraph(
-        f"At the calibrated default (2400 veh/h/lane), all three levers reproduce this paper's "
-        f"main result in direction: adaptive {a2400[0]:+.1f}% +/- {a2400[1]:.1f}%, pricing "
-        f"{p2400[0]:+.1f}% +/- {p2400[1]:.1f}%, combined {c2400[0]:+.1f}% +/- {c2400[1]:.1f}% "
-        f"(all significant at this n). Below that capacity, the two individual levers degrade "
-        f"and can reverse sign: at 2000 veh/h/lane, pricing alone is {p2000[0]:+.1f}% +/- "
-        f"{p2000[1]:.1f}% (significantly worse delay, not better), and adaptive signals alone "
-        f"are {a2000[0]:+.1f}% +/- {a2000[1]:.1f}% (no longer a significant improvement). The "
-        f"combined lever alone stays directionally beneficial at every capacity tested, "
-        f"{c2000[0]:+.1f}% +/- {c2000[1]:.1f}% at 2000 veh/h/lane and negative at 1200 and 1600 "
-        f"as well (significant at 3 of the 4 capacities), though with wide confidence intervals "
-        f"at the two lowest capacities given the reduced seed count.", BODY))
+        f"The combined lever is additive. Its per seed interaction term, the combined change "
+        f"minus the two single changes, is {im:+.1f}% +/- {ih:.1f}% of baseline time in system "
+        f"({ineg} of {inn} seeds negative), centered on zero. This agrees with the correction "
+        "made to the first version, where an assumed super additive effect did not survive "
+        "a paired test.", BODY))
+
+    s.append(Paragraph("4.3 Capacity and Demand Management", H2))
     s.append(Paragraph(
-        "This is a genuine strengthening of this paper's case for the combined lever "
-        "specifically, found by testing a real, named uncertainty rather than searching for "
-        "whichever capacity assumption best fits validation data, which this project's own "
-        "review process treats as invalid (section 3.5). It also means the standalone adaptive "
-        "signal and pricing results (section 4.1) should be read as conditional on this "
-        "study's calibrated capacity assumption holding, not as findings that are robust on "
-        "their own; the combined result is the more capacity-robust claim this paper makes.", BODY))
+        f"Staggered departures give the largest single effect, {pc('H6')} in time in system "
+        f"and {pc('H6', 'delay')} in delay. Spreading the peak leaves {-J['H6']['comp'][0]:.1f} "
+        "more points of trips unfinished at the four hour horizon, simply because they start "
+        "later; time in system counts them, so the estimate is not flattered by it. Both arms "
+        "generate exactly 117,050 vehicles. A 50 "
+        "percent longer peak is a large coordination request in practice.", BODY))
+    s.append(Paragraph(
+        f"Decentralizing attraction changes time in system by {pc('H7')} against the baseline, "
+        f"but cutting every trip uniformly to the same total does as well: decentralized "
+        f"against uniform is {pc('H7u')}, not significant. In this model the benefit comes from "
+        "fewer trips, not from where they end. The first version reported a 10.5 percent "
+        "advantage over the same control; it does not reproduce here.", BODY))
+    s.append(Paragraph(
+        f"Tidal lanes do nothing measurable ({pc('H4')}). The parking enforcement proxy gives "
+        f"{pc('H5')} in time in system, which does not survive the Bonferroni correction, and "
+        f"no delay change ({pc('H5', 'delay')}). Both are read as null results.", BODY))
+
+    s.append(Paragraph("4.4 Comparison With the First Version", H2))
+    s.append(Paragraph(
+        "On the first version's synthetic demand and main road network, the same levers cut "
+        f"completed trip delay by {-O['adaptive'][0]:.1f}% (adaptive), {-O['pricing'][0]:.1f}% "
+        f"(pricing) and {-O['adaptive_pricing'][0]:.1f}% (combined). Here the corresponding "
+        f"figures are {-J['H1']['delay'][0]:.1f}%, {-J['H2']['delay'][0]:.1f}% and "
+        f"{-J['H3']['delay'][0]:.1f}%. Adaptive signals keep, and here exceed, their effect; "
+        f"pricing loses {1 - J['H2']['delay'][0] / O['pricing'][0]:.0%} of its effect and the "
+        f"combined lever {1 - J['H3']['delay'][0] / O['adaptive_pricing'][0]:.0%}. A likely reason is "
+        "route choice: tolls work by moving traffic to less used paths. With main roads only, "
+        "parallel arterials had spare capacity to absorb it; here the parallel options are "
+        "side streets at a third of a main road's capacity that must give way. This was not "
+        "isolated by a separate experiment. The first version loaded a one hour peak and this "
+        "one a two hour peak, so only relative changes, not absolute delays, are comparable "
+        "between them.", BODY))
+
+    s.append(Paragraph("4.5 Demand Growth to 2030", H2))
+    g = P.get
+    s.append(Paragraph(
+        "Demand is grown from 2011 at the JICA and Department of Roads 2024 main section "
+        "forecast of 4.52 percent a year: by a factor of 1.94 to 2026 and 2.32 to the end of "
+        "2030, each as its own origin destination table over the same pairs, plus a factor of "
+        "1.20 for comparison with the first version. Every arm, baseline included, runs a six "
+        f"hour horizon on {g('baseline')['n']} paired seeds. The baseline completes "
+        f"{g('baseline')['comp'][0]:.1f}% of trips; at 1.20 times demand "
+        f"{g('x1.20_4yr')['comp'][0]:.1f}% complete and time in system rises "
+        f"{g('x1.20_4yr')['tis'][0]:+.0f}% +/- {g('x1.20_4yr')['tis'][1]:.0f}%. At 2026 demand "
+        f"({g('x1.94_2026')['trips']:,} vehicles) only {g('x1.94_2026')['comp'][0]:.1f}% of "
+        f"trips finish, and at 2030 demand ({g('x2.32_2030')['trips']:,}) "
+        f"{g('x2.32_2030')['comp'][0]:.1f}%, with time in system up "
+        f"{g('x2.32_2030')['tis'][0]:+.0f}% +/- {g('x2.32_2030')['tis'][1]:.0f}%. The network "
+        "gridlocks well before 2030 demand is reached. These levels assume no new roads, no "
+        "mode shift and no peak spreading, so they mark where the present network fails "
+        "rather than forecast actual 2030 conditions.", BODY))
 
     s.append(Paragraph("5. Discussion and Limitations", H1))
     s.append(Paragraph(
-        "Section 4.2's validation result is this study's central limitation. The baseline's "
-        "absolute figures should be read as internally consistent outputs of a calibrated "
-        "model, not measured properties of Kathmandu's roads, since a single calibration "
-        "target does not constrain how demand distributes spatially. The relative comparisons "
-        "are better supported than the absolute numbers, though not unconditionally: a "
-        "single-seed check found adaptive signal control specifically reverses direction "
-        "where the baseline is most wrong, while pricing and the combined lever did not.", BODY))
+        f"The simulation remains partial. It carries {S['share'][0]:.0%} of counted intersection "
+        "traffic and under half at the four busiest junctions. Residential streets and lanes "
+        "are absent, so any traffic that really uses them is forced onto modeled roads, and "
+        "trips to and from the outer valley enter only at the edge of the box. The demand is "
+        "from 2011 while the network is recent, the peak hour factor of 0.10 and the give way "
+        f"rule are assumptions, and Ring Road speed is still {24.0 - S['ring_kmh'][0]:.0f} km/h below the survey. "
+        "Relative comparisons between interventions are better supported than absolute "
+        "travel times.", BODY))
     s.append(Paragraph(
-        "The demand matrix is synthesized from a gravity model over junction density, with no "
-        "land-use data, survey, or observed trip count behind it, and no peak directionality "
-        "unless reweighted for a specific test. Day-to-day route equilibrium did not converge "
-        "on this network; results describe a within-day process, not a settled equilibrium.", BODY))
+        "Route choice is within day dynamic user optimum, rerouting every 600 seconds; a day "
+        "to day equilibrium did not converge in the first version and was not retried. Pricing "
+        "holds demand fixed, so it can only reroute trips, and no local price elasticity is "
+        "available. Several analyses from the first version were not rerun on the new "
+        "baseline and are omitted: a sweep over assumed lane capacity, a sensitivity sweep on "
+        "fitted demand factors, and an elastic demand pricing test.", BODY))
     s.append(Paragraph(
-        "Pricing assumes inelastic demand, so a real deployment with elastic demand would "
-        "plausibly show a larger effect. Both supported additional interventions carry an "
-        "unresolved confound: staggered departures' benefit may not scale linearly to smaller "
-        "shifts, and decentralized attraction is mixed with a genuine demand reduction this "
-        "study did not isolate.", BODY))
+        "Deployability differs sharply between levers. No well documented case was found of "
+        "congestion pricing implemented and measured in a lower or middle income city with "
+        "institutional capacity comparable to Kathmandu's. The closest precedent is Jakarta, "
+        "where electronic road pricing did not launch after about a decade, and the occupancy "
+        "rule used instead was defeated by drivers hiring passengers (The Jakarta Post, 2013). "
+        "Adaptive signals need no enforcement of driver behavior, and in this model they "
+        "deliver most of the combined lever's benefit on their own.", BODY))
     s.append(Paragraph(
-        "A separate concern applies to congestion pricing specifically: its practical "
-        "deployability in a setting like Kathmandu. No well-documented case was found of "
-        "congestion pricing implemented and measured in a lower- or middle-income country "
-        "under institutional capacity comparable to Nepal's. The closest precedent is "
-        "Jakarta, where a proposed electronic road pricing scheme never launched after "
-        "roughly a decade of attempts, and the occupancy-based rule used in its place was "
-        "defeated by drivers hiring strangers, sometimes children, to sit in the vehicle "
-        "(The Jakarta Post, 2013). Adaptive signal control, by contrast, requires no "
-        "enforcement of driver behavior at all, a practical advantage this study's simulation "
-        "results alone do not capture.", BODY))
-    s.append(Paragraph(
-        "Independent field evidence from two real Ring Road intersections supports both the "
-        "direction of this study's main result and the shape of its interaction correction. "
-        "Tiwari et al. (2024) measured existing average delay at Satdobato and Gwarko at "
-        "226.5s and 201.1s per vehicle, and found that signal optimization alone, calibrated "
-        "with the same GEH statistic used here, reduced delay to 51.8s and 52.5s, roughly a "
-        "three-quarter reduction at each intersection, independent field confirmation of this "
-        "study's direction. The same paper found coordinating the two intersections performed "
-        "worse than optimizing each in isolation, an independent precedent for this paper's "
-        "own interaction-term correction: combining two effective measures is not guaranteed "
-        "to outperform optimizing them separately. This study's own per-lane capacity, not "
-        "measured but computed from its calibrated free flow speed and jam density settings "
-        "(approximately 2400 veh/h), runs above the 1203-2160 veh/h/lane that Tiwari et al. "
-        "actually measured in the field at the same two intersections, suggesting the baseline "
-        "may allow slightly more per-lane throughput than Kathmandu's roads actually sustain.", BODY))
-    s.append(Paragraph(
-        "Trips originating or ending outside the modeled boundary are not represented; the "
-        "one attempt to add such demand reduced, not improved, face validity. Deep "
-        "reinforcement learning for signal control, public transport interventions, and new "
-        "road or rail capacity are outside this study's scope by design.", BODY))
+        "An independent study agrees in direction. Tiwari et al. (2024), calibrated to field "
+        "data at Satdobato and Gwarko with the same GEH statistic, model average delays "
+        "falling from 226.5 and 201.1 seconds to 51.8 and 52.5 seconds after signal "
+        "optimization. They also found coordinating the two intersections worse than "
+        "optimizing each alone, a reminder that combining measures does not guarantee more "
+        "than their sum.", BODY))
 
     s.append(Paragraph("6. Conclusion", H1))
     s.append(Paragraph(
-        "Signal retiming and congestion pricing each significantly reduce delay on a "
-        "calibrated simulation of Kathmandu's arterial network, and combining them produces "
-        "the largest effect of any intervention tested. A direct test of whether this "
-        "combined effect is super additive finds that it is not, a correction to an earlier "
-        "working assumption reported here rather than carried forward uncorrected. A separate "
-        "robustness check across a range of per-lane road capacities, since this study's own "
-        "capacity assumption was never measured against the city, finds the combined result "
-        "holds at every capacity tested while the two levers' individual effects degrade and "
-        "can reverse sign below the calibrated default, meaning the standalone findings should "
-        "be read as conditional on that assumption and the combined result as this paper's "
-        "more robust claim. This result is presented alongside the honest limits of the model "
-        "it rests on: a calibration that matches the city on average but not every "
-        "intersection, a route choice process rather than a settled equilibrium, and two "
-        "further interventions tested and rejected rather than quietly omitted. Future work "
-        "should prioritize closing the validation gap with more observed intersection counts, "
-        "isolating the confounds on the two supported additional interventions, running more "
-        "seeds on the interaction term, and sharpening the capacity range between 1600 and "
-        "2000 veh/h/lane where the individual levers' benefit appears to disappear.", BODY))
+        "On a simulation of Kathmandu built from the JICA 2011 survey and calibrated to "
+        "observed speeds, three interventions reliably reduce peak congestion: staggered "
+        f"departure times ({-J['H6']['tis'][0]:.0f}% less time in system), adaptive signal "
+        f"control ({-J['H1']['tis'][0]:.0f}%), and adaptive signals with congestion pricing "
+        f"({-J['H3']['tis'][0]:.0f}%), the last being additive rather than synergistic. Pricing "
+        f"alone has a small effect ({-J['H2']['tis'][0]:.0f}%), decentralizing destinations "
+        "works only through the trips it removes, and tidal lanes and parking enforcement show "
+        "no reliable effect. The ranking matches the study's first version but the size of the "
+        "pricing effect does not, which shows how much such estimates depend on the side "
+        "streets a model includes. Future work should add residential streets and outer valley "
+        "demand, use counts newer than 2011, measure a local price elasticity, and rerun the "
+        "capacity analysis on this baseline. Under 2030 demand the present network "
+        "completes only a quarter of peak trips, so these levers buy time rather than "
+        "absorb growth.", BODY))
+    s.append(Paragraph("Data and Code Availability", H1))
+    s.append(Paragraph(
+        "Every result in this paper comes from one public run: the network, demand inputs, "
+        "code and notebooks are on Kaggle (dataset kathmandu-traffic-sim and notebooks "
+        "kathmandu-traffic-1 to 5), and each notebook's output can be inspected or rerun.", BODY))
 
     # ---- references ----
     s.append(Paragraph("References", H1))
@@ -492,9 +512,6 @@ def main():
         "Methodological, 35(1), 41 to 70.",
         "Japan International Cooperation Agency and Department of Roads, Nepal (2012). Data "
         "collection survey on traffic improvement in Kathmandu Valley. Final report.",
-        "Japan International Cooperation Agency, Department of Roads, and Kathmandu Valley "
-        "Development Authority (2017). The project on urban transport improvement for "
-        "Kathmandu Valley. Final report, volume two: master plan and pilot project.",
         "The Jakarta Post (2013, October 2). Dead end: Jakarta's jockeys. Available at "
         "thejakartapost.com.",
         "Luitel, S., Subedi, A. K., Nepal, S., and Tiwari, H. (2025). A multi faceted approach "
@@ -524,6 +541,11 @@ def main():
     ]
     for r in refs:
         s.append(Paragraph(r, REF))
+
+    # every claim the text makes from these numbers must still hold
+    assert all(sig(h) for h in ("H1", "H2", "H3", "H6", "H7")), "Bonferroni wording out of date"
+    assert not sig("H5") and not sig("H4") and not sig("H7u"), "null-result wording out of date"
+    assert abs(im) < ih, "interaction wording out of date"
 
     doc.build(s)
     print(f"wrote {ROOT / 'paper' / 'kathmandu_traffic_paper.pdf'}")

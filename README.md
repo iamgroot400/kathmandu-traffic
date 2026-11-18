@@ -19,7 +19,7 @@ bound (no system-optimum assignment is computed anywhere in this project). The c
 causal and relative — that these levers recover a specific, quantified share of delay —
 **not** a forecast of Kathmandu's actual travel times, because the demand matrix is
 synthesised rather than surveyed and the model's absolute numbers pass GEH validation
-at only 2 of 6 checked intersections (see Validation below).
+at only 1 of 9 checked intersections, carrying about 46% of real peak intersection volume (see Validation below).
 
 ## Pipeline
 
@@ -251,6 +251,12 @@ Checked against JICA/Department of Roads traffic counts (2012 survey; see
 `lab/experiments/E6.md`) at 6 named Kathmandu intersections, using the GEH statistic
 (the standard model-vs-observed-volume check; GEH < 5 is a conventional pass).
 
+**Superseded (D31):** against the original 2011-12 counts at 9 intersections, transcribed from the JICA 2012
+appendix (`data/jica2012/`, `python checks/geh_jica2012.py`), the model passes at **1 of 9** and carries
+**46%** of observed volume: a level gap, not a pattern gap. The paragraph below describes the earlier
+6-landmark check, kept for the record. Its observed figures came partly from a 2017 summary table that is
+about half the original counts at three intersections.
+
 **2 of 6 (33%) pass** — well short of the usual ≥85% target. Thapathali (GEH 0.77)
 and Old Baneshwor (GEH 3.16) fit well; Koteshwor (GEH 102, model undershoots by ~5x),
 Kalimati, and New Baneshwor also undershoot, while Sorakhutte *overshoots*. The mixed
@@ -306,11 +312,20 @@ Projecting forward 5 years at the JICA-reported 16%/year vehicle-registration gr
 rate (1991-2011; A12, untested extrapolation) gives 2.1x today's peak-hour demand.
 The network does not just get slower - **completion collapses to 36.8%** and mean
 speed falls to near zero and stays there, i.e. outright gridlock, with 97 of 590
-links (16.4%) reaching "jammed" severity. A separate robustness sweep tests whether
-H1-H3's conclusions survive if the model's per-lane capacity assumption (never
-directly measured for this network) is lower than calibrated, spanning the
-1203-2160 veh/h/lane Tiwari et al. measured in the field; in progress as of this
-writing (`lab/notebook/2026-10-19.md`).
+links (16.4%) reaching "jammed" severity. Delay among the trips that do finish
+rises only modestly, which is completion bias: read the completion figure, not the
+delay figure. The 16%/year rate is the JICA figure for motorcycles applied to all
+vehicles, so treat this as a stress test, not a forecast. The same test at 1.86x
+demand (growth to the end of 2030) is in `results/future_demand_projected_2030.csv`.
+
+A separate robustness sweep tests whether H1-H3 survive a lower per-lane capacity
+than the calibrated default (1200/1600/2000/2400 veh/h/lane, spanning the 1203-2160
+Tiwari et al. measured). The combined lever lowers delay in direction at every
+capacity and completes 16-18 points more trips below the default. The individual
+levers are not robust below the default. An earlier reading that pricing alone
+becomes harmful at 2000 veh/h/lane was a completion-bias artifact (pricing
+completes 17 points more trips there), corrected in `lab/decisions.md` D27.
+`python checks/audit_numbers.py` reproduces every figure quoted here.
 
 ## Attribution
 
@@ -321,7 +336,7 @@ Any derived network or published result must carry this attribution.
 ## Scope note
 
 The geometry is real; the demand is not. The model has been checked against observed
-traffic counts at 6 intersections (see Validation above) and passes at only 2 of 6 -
+traffic counts at 9 intersections (see Validation above) and passes at only 1 of 9 -
 so results describe the model's own internally consistent behaviour, and the
 relative comparisons between control levers more than the absolute numbers, until
 broader surveyed counts are available.

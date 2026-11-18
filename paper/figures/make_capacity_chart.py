@@ -48,35 +48,41 @@ def main():
     by, path = load()
     print(f"reading {path}")
 
-    fig, ax = plt.subplots(figsize=(6.4, 4.4))
+    # two panels: mean delay covers completed trips only, so it is only readable
+    # next to the completion change (completion bias, decisions.md D18/D27)
+    fig, (ax, ax2) = plt.subplots(2, 1, figsize=(6.4, 6.6), sharex=True)
     width = 0.25
     x = range(len(CAPACITY_ORDER))
     for i, lever in enumerate(["adaptive", "pricing", "adaptive_pricing"]):
-        means, errs, ns = [], [], []
+        means, errs, ns, cmeans, cerrs = [], [], [], [], []
         for cap in CAPACITY_ORDER:
             base = by.get(cap, {}).get("fixed_time", {})
             runs = by.get(cap, {}).get(lever, {})
             shared = sorted(set(base) & set(runs))
             if len(shared) < 2:
-                means.append(0); errs.append(0); ns.append(len(shared))
+                means.append(0); errs.append(0); ns.append(len(shared)); cmeans.append(0); cerrs.append(0)
                 continue
-            diffs = [float(runs[s]["delay_s"]) - float(base[s]["delay_s"]) for s in shared]
-            rels = [d / float(base[s]["delay_s"]) * 100 for d, s in zip(diffs, shared)]
+            rels = [(float(runs[s]["delay_s"]) - float(base[s]["delay_s"])) / float(base[s]["delay_s"]) * 100
+                    for s in shared]
+            comp = [(float(runs[s]["completed"]) - float(base[s]["completed"])) * 100 for s in shared]
             mean_r, ci_r = ci95(rels)
-            means.append(mean_r); errs.append(ci_r); ns.append(len(shared))
+            mean_c, ci_c = ci95(comp)
+            means.append(mean_r); errs.append(ci_r); ns.append(len(shared)); cmeans.append(mean_c); cerrs.append(ci_c)
         xpos = [xi + (i - 1) * width for xi in x]
-        bars = ax.bar(xpos, means, width=width, yerr=errs, capsize=3,
-                      color=COLORS[lever], label=LEVER_LABELS[lever])
+        ax.bar(xpos, means, width=width, yerr=errs, capsize=3, color=COLORS[lever], label=LEVER_LABELS[lever])
+        ax2.bar(xpos, cmeans, width=width, yerr=cerrs, capsize=3, color=COLORS[lever])
         for xp, m, n in zip(xpos, means, ns):
             if n > 0:
                 ax.text(xp, m - 2 if m < 0 else m + 2, f"n={n}", ha="center",
                         va="top" if m < 0 else "bottom", fontsize=6.5)
 
-    ax.axhline(0, color="black", linewidth=0.8)
-    ax.set_xticks(list(x)); ax.set_xticklabels([f"{c} veh/h/lane" for c in CAPACITY_ORDER], fontsize=9)
-    ax.set_ylabel("Delay change vs. fixed-time (%)", fontsize=10)
-    ax.set_title("Robustness: does the result hold across assumed capacity?", fontsize=10.5)
-    ax.legend(fontsize=8, loc="lower right")
+    for a_ in (ax, ax2):
+        a_.axhline(0, color="black", linewidth=0.8)
+    ax2.set_xticks(list(x)); ax2.set_xticklabels([f"{c} veh/h/lane" for c in CAPACITY_ORDER], fontsize=9)
+    ax.set_ylabel("Delay change, completed trips (%)", fontsize=9)
+    ax2.set_ylabel("Completion change (points)", fontsize=9)
+    ax.set_title("Robustness across assumed per-lane capacity, vs. fixed-time", fontsize=10.5)
+    ax.legend(fontsize=8, loc="lower left")
     fig.tight_layout(pad=1.2)
     fig.savefig(OUT / "fig_capacity_sweep.png", dpi=200)
     plt.close(fig)

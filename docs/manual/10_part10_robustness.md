@@ -87,35 +87,62 @@ once a reversal was found there, to sharpen exactly where it happens.
 
 At the calibrated default (2,400 vehicles per hour per lane), all three levers
 reproduce this project's main result in direction: adaptive signals **−25.9% ±
-6.4%**, pricing **−29.7% ± 14.7%**, combined **−67.3% ± 4.3%** — all statistically
-significant at this reduced sample size, and consistent in direction with the
-project's full, 15-seed main result.
+6.4%**, pricing **−29.7% ± 14.7%**, combined **−67.3% ± 4.3%**.
 
-**Below that capacity, the two individual levers degrade — and can reverse sign
-entirely.** At 2,000 vehicles per hour per lane, pricing alone comes out at **+38.2%
-± 16.5%** — a statistically significant result, but in the *wrong* direction: pricing
-alone makes delay *worse*, not better, under this lower (and, per Tiwari et al.'s
-real measurements, arguably more realistic) capacity assumption. Adaptive signal
-control alone, at the same capacity, comes out at **+9.6% ± 11.1%** — no longer a
-significant improvement at all. **The combined lever is the only one that stays
-directionally beneficial at every single capacity level tested** — negative
-(beneficial) at all four levels, statistically significant at three of the four,
-including the lowest (1,200) and highest (2,400) levels, with the 1,600 level's wide
-confidence interval (given the reduced seed count) the main reason it falls just
-short of significance there.
+Below that capacity, something happens that changes how every other number must be
+read: **the fixed-time baseline itself stops completing every trip.** Mean
+completion in the baseline is 82% at 2,000, 77% at 1,600 and 75% at 1,200. Chapter
+28 explained why that matters. Average delay is computed over completed trips only,
+so two arms that complete different shares of their trips are not being measured on
+the same set of journeys.
 
-### Why this is a strengthening of the project's case, not a weakening of it
+### The mistake this chapter originally made, and its correction (D27)
 
-This finding could easily be mistaken for bad news — "two of our three headline levers
-aren't robust" — but the correct reading is more specific and, if anything, more
-useful: it identifies **exactly which of this project's claims is the strong one.**
-The standalone adaptive-signal and pricing results should now be read as
-**conditional on this project's calibrated capacity assumption holding** — a real,
-named caveat that this project's paper states explicitly, rather than continuing to
-present those two findings with the same unconditional confidence as before this
-sweep was run. The **combined lever**, by contrast, emerges as this project's **most
-capacity-robust claim** — the one finding that survives a real, substantial range of
-uncertainty in an assumption this project never had the ability to measure directly
-against the city. This is a textbook example of what a genuine robustness check is
-supposed to do: not simply confirm what was already believed, but **sharpen exactly
-which part of a conclusion deserves confidence, and which part does not.**
+The first version of this chapter reported that the individual levers "reverse
+sign" below the default, and in particular that pricing alone makes delay
+significantly *worse* at 2,000 (+23.2% ± 17.5% with 15 seeds). That reading was
+wrong, and it was wrong in exactly the way Chapter 28 warns about, only in the
+opposite direction from the parking result of Chapter 21.
+
+At 2,000, pricing completes **98.8%** of trips against the baseline's **81.9%**, a
+paired gain of **+17.0 ± 5.9 points**. The trips pricing rescues are the long,
+badly delayed ones the baseline never finishes. They enter pricing's average and
+are missing from the baseline's. Pricing's mean delay goes up *because it is doing
+better*, not worse. Only 3 of 15 baseline seeds complete fully at that capacity, so
+a completion-matched comparison (the fix used in Chapters 21 to 23) is not possible
+here; among those 3 seeds pricing is lower in all 3, which is suggestive and
+nothing more.
+
+The error was caught in the final audit (`lab/qa/2026-11-10-qa.md`,
+`checks/audit_numbers.py`) and is recorded as D27. D24 and D26 are left in the
+decision log as written, with D27 correcting them.
+
+### What survives
+
+**The combined lever is the one result that reads the same on both measures.** It
+lowers delay in direction at every capacity (−11.5% ± 11.4% at 1,200, −8.2% ± 13.4%
+at 1,600 with 11 of 15 seeds negative, −38.9% ± 9.7% at 2,000, −67.3% ± 4.3% at
+2,400), and at each of the three lower capacities it also completes more trips
+(+17.5 ± 11.3, +17.1 ± 7.7 and +16.4 ± 5.5 points). Completion bias therefore works
+*against* it: its delay figures understate its benefit.
+
+The individual levers are not robust in the same way, but "not robust" is a weaker
+statement than "reversed". Adaptive signals alone lower delay at 1,600 (−16.5% ±
+8.8%) with no significant completion change (−4.4 ± 5.6 points) and show no clear
+delay effect at 2,000 (+2.7% ± 16.0%). Pricing alone raises completion at 1,600
+and 2,000 while its completed-trip delay does not fall. Below the default, their
+effect on delay is **undetermined by this metric**.
+
+### What would settle it
+
+A metric that counts unfinished trips, such as total system delay with stranded
+vehicles charged for the time they spent in the network, or a horizon long enough
+that every arm drains. `compare_capacity_sweep.py` does not record either, so this
+is future work (Chapter 48).
+
+### Why this is still a strengthening of the project's case
+
+The sweep still identifies which claim is the strong one. The standalone adaptive
+and pricing results are **conditional on the calibrated capacity assumption**. The
+**combined lever** is the project's most capacity-robust claim, and after the
+completion check it is supported by two measures instead of one.

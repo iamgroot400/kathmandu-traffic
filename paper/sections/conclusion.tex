@@ -5,9 +5,9 @@ tested directly whether this combined effect is super-additive and found it is
 not -- a correction to this project's own earlier working conclusion, reported
 here rather than carried forward uncorrected. A separate robustness check across a
 range of per-lane road capacities, since this study's own capacity assumption was
-never measured against the city, finds the combined result holds at every
-capacity tested while the two levers' individual effects degrade and can reverse
-sign below the calibrated default, meaning the standalone findings should be read
+never measured against the city, finds the combined lever lowers delay in
+direction at every capacity tested while completing more trips, whereas the
+individual levers' effects are not robust below the calibrated default, meaning the standalone findings should be read
 as conditional on that assumption and the combined result as this paper's more
 robust claim. We report this result alongside the
 honest limits of the model it rests on: a calibration that matches the city on
@@ -21,5 +21,5 @@ observed intersection counts, isolating the confounds on the two supported
 additional interventions, running more seeds on the interaction term itself,
 since the current result (CI including zero, 9/15 seeds negative) rules out a
 large super-additive effect but cannot rule out a smaller one at this sample size,
-and sharpening the capacity range between 1600 and 2000~veh/h/lane where the
-individual levers' benefit appears to disappear.
+and re-testing the individual levers below the calibrated capacity with a metric
+that counts unfinished trips.

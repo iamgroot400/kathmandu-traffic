@@ -35,3 +35,8 @@ cache/
 .DS_Store
 Thumbs.db
 *.log
+
+# field counting (fieldcount/)
+.venv-vision/
+*.pt
+*.mp4

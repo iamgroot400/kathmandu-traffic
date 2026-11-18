@@ -25,16 +25,19 @@ comparison between the two studies' findings meaningful.
 
 ### What they measured, and what this project found when it checked
 
-They measured real, field delay at both intersections under existing conditions:
-**226.5 seconds per vehicle at Satdobato, 201.1 seconds at Gwarko** — both the worst
-possible service level by conventional traffic-engineering grading. After optimizing
-signal phasing and cycle timing *alone*, with **no new infrastructure whatsoever**,
-delay fell to **51.8 and 52.5 seconds respectively** — roughly a three-quarters
-reduction at each intersection. This is **independent, field-measured confirmation**
-that signal optimization produces large delay reductions in Kathmandu specifically,
-not merely inside this project's own simulation — a different tool, a different
-research team, and real field measurement, all pointing the same direction as this
-project's own H1 finding (Chapter 18).
+They built a SIDRA Intersection model of both intersections and calibrated it to
+field data. The model gives existing delays of **226.5 seconds per vehicle at
+Satdobato and 201.1 seconds at Gwarko**, both the worst service level by
+conventional grading. After optimizing signal phasing and cycle timing *alone*, with
+**no new infrastructure**, the model gives **51.8 and 52.5 seconds respectively**,
+roughly a three-quarters reduction at each intersection.
+
+An earlier version of this chapter called this "field-measured confirmation". That
+overstated it. The saturation flows were measured in the field; the before and
+after delays are outputs of a calibrated model, because the optimized timings were
+never installed. What the paper provides is **a second, independent model built on
+field data that points the same direction** as this project's H1 finding (Chapter
+18): a different tool and a different team, but still a model.
 
 ### A second, equally important finding from the same paper
 

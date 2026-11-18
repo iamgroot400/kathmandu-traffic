@@ -35,6 +35,9 @@ decision in order, each pointing to the manual chapter that explains it in full.
 | D22 | 2026-10-19 | Simulation realism refinement: surface density, recover Ring Road bridges, and report jam chain-reaction | Chapter 43 |
 | D23 | 2026-10-19 | Two principled hypotheses to improve the GEH fit were tested; both made it worse and were rejected rather than kept | Chapter 38 |
 | D24 | 2026-10-21 | Capacity-sensitivity sweep: the combined lever is robust across tested capacities, the individual levers are not | Chapter 38 |
+| D25 | 2026-10-22 | Widened the OSM extract to include Thankot; Kalanki's face-validity did not improve; not adopted | Chapter 35 |
+| D26 | 2026-11-10 | Capacity sweep extended to 15 seeds at 1,600 and 2,000 | Chapter 38 |
+| D27 | 2026-11-10 | Final audit: the individual-lever "reversal" in D24/D26 is completion bias, not harm; Tiwari et al. results are model outputs, not field measurements | Chapters 38, 39 |
 
 ### Why this log is append-only, stated plainly
 

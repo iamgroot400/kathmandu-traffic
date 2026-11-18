@@ -1,0 +1,17 @@
+{
+ "id": "aashikkhatri/kathmandu-traffic-3b-interventions-seeds-9-15",
+ "title": "Kathmandu traffic 3b - interventions, seeds 9-15",
+ "code_file": "notebook.ipynb",
+ "language": "python",
+ "kernel_type": "notebook",
+ "is_private": false,
+ "enable_gpu": false,
+ "enable_tpu": false,
+ "enable_internet": true,
+ "dataset_sources": [],
+ "competition_sources": [],
+ "kernel_sources": [
+  "aashikkhatri/kathmandu-traffic-1-build-demand",
+  "aashikkhatri/kathmandu-traffic-2-baseline-and-validation"
+ ]
+}

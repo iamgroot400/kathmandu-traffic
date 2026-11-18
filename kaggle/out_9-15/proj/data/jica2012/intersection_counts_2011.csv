@@ -1,0 +1,11 @@
+intersection,am_hour,am_entering_veh_h,pm_hour,pm_entering_veh_h,balance_check,note
+Kalanki,9-10,8624,17-18,9144,in=out both periods,
+Kalimati,9-10,5797,16-17,5317,in=out both periods,JICA 2017 Table 8.2.6 gives 4897 pcu/h
+Sorakhutte,9-10,,17-18,,,UNUSABLE: the report prints the same numbers as Koteshwor under this heading
+Balaju,9-10,8210,17-18,7374,in=out both periods,
+Thapathali,9-10,14723,17-18,17933,in=out both periods,JICA 2017 Table 8.2.5 gives 7395 veh/h (meaning of that table unresolved)
+Old Baneshwor,9-10,6560,17-18,8117,in=out both periods,JICA 2017 Table 8.2.5 gives 3910
+New Baneshwor,9-10,13089,17-18,17760,AM exact; PM in 17760 vs out 17759,north entering read as 1518 (digits overlap in the scan); Table 8.2.5 gives 9123
+Koteshwor,9-10,10064,17-18,9793,in=out both periods,JICA 2017 Table 8.2.6 gives 9996 pcu/h
+Chabahil,8-9,7454,16-17,10955,in=out both periods,
+Gausala,9-10,10515,15-16,10927,in=out both periods,

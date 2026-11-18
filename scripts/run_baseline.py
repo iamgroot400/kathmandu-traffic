@@ -108,6 +108,20 @@ def add_model_args(ap: argparse.ArgumentParser) -> None:
     # here - as a lower effective free-flow speed - not as driver behaviour.
     ap.add_argument("--free-flow-kmh", type=float, default=30.0,
                     help="override OSM maxspeed on every link (None = use OSM)")
+    # Narrow side streets (D36): OSM ways listed in this file are built as 1-lane links whose
+    # discharge is capped at --minor-capacity-ratio of a normal lane. JICA (2012, Table 8.2.4)
+    # gives a narrow 2-lane road 6,000 PCU/day against 17,000 for a 2-lane road: 0.353.
+    # Default off, so every published run is unchanged.
+    ap.add_argument("--minor-ways", type=Path, default=None,
+                    help="file of OSM way ids to treat as narrow side streets")
+    ap.add_argument("--minor-capacity-ratio", type=float, default=6000 / 17000)
+    # JICA 2012 Table 8.2.4b free speed: asphalt good 60, fair 45, bad 30 km/h (D36)
+    ap.add_argument("--priority-junctions", action="store_true",
+                    help="side-street-only crossings give way instead of being signalised (D36)")
+    ap.add_argument("--yield-priority", type=float, default=0.2,
+                    help="merge priority of side streets at give-way junctions (assumed, D36)")
+    ap.add_argument("--minor-free-flow-kmh", type=float, default=None,
+                    help="side-street free-flow speed (default: same as --free-flow-kmh)")
     ap.add_argument("--jam-density", type=float, default=0.2,
                     help="veh/m/lane at standstill (0.2 = 5 m per vehicle)")
     ap.add_argument("--no-signals", action="store_true",
@@ -120,10 +134,19 @@ def add_model_args(ap: argparse.ArgumentParser) -> None:
     # UXsim's route choice carries duo_noise, so each seed is a different realization.
     # Comparing two configurations on one seed each cannot separate effect from noise.
     ap.add_argument("--seed", type=int, default=0, help="random seed for this run")
+    ap.add_argument("--platoon-fix", action=argparse.BooleanOptionalAction, default=True,
+                    help="pass each pair's volume +0.5 so UXsim's float accumulation does not drop its "
+                         "last platoon (D38: 2.5-6%% of vehicles lost otherwise, varying by demand file)")
+    ap.add_argument("--vehicle-log-interval", type=int, default=1,
+                    help="UXsim per-vehicle log every N steps; >1 saves memory in gridlock (D38). "
+                         "Trip times are unaffected; average speed becomes sampled")
     ap.add_argument("--toll-file", type=Path, default=None,
                     help="per-link delay schedule to price from (results/tolls.csv)")
     ap.add_argument("--toll-strength", type=float, default=0.0,
                     help="toll as a multiple of each link's observed delay")
+    ap.add_argument("--demand-elasticity", type=float, default=0.0,
+                    help="with pricing: elasticity of each OD's volume to the toll on "
+                         "its path (negative, e.g. -0.3); 0 keeps demand fixed (A6)")
     ap.add_argument("--tidal-period", choices=["am", "pm"], default=None,
                     help="apply the tidal-flow lever (H4) for this period; pair with "
                          "--od-file data/od_matrix_<period>.csv")
@@ -175,10 +198,29 @@ def build_world(args, verbose: bool = True):
     # print_mode=0 also silences analyzer output, so stats would vanish too.
     W = World(name="kathmandu", deltan=args.deltan, tmax=args.tmax,
               print_mode=1 if verbose else 0, save_mode=1, show_mode=0,
-              random_seed=args.seed)
-    OSMImporter.osm_network_to_World(W, nodes, links,
+              random_seed=args.seed,
+              vehicle_logging_timestep_interval=args.vehicle_log_interval)
+    minor = set()
+    if args.minor_ways:
+        minor = set(args.minor_ways.read_text(encoding="utf-8").split())
+    way = lambda l: str(l[0]).rsplit("-", 1)[-1]
+    OSMImporter.osm_network_to_World(W, nodes, [l for l in links if way(l) not in minor],
                                      default_jam_density=args.jam_density,
                                      coef_degree_to_meter=111000)
+    n_minor = 0
+    minor_links = set()
+    for l in links:
+        if way(l) in minor:
+            link = W.addLink(str(l[0]), str(l[1]), str(l[2]), length=l[5] * 111000,
+                             free_flow_speed=(args.minor_free_flow_kmh / 3.6
+                                              if args.minor_free_flow_kmh else l[4]), jam_density_per_lane=args.jam_density,
+                             number_of_lanes=1, auto_rename=True)
+            link.capacity_out = args.minor_capacity_ratio * link.capacity
+            link.capacity_out_remain = link.capacity_out * W.DELTAT
+            minor_links.add(link)
+            n_minor += 1
+    if minor:
+        say(f"side streets: {n_minor} links at 1 lane, discharge {args.minor_capacity_ratio:.3f} x lane capacity")
 
     if args.tidal_period:
         from tidal_lanes import apply_tidal_lanes
@@ -187,10 +229,12 @@ def build_world(args, verbose: bool = True):
             f"lane-equivalents for {args.tidal_period}")
 
     if not args.no_signals:
-        info = add_fixed_time_signals(W, cycle_s=args.cycle)
+        info = add_fixed_time_signals(W, cycle_s=args.cycle,
+                                      priority_minor=minor_links if args.priority_junctions else None,
+                                      yield_priority=args.yield_priority)
         self_check(W)
         say(f"signals:      {info['signalised']} intersections at {args.cycle:.0f}s cycle "
-            f"({info['skipped']} nodes left as free merges)")
+            f"({info['skipped']} nodes left as free merges, {info.get('priority', 0)} side-street give-way junctions)")
         if args.adaptive:
             n = attach_adaptive(W, min_green=args.min_green, max_green=args.max_green)
             say(f"control:      queue-actuated on {n} intersections "
@@ -203,17 +247,24 @@ def build_world(args, verbose: bool = True):
         say(f"pricing:      {priced} links tolled at {args.toll_strength}x "
             f"observed delay, peak window only")
 
+    kept = None
+    if args.demand_elasticity and args.toll_file and args.toll_strength > 0:
+        from elastic_demand import od_response
+        kept = od_response(W, args.demand_elasticity)
+
     loaded = skipped = 0
     with od_file.open(encoding="utf-8") as fh:
         for row in csv.DictReader(fh):
             o, d = zones.get(row["origin_id"]), zones.get(row["dest_id"])
             vol = int(int(row["demand"]) * args.demand_scale * args.pcu_factor
                      * args.demand_growth)
+            if kept and o is not None and d is not None and o != d:
+                vol = int(vol * kept(str(o), str(d)))
             if o is None or d is None or o == d or vol < args.deltan:
                 skipped += vol
                 continue
             W.adddemand(str(o), str(d), args.warmup, args.warmup + args.demand_window,
-                       volume=vol)
+                       volume=vol + (0.5 if args.platoon_fix else 0))
             loaded += vol
     say(f"demand:       {loaded:,} trips loaded, {skipped:,} skipped "
           f"(intrazonal or below deltan={args.deltan})")

@@ -1,0 +1,7 @@
+{
+  "title": "Kathmandu traffic sim",
+  "id": "aashikkhatri/kathmandu-traffic-sim",
+  "subtitle": "Mesoscopic peak-hour simulation of Kathmandu on JICA 2011 survey demand",
+  "description": "Code and inputs for a UXsim simulation of Kathmandu's peak-hour traffic: OpenStreetMap road network (ODbL), peak-hour demand built from the JICA 2011 origin-destination surveys, travel-speed and intersection-count observations, and the scripts for the baseline, seven interventions and a 2030 demand projection. See README.md and the 'Kathmandu traffic 1-5' notebooks.",
+  "licenses": [{"name": "ODbL-1.0"}]
+}

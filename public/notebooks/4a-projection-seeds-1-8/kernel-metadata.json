@@ -1,0 +1,16 @@
+{
+ "id": "aashikkhatri/kathmandu-traffic-4a-projection-seeds-1-8",
+ "title": "Kathmandu traffic 4a - projection, seeds 1-8",
+ "code_file": "notebook.ipynb",
+ "language": "python",
+ "kernel_type": "notebook",
+ "is_private": false,
+ "enable_gpu": false,
+ "enable_tpu": false,
+ "enable_internet": true,
+ "dataset_sources": [],
+ "competition_sources": [],
+ "kernel_sources": [
+  "aashikkhatri/kathmandu-traffic-1-build-demand"
+ ]
+}

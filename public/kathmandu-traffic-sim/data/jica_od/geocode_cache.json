@@ -1,0 +1,2024 @@
+{
+ "Thankot": [
+  {
+   "place_id": 242360297,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 3496148177,
+   "lat": "27.6902884",
+   "lon": "85.2155817",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u0925\u093e\u0928\u0915\u094b\u091f",
+   "display_name": "\u0925\u093e\u0928\u0915\u094b\u091f, Chandragiri-04, \u091a\u0928\u094d\u0926\u094d\u0930\u093e\u0917\u093f\u0930\u0940, \u091a\u0928\u094d\u0926\u094d\u0930\u093e\u0917\u093f\u0930\u0940 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44619, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6702884",
+    "27.7102884",
+    "85.1955817",
+    "85.2355817"
+   ]
+  }
+ ],
+ "Sundarijal": [
+  {
+   "place_id": 243314107,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 1341029550,
+   "lat": "27.7580050",
+   "lon": "85.4191890",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u0938\u0941\u0928\u094d\u0926\u0930\u0940\u091c\u0932",
+   "display_name": "\u0938\u0941\u0928\u094d\u0926\u0930\u0940\u091c\u0932, Gokarneshwar-01, \u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44603, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7380050",
+    "27.7780050",
+    "85.3991890",
+    "85.4391890"
+   ]
+  }
+ ],
+ "Budhanilkantha": [
+  {
+   "place_id": 242227407,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 85552443,
+   "lat": "27.7781261",
+   "lon": "85.3623412",
+   "class": "amenity",
+   "type": "place_of_worship",
+   "place_rank": 30,
+   "importance": 0.308429648456196,
+   "addresstype": "amenity",
+   "name": "Budhanilkantha",
+   "display_name": "Budhanilkantha, budhalinkantha main road, Budhanilkantha-03, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 22644, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7778588",
+    "27.7783933",
+    "85.3620289",
+    "85.3626552"
+   ]
+  },
+  {
+   "place_id": 242327398,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 1772109893,
+   "lat": "27.7603552",
+   "lon": "85.3506294",
+   "class": "place",
+   "type": "town",
+   "place_rank": 18,
+   "importance": 0.31620884567581686,
+   "addresstype": "town",
+   "name": "\u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920",
+   "display_name": "\u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 22644, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7203552",
+    "27.8003552",
+    "85.3106294",
+    "85.3906294"
+   ]
+  }
+ ],
+ "Kapan": [
+  {
+   "place_id": 243191126,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 5531648122,
+   "lat": "27.7342051",
+   "lon": "85.3573186",
+   "class": "tourism",
+   "type": "apartment",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "tourism",
+   "name": "Kapan",
+   "display_name": "Kapan, \u0938\u0930 \u0930\u093e\u091c \u092c\u0939\u093e\u0926\u0941\u0930 \u0930\u094b\u0921, Aakashedhara, Budhanilkantha-10, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 13958, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7341551",
+    "27.7342551",
+    "85.3572686",
+    "85.3573686"
+   ]
+  },
+  {
+   "place_id": 242339462,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 429714976,
+   "lat": "27.7441784",
+   "lon": "85.3755017",
+   "class": "highway",
+   "type": "unclassified",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "unclassified",
+   "name": "kapan->> jagadol road",
+   "display_name": "kapan->> jagadol road, Budhanilkantha-11, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 21740, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7424906",
+    "27.7450859",
+    "85.3706170",
+    "85.3790907"
+   ]
+  },
+  {
+   "place_id": 243277667,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 209718345,
+   "lat": "27.7427784",
+   "lon": "85.3679638",
+   "class": "highway",
+   "type": "unclassified",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "unclassified",
+   "name": "kapan jagadol gokarna road",
+   "display_name": "kapan jagadol gokarna road, Budhanilkantha-11, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 21740, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7414070",
+    "27.7446226",
+    "85.3646902",
+    "85.3705263"
+   ]
+  },
+  {
+   "place_id": 243174928,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 743232079,
+   "lat": "27.7412695",
+   "lon": "85.3395933",
+   "class": "highway",
+   "type": "residential",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "residential",
+   "name": "Kapan Marg",
+   "display_name": "Kapan Marg, \u0928\u093e\u0930\u093e\u092f\u0923 \u0917\u094b\u092a\u093e\u0932 \u091a\u094b\u0915, \u092c\u0938\u0941\u0928\u094d\u0927\u0930\u093e, Kathmandu-03, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0901 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44606, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7410562",
+    "27.7414015",
+    "85.3393748",
+    "85.3396075"
+   ]
+  },
+  {
+   "place_id": 242710831,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 180682217,
+   "lat": "27.7409425",
+   "lon": "85.3414056",
+   "class": "highway",
+   "type": "tertiary",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "tertiary",
+   "name": "\u0915\u092a\u0928 \u092e\u093e\u0930\u094d\u0917",
+   "display_name": "\u0915\u092a\u0928 \u092e\u093e\u0930\u094d\u0917, \u0928\u093e\u0930\u093e\u092f\u0923 \u0917\u094b\u092a\u093e\u0932 \u091a\u094b\u0915, \u092c\u0938\u0941\u0928\u094d\u0927\u0930\u093e, Kathmandu-03, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0901 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44606, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7408219",
+    "27.7412456",
+    "85.3380210",
+    "85.3447487"
+   ]
+  }
+ ],
+ "Jorpati": [
+  {
+   "place_id": 248164168,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 377732311,
+   "lat": "27.7219909",
+   "lon": "85.3730523",
+   "class": "leisure",
+   "type": "park",
+   "place_rank": 24,
+   "importance": 0.08006794460975049,
+   "addresstype": "park",
+   "name": "Jorpati Chowk Park",
+   "display_name": "Jorpati Chowk Park, Gokarneshwar-06, \u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930, \u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7218745",
+    "27.7220764",
+    "85.3728385",
+    "85.3732247"
+   ]
+  },
+  {
+   "place_id": 248164006,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 112662268,
+   "lat": "27.7257456",
+   "lon": "85.3742103",
+   "class": "highway",
+   "type": "residential",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "residential",
+   "name": "Arubari Jorpati Marg",
+   "display_name": "Arubari Jorpati Marg, \u092c\u0947\u0928\u094d\u0938\u093f\u0917\u093e\u0909, Gokarneshwar-08, \u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930, \u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 20187, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7215040",
+    "27.7311102",
+    "85.3715706",
+    "85.3756443"
+   ]
+  },
+  {
+   "place_id": 242263331,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 32133466,
+   "lat": "27.6971204",
+   "lon": "85.3932297",
+   "class": "highway",
+   "type": "primary",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "primary",
+   "name": "Bode- Jorpati",
+   "display_name": "Bode- Jorpati, Madhyapur Thimi-08, \u092e\u0927\u094d\u092f\u092a\u0941\u0930 \u0925\u093f\u092e\u093f, \u092e\u0927\u094d\u092f\u092a\u0941\u0930 \u0925\u093f\u092e\u093f \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 97701, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6914858",
+    "27.7029853",
+    "85.3916082",
+    "85.3937600"
+   ]
+  },
+  {
+   "place_id": 242037307,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 206868634,
+   "lat": "27.7167990",
+   "lon": "85.3954281",
+   "class": "highway",
+   "type": "tertiary",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "tertiary",
+   "name": "Way to Jorpati",
+   "display_name": "Way to Jorpati, \u092e\u0941\u0932\u092a\u093e\u0928\u0940, Kageshwori Manohara-06, \u0915\u093e\u0917\u0947\u0936\u094d\u0935\u0930\u0940 \u092e\u0928\u094b\u0939\u0930\u093e, \u0915\u093e\u0917\u0947\u0936\u094d\u0935\u0930\u0940 \u092e\u0928\u094b\u0939\u0930\u093e \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 97701, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7157016",
+    "27.7190287",
+    "85.3938387",
+    "85.3982188"
+   ]
+  },
+  {
+   "place_id": 242038070,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 32134617,
+   "lat": "27.7481244",
+   "lon": "85.4118128",
+   "class": "highway",
+   "type": "secondary",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "secondary",
+   "name": "\u091c\u094b\u0930\u092a\u093e\u091f\u0940-\u0938\u0941\u0928\u094d\u0926\u0930\u0940\u091c\u0932 \u0930\u094b\u0921",
+   "display_name": "\u091c\u094b\u0930\u092a\u093e\u091f\u0940-\u0938\u0941\u0928\u094d\u0926\u0930\u0940\u091c\u0932 \u0930\u094b\u0921, \u0938\u0941\u0928\u094d\u0926\u0930\u0940\u091c\u0932, Gokarneshwar-01, \u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930, \u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44603, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7413155",
+    "27.7575667",
+    "85.4018699",
+    "85.4194487"
+   ]
+  }
+ ],
+ "Gothatar": [
+  {
+   "place_id": 242504152,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 262876903,
+   "lat": "27.6927882",
+   "lon": "85.3712973",
+   "class": "landuse",
+   "type": "residential",
+   "place_rank": 24,
+   "importance": 0.08006794460975049,
+   "addresstype": "residential",
+   "name": "Suncity Apartment",
+   "display_name": "Suncity Apartment, 8, Kageshwori Manohara-09, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0901 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0917\u0947\u0936\u094d\u0935\u0930\u0940 \u092e\u0928\u094b\u0939\u0930\u093e \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6918065",
+    "27.6936537",
+    "85.3704384",
+    "85.3718574"
+   ]
+  },
+  {
+   "place_id": 240135277,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 222839956,
+   "lat": "27.6956138",
+   "lon": "85.3688683",
+   "class": "building",
+   "type": "school",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "building",
+   "name": "New Star Pole English Secondary School",
+   "display_name": "New Star Pole English Secondary School, 8, Jagatjung Marg, Kageshwori Manohara-09, \u0915\u093e\u0917\u0947\u0936\u094d\u0935\u0930\u0940 \u092e\u0928\u094b\u0939\u0930\u093e, \u0915\u093e\u0917\u0947\u0936\u094d\u0935\u0930\u0940 \u092e\u0928\u094b\u0939\u0930\u093e \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44810, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6955267",
+    "27.6957445",
+    "85.3687821",
+    "85.3689404"
+   ]
+  }
+ ],
+ "Lubhu": [
+  {
+   "place_id": 239728652,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2266081486,
+   "lat": "27.6434777",
+   "lon": "85.3714959",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.29754280206928735,
+   "addresstype": "suburb",
+   "name": "\u0932\u0941\u092d\u0942",
+   "display_name": "\u0932\u0941\u092d\u0942, Mahalaxmi-08, \u092e\u0939\u093e\u0932\u0915\u094d\u0937\u094d\u092e\u0940, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44708, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6234777",
+    "27.6634777",
+    "85.3514959",
+    "85.3914959"
+   ]
+  }
+ ],
+ "Godawari": [
+  {
+   "place_id": 242245413,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2207770553,
+   "lat": "27.5977019",
+   "lon": "85.3737037",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u0917\u094b\u0926\u093e\u0935\u0930\u0940",
+   "display_name": "\u0917\u094b\u0926\u093e\u0935\u0930\u0940, Godawari-03, \u0917\u094b\u0926\u093e\u0935\u0930\u0940 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44709, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.5777019",
+    "27.6177019",
+    "85.3537037",
+    "85.3937037"
+   ]
+  },
+  {
+   "place_id": 242232565,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "relation",
+   "osm_id": 10535033,
+   "lat": "27.5812414",
+   "lon": "85.3393152",
+   "class": "boundary",
+   "type": "administrative",
+   "place_rank": 14,
+   "importance": 0.2134012779430838,
+   "addresstype": "municipality",
+   "name": "\u0917\u094b\u0926\u093e\u0935\u0930\u0940 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e",
+   "display_name": "\u0917\u094b\u0926\u093e\u0935\u0930\u0940 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.5282271",
+    "27.6345008",
+    "85.2495708",
+    "85.4132294"
+   ]
+  },
+  {
+   "place_id": 242341414,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 6434169987,
+   "lat": "27.6074182",
+   "lon": "85.3294079",
+   "class": "place",
+   "type": "town",
+   "place_rank": 18,
+   "importance": 0.1600679446097505,
+   "addresstype": "town",
+   "name": "\u0917\u094b\u0926\u093e\u0935\u0930\u0940",
+   "display_name": "\u0917\u094b\u0926\u093e\u0935\u0930\u0940, \u0917\u094b\u0926\u093e\u0935\u0930\u0940 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 47000, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.5674182",
+    "27.6474182",
+    "85.2894079",
+    "85.3694079"
+   ]
+  }
+ ],
+ "Bungamati": [
+  {
+   "place_id": 240851948,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 3155824509,
+   "lat": "27.6285987",
+   "lon": "85.3036690",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u092c\u0941\u0919\u094d\u0917\u092e\u0924\u0940",
+   "display_name": "\u092c\u0941\u0919\u094d\u0917\u092e\u0924\u0940, Lalitpur-22, \u0932\u0932\u093f\u0924\u092a\u0941\u0930, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44700, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6085987",
+    "27.6485987",
+    "85.2836690",
+    "85.3236690"
+   ]
+  }
+ ],
+ "Chapagaun": [
+  {
+   "place_id": 242725897,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 517878939,
+   "lat": "27.6073918",
+   "lon": "85.3242847",
+   "class": "amenity",
+   "type": "police",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "Police Station Chapagaun, Lalitpur",
+   "display_name": "Police Station Chapagaun, Lalitpur, Godawari-11, \u0917\u094b\u0926\u093e\u0935\u0930\u0940, \u0917\u094b\u0926\u093e\u0935\u0930\u0940 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44700, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6072261",
+    "27.6076021",
+    "85.3240685",
+    "85.3244486"
+   ]
+  },
+  {
+   "place_id": 242569704,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 229036468,
+   "lat": "27.5922856",
+   "lon": "85.3316209",
+   "class": "amenity",
+   "type": "health_post",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "Chapagaun Sub Health Post",
+   "display_name": "Chapagaun Sub Health Post, TaakhelTaukhel Road, \u0928\u094d\u092f\u094b\u092a\u093e\u0928\u0947\u0917\u093e\u0909\u0901, Godawari-10, \u0917\u094b\u0926\u093e\u0935\u0930\u0940, \u0917\u094b\u0926\u093e\u0935\u0930\u0940 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44760, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.5922438",
+    "27.5923275",
+    "85.3315652",
+    "85.3316766"
+   ]
+  },
+  {
+   "place_id": 239640647,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 9620834139,
+   "lat": "27.6074946",
+   "lon": "85.3219888",
+   "class": "amenity",
+   "type": "police",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "Chapagaun traffic Police Station",
+   "display_name": "Chapagaun traffic Police Station, Kanti Lokhpath, Godawari-11, \u0932\u0932\u093f\u0924\u092a\u0941\u0930, \u0917\u094b\u0926\u093e\u0935\u0930\u0940 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44700, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6074446",
+    "27.6075446",
+    "85.3219388",
+    "85.3220388"
+   ]
+  },
+  {
+   "place_id": 241833378,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 6275508049,
+   "lat": "27.6578240",
+   "lon": "85.3224583",
+   "class": "highway",
+   "type": "traffic_signals",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "highway",
+   "name": "Chapagaun dobato",
+   "display_name": "Chapagaun dobato, \u0938\u093e\u0924\u0926\u094b\u0935\u093e\u091f\u094b, \u091f\u0941\u091f\u0947\u092a\u093e\u0928\u0940, Lalitpur-15, \u0932\u0932\u093f\u0924\u092a\u0941\u0930, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44702, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6577740",
+    "27.6578740",
+    "85.3224083",
+    "85.3225083"
+   ]
+  },
+  {
+   "place_id": 241443929,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 1782272973,
+   "lat": "27.6578980",
+   "lon": "85.3224925",
+   "class": "junction",
+   "type": "yes",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "junction",
+   "name": "Chapagaun dobato Chowk",
+   "display_name": "Chapagaun dobato Chowk, Kathmandu Ringroad, \u0938\u093e\u0924\u0926\u094b\u0935\u093e\u091f\u094b, \u091f\u0941\u091f\u0947\u092a\u093e\u0928\u0940, Lalitpur-15, \u0932\u0932\u093f\u0924\u092a\u0941\u0930, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44702, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6578480",
+    "27.6579480",
+    "85.3224425",
+    "85.3225425"
+   ]
+  }
+ ],
+ "Thecho": [
+  {
+   "place_id": 242174492,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 3482967558,
+   "lat": "27.6141343",
+   "lon": "85.3206728",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u0920\u0947\u091a\u094b",
+   "display_name": "\u0920\u0947\u091a\u094b, Godawari-12, \u0917\u094b\u0926\u093e\u0935\u0930\u0940, \u0917\u094b\u0926\u093e\u0935\u0930\u0940 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 47000, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.5941343",
+    "27.6341343",
+    "85.3006728",
+    "85.3406728"
+   ]
+  }
+ ],
+ "Changunarayan": [
+  {
+   "place_id": 242225945,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 706922152,
+   "lat": "27.7164593",
+   "lon": "85.4279875",
+   "class": "landuse",
+   "type": "religious",
+   "place_rank": 24,
+   "importance": 0.08006794460975049,
+   "addresstype": "religious",
+   "name": "Changunarayan",
+   "display_name": "Changunarayan, Iku Tol, Changunarayan-04, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7160906",
+    "27.7167321",
+    "85.4275739",
+    "85.4283796"
+   ]
+  },
+  {
+   "place_id": 242492439,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 8009598335,
+   "lat": "27.7162258",
+   "lon": "85.4283560",
+   "class": "tourism",
+   "type": "attraction",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "tourism",
+   "name": "Changunarayan",
+   "display_name": "Changunarayan, Buspark- Dolagiri path, Sangapha Twaa, Iku Tol, Changunarayan-04, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44603, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7161758",
+    "27.7162758",
+    "85.4283060",
+    "85.4284060"
+   ]
+  },
+  {
+   "place_id": 242374714,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 6652889772,
+   "lat": "27.7162698",
+   "lon": "85.4292752",
+   "class": "place",
+   "type": "town",
+   "place_rank": 18,
+   "importance": 0.1600679446097505,
+   "addresstype": "town",
+   "name": "\u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923",
+   "display_name": "\u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44603, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6762698",
+    "27.7562698",
+    "85.3892752",
+    "85.4692752"
+   ]
+  },
+  {
+   "place_id": 242172957,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "relation",
+   "osm_id": 10534891,
+   "lat": "27.6921181",
+   "lon": "85.4523855",
+   "class": "boundary",
+   "type": "administrative",
+   "place_rank": 14,
+   "importance": 0.2134012779430838,
+   "addresstype": "municipality",
+   "name": "\u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e",
+   "display_name": "\u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44812, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6560677",
+    "27.7283925",
+    "85.3962157",
+    "85.5248089"
+   ]
+  }
+ ],
+ "Imadol": [
+  {
+   "place_id": 242190519,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2313807788,
+   "lat": "27.6668220",
+   "lon": "85.3442990",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.2961343492019334,
+   "addresstype": "suburb",
+   "name": "\u0907\u092e\u093e\u0921\u094b\u0932",
+   "display_name": "\u0907\u092e\u093e\u0921\u094b\u0932, Mahalaxmi-03, \u092e\u0939\u093e\u0932\u0915\u094d\u0937\u094d\u092e\u0940, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44795, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6468220",
+    "27.6868220",
+    "85.3242990",
+    "85.3642990"
+   ]
+  }
+ ],
+ "Tikathali": [
+  {
+   "place_id": 242961531,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2313807920,
+   "lat": "27.6580281",
+   "lon": "85.3610436",
+   "class": "place",
+   "type": "neighbourhood",
+   "place_rank": 24,
+   "importance": 0.2946949388609965,
+   "addresstype": "neighbourhood",
+   "name": "\u091f\u093f\u0915\u093e\u0925\u0932\u0940",
+   "display_name": "\u091f\u093f\u0915\u093e\u0925\u0932\u0940, \u0924\u0932\u094d\u0932\u094b\u0917\u093e\u0909, Mahalaxmi-05, \u092e\u0939\u093e\u0932\u0915\u094d\u0937\u094d\u092e\u0940, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44795, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6480281",
+    "27.6680281",
+    "85.3510436",
+    "85.3710436"
+   ]
+  }
+ ],
+ "Siddhipur": [
+  {
+   "place_id": 242315248,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2313807961,
+   "lat": "27.6473655",
+   "lon": "85.3568211",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.2954185985350713,
+   "addresstype": "suburb",
+   "name": "\u0938\u093f\u0926\u094d\u0927\u093f\u092a\u0941\u0930",
+   "display_name": "\u0938\u093f\u0926\u094d\u0927\u093f\u092a\u0941\u0930, Mahalaxmi-06, \u092e\u0939\u093e\u0932\u0915\u094d\u0937\u094d\u092e\u0940, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44795, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6273655",
+    "27.6673655",
+    "85.3368211",
+    "85.3768211"
+   ]
+  }
+ ],
+ "Harisiddhi": [
+  {
+   "place_id": 240851257,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2313807785,
+   "lat": "27.6362720",
+   "lon": "85.3402710",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.2961343492019334,
+   "addresstype": "suburb",
+   "name": "\u0939\u0930\u093f\u0938\u093f\u0926\u094d\u0927\u0940",
+   "display_name": "\u0939\u0930\u093f\u0938\u093f\u0926\u094d\u0927\u0940, Lalitpur-28, \u0932\u0932\u093f\u0924\u092a\u0941\u0930, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 41700, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6162720",
+    "27.6562720",
+    "85.3202710",
+    "85.3602710"
+   ]
+  }
+ ],
+ "Balkot": [
+  {
+   "place_id": 243234623,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 4563700498,
+   "lat": "27.6610859",
+   "lon": "85.3697455",
+   "class": "amenity",
+   "type": "bus_station",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "Balkot",
+   "display_name": "Balkot, \u092c\u093e\u0932\u0915\u094b\u091f-\u092c\u093f\u0930\u0941\u0935\u093e \u0938\u0921\u0915, \u0938\u093f\u0930\u0941\u091f\u093e\u0930, Suryabinayak-02, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44708, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6610359",
+    "27.6611359",
+    "85.3696955",
+    "85.3697955"
+   ]
+  },
+  {
+   "place_id": 243310959,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2251951406,
+   "lat": "27.6689044",
+   "lon": "85.3603939",
+   "class": "place",
+   "type": "neighbourhood",
+   "place_rank": 24,
+   "importance": 0.08006794460975049,
+   "addresstype": "neighbourhood",
+   "name": "\u092c\u093e\u0932\u0915\u094b\u091f",
+   "display_name": "\u092c\u093e\u0932\u0915\u094b\u091f, \u0924\u0932\u094d\u0932\u094b\u0917\u093e\u0909, Mahalaxmi-05, \u092e\u0939\u093e\u0932\u0915\u094d\u0937\u094d\u092e\u0940, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44810, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6589044",
+    "27.6789044",
+    "85.3503939",
+    "85.3703939"
+   ]
+  }
+ ],
+ "Dadhikot": [
+  {
+   "place_id": 242213052,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2249178847,
+   "lat": "27.6681336",
+   "lon": "85.3859703",
+   "class": "amenity",
+   "type": "place_of_worship",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "Dakshin Barahi Temple",
+   "display_name": "Dakshin Barahi Temple, gamch, Suryabinayak-03, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 42600, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6680836",
+    "27.6681836",
+    "85.3859203",
+    "85.3860203"
+   ]
+  },
+  {
+   "place_id": 242174076,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2251951467,
+   "lat": "27.6492270",
+   "lon": "85.3935930",
+   "class": "place",
+   "type": "hamlet",
+   "place_rank": 20,
+   "importance": 0.13340127794308382,
+   "addresstype": "hamlet",
+   "name": "\u0926\u093e\u0926\u093f\u0915\u094b\u091f",
+   "display_name": "\u0926\u093e\u0926\u093f\u0915\u094b\u091f, Suryabinayak-04, \u092c\u093f\u0930\u0941\u0935\u093e, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44708, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6292270",
+    "27.6692270",
+    "85.3735930",
+    "85.4135930"
+   ]
+  }
+ ],
+ "Matatirtha": [
+  {
+   "place_id": 241846344,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 7709963858,
+   "lat": "27.6749394",
+   "lon": "85.2369873",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u092e\u093e\u0924\u093e\u0924\u0940\u0930\u094d\u0925",
+   "display_name": "\u092e\u093e\u0924\u093e\u0924\u0940\u0930\u094d\u0925, Chandragiri-08, \u091a\u0928\u094d\u0926\u094d\u0930\u093e\u0917\u093f\u0930\u0940, \u091a\u0928\u094d\u0926\u094d\u0930\u093e\u0917\u093f\u0930\u0940 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44619, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6549394",
+    "27.6949394",
+    "85.2169873",
+    "85.2569873"
+   ]
+  }
+ ],
+ "Dhapasi": [
+  {
+   "place_id": 242851729,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 410997876,
+   "lat": "27.7451935",
+   "lon": "85.3291194",
+   "class": "leisure",
+   "type": "park",
+   "place_rank": 24,
+   "importance": 0.08006794460975049,
+   "addresstype": "park",
+   "name": "Dhapasi Park",
+   "display_name": "Dhapasi Park, Tokha-07, \u091f\u094b\u0916\u093e, \u091f\u094b\u0916\u093e \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7451145",
+    "27.7452427",
+    "85.3290432",
+    "85.3291826"
+   ]
+  },
+  {
+   "place_id": 239574288,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 165929099,
+   "lat": "27.7452022",
+   "lon": "85.3345306",
+   "class": "highway",
+   "type": "residential",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "residential",
+   "name": "Dhapasi Marg",
+   "display_name": "Dhapasi Marg, Kathmandu-03, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0901 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u091f\u094b\u0916\u093e \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44606, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7420563",
+    "27.7478939",
+    "85.3331230",
+    "85.3370167"
+   ]
+  },
+  {
+   "place_id": 242508082,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 530089660,
+   "lat": "27.7463125",
+   "lon": "85.3393229",
+   "class": "highway",
+   "type": "unclassified",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "unclassified",
+   "name": "Dhapasi Marg",
+   "display_name": "Dhapasi Marg, Kathmandu-03, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0901 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u091f\u094b\u0916\u093e \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44606, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7451337",
+    "27.7478939",
+    "85.3370167",
+    "85.3418863"
+   ]
+  },
+  {
+   "place_id": 240091757,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 191534875,
+   "lat": "27.7436360",
+   "lon": "85.3345258",
+   "class": "highway",
+   "type": "residential",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "residential",
+   "name": "212 Dhapasi Marg",
+   "display_name": "212 Dhapasi Marg, Kathmandu-03, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0901 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u091f\u094b\u0916\u093e \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44606, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7430836",
+    "27.7439477",
+    "85.3336392",
+    "85.3349367"
+   ]
+  },
+  {
+   "place_id": 242673979,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 1185189792,
+   "lat": "27.7433469",
+   "lon": "85.3337948",
+   "class": "highway",
+   "type": "residential",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "residential",
+   "name": "212 Dhapasi Marg",
+   "display_name": "212 Dhapasi Marg, \u0938\u0943\u091c\u0928\u0936\u0940\u0932 \u091f\u094b\u0932, \u092c\u0938\u0941\u0928\u094d\u0927\u0930\u093e, Kathmandu-03, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0901 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44606, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7432062",
+    "27.7434875",
+    "85.3337552",
+    "85.3338343"
+   ]
+  }
+ ],
+ "Thaiba": [
+  {
+   "place_id": 242847323,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2313807995,
+   "lat": "27.6233873",
+   "lon": "85.3486897",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.29396319343666205,
+   "addresstype": "suburb",
+   "name": "\u0920\u0948\u092c\u093e",
+   "display_name": "\u0920\u0948\u092c\u093e, Godawari-14, \u0917\u094b\u0926\u093e\u0935\u0930\u0940, \u0917\u094b\u0926\u093e\u0935\u0930\u0940 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 41700, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6033873",
+    "27.6433873",
+    "85.3286897",
+    "85.3686897"
+   ]
+  }
+ ],
+ "Khokana": [
+  {
+   "place_id": 243186375,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 562963056,
+   "lat": "27.6358870",
+   "lon": "85.2990340",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.3022467077917196,
+   "addresstype": "suburb",
+   "name": "\u0916\u094b\u0915\u0928\u093e",
+   "display_name": "\u0916\u094b\u0915\u0928\u093e, Lalitpur-21, \u0932\u0932\u093f\u0924\u092a\u0941\u0930, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44700, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6158870",
+    "27.6558870",
+    "85.2790340",
+    "85.3190340"
+   ]
+  }
+ ],
+ "Sainbu": [
+  {
+   "place_id": 242242556,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2313807871,
+   "lat": "27.6493300",
+   "lon": "85.3035881",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u0938\u0948\u0902\u092c\u0941",
+   "display_name": "\u0938\u0948\u0902\u092c\u0941, Lalitpur-18, \u0932\u0932\u093f\u0924\u092a\u0941\u0930, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 13775, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6293300",
+    "27.6693300",
+    "85.2835881",
+    "85.3235881"
+   ]
+  }
+ ],
+ "Duwakot": [
+  {
+   "place_id": 242924157,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 11306546069,
+   "lat": "27.6969726",
+   "lon": "85.4117566",
+   "class": "amenity",
+   "type": "cafe",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "Duwakot",
+   "display_name": "Duwakot, Rudraksha Road, Changunarayan-01, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 97701, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6969226",
+    "27.6970226",
+    "85.4117066",
+    "85.4118066"
+   ]
+  },
+  {
+   "place_id": 242245186,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2148707722,
+   "lat": "27.6940990",
+   "lon": "85.4126820",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u0926\u0941\u0935\u093e\u0915\u094b\u091f",
+   "display_name": "\u0926\u0941\u0935\u093e\u0915\u094b\u091f, Changunarayan-02, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 97701, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6740990",
+    "27.7140990",
+    "85.3926820",
+    "85.4326820"
+   ]
+  }
+ ],
+ "Lamatar": [
+  {
+   "place_id": 243243638,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2054615266,
+   "lat": "27.6329650",
+   "lon": "85.3900150",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.29396319343666205,
+   "addresstype": "suburb",
+   "name": "\u0932\u093e\u092e\u093e\u091f\u093e\u0930",
+   "display_name": "\u0932\u093e\u092e\u093e\u091f\u093e\u0930, Mahalaxmi-09, \u092e\u0939\u093e\u0932\u0915\u094d\u0937\u094d\u092e\u0940, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44708, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6129650",
+    "27.6529650",
+    "85.3700150",
+    "85.4100150"
+   ]
+  }
+ ],
+ "Nayapati": [
+  {
+   "place_id": 243130277,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 3686003043,
+   "lat": "27.7448631",
+   "lon": "85.4096100",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u0928\u092f\u093e\u0901\u092a\u093e\u091f\u0940",
+   "display_name": "\u0928\u092f\u093e\u0901\u092a\u093e\u091f\u0940, Gokarneshwar-02, \u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930, \u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44603, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7248631",
+    "27.7648631",
+    "85.3896100",
+    "85.4296100"
+   ]
+  }
+ ],
+ "Gokarneshwor": [
+  {
+   "place_id": 242962376,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 6646454829,
+   "lat": "27.7262875",
+   "lon": "85.3759059",
+   "class": "place",
+   "type": "town",
+   "place_rank": 18,
+   "importance": 0.23992860907835414,
+   "addresstype": "town",
+   "name": "\u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930",
+   "display_name": "\u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930, \u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 20187, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6862875",
+    "27.7662875",
+    "85.3359059",
+    "85.4159059"
+   ]
+  }
+ ],
+ "Mulpani": [
+  {
+   "place_id": 242291872,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 5217659939,
+   "lat": "27.7096428",
+   "lon": "85.3950756",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u092e\u0941\u0932\u092a\u093e\u0928\u0940",
+   "display_name": "\u092e\u0941\u0932\u092a\u093e\u0928\u0940, Kageshwori Manohara-06, \u0915\u093e\u0917\u0947\u0936\u094d\u0935\u0930\u0940 \u092e\u0928\u094b\u0939\u0930\u093e, \u0915\u093e\u0917\u0947\u0936\u094d\u0935\u0930\u0940 \u092e\u0928\u094b\u0939\u0930\u093e \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 97701, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6896428",
+    "27.7296428",
+    "85.3750756",
+    "85.4150756"
+   ]
+  },
+  {
+   "place_id": 242029782,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2313807888,
+   "lat": "27.6173061",
+   "lon": "85.3734042",
+   "class": "place",
+   "type": "locality",
+   "place_rank": 25,
+   "importance": 0.06673461127641718,
+   "addresstype": "locality",
+   "name": "Mulpani",
+   "display_name": "Mulpani, \u0917\u094b\u0926\u093e\u092e\u091a\u094c\u0930, Godawari-01, \u0917\u094b\u0926\u093e\u0935\u0930\u0940 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44709, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6073061",
+    "27.6273061",
+    "85.3634042",
+    "85.3834042"
+   ]
+  }
+ ],
+ "Sitapaila": [
+  {
+   "place_id": 242982293,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 877388979,
+   "lat": "27.7096283",
+   "lon": "85.2831935",
+   "class": "building",
+   "type": "house",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "building",
+   "name": "kartik international",
+   "display_name": "kartik international, sitapaila, \u0915\u093e\u0920\u092e\u093e\u0921\u093e\u0948\u0901 \u091a\u0915\u094d\u0930\u092a\u0925, \u0938\u0940\u0924\u093e\u092a\u093e\u0907\u0932\u093e, Kathmandu-15, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0901 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0928\u093e\u0917\u093e\u0930\u094d\u091c\u0941\u0928 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44600, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7096043",
+    "27.7096523",
+    "85.2831356",
+    "85.2832515"
+   ]
+  },
+  {
+   "place_id": 242248013,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 5362570123,
+   "lat": "27.7072377",
+   "lon": "85.2825515",
+   "class": "highway",
+   "type": "bus_stop",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "highway",
+   "name": "Sitapaila",
+   "display_name": "Sitapaila, Kathmandu Ringroad, \u0938\u0940\u0924\u093e\u092a\u093e\u0907\u0932\u093e, Kathmandu-13, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0901 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0928\u093e\u0917\u093e\u0930\u094d\u091c\u0941\u0928 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44620, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7071877",
+    "27.7072877",
+    "85.2825015",
+    "85.2826015"
+   ]
+  },
+  {
+   "place_id": 242320359,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2207719955,
+   "lat": "27.7117082",
+   "lon": "85.2769017",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u0938\u0940\u0924\u093e\u092a\u093e\u0907\u0932\u093e",
+   "display_name": "\u0938\u0940\u0924\u093e\u092a\u093e\u0907\u0932\u093e, Nagarjun-04, \u0928\u093e\u0917\u093e\u0930\u094d\u091c\u0941\u0928, \u0928\u093e\u0917\u093e\u0930\u094d\u091c\u0941\u0928 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44620, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6917082",
+    "27.7317082",
+    "85.2569017",
+    "85.2969017"
+   ]
+  }
+ ],
+ "Ramkot": [
+  {
+   "place_id": 243179129,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 3029448725,
+   "lat": "27.7208558",
+   "lon": "85.2521799",
+   "class": "place",
+   "type": "neighbourhood",
+   "place_rank": 24,
+   "importance": 0.08006794460975049,
+   "addresstype": "neighbourhood",
+   "name": "\u0930\u093e\u092e\u0915\u094b\u091f",
+   "display_name": "\u0930\u093e\u092e\u0915\u094b\u091f, Nagarjun-07, \u0928\u093e\u0917\u093e\u0930\u094d\u091c\u0941\u0928, \u0928\u093e\u0917\u093e\u0930\u094d\u091c\u0941\u0928 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44619, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7108558",
+    "27.7308558",
+    "85.2421799",
+    "85.2621799"
+   ]
+  }
+ ],
+ "Dharmasthali": [
+  {
+   "place_id": 248416889,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2206264553,
+   "lat": "27.7670400",
+   "lon": "85.3006210",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u0927\u0930\u094d\u092e\u0938\u094d\u0925\u0932\u0940",
+   "display_name": "\u0927\u0930\u094d\u092e\u0938\u094d\u0925\u0932\u0940, Tarakeshwar-06, \u0924\u093e\u0930\u0915\u0947\u0936\u094d\u0935\u0930, \u0924\u093e\u0930\u0915\u0947\u0936\u094d\u0935\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 19975, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7470400",
+    "27.7870400",
+    "85.2806210",
+    "85.3206210"
+   ]
+  }
+ ],
+ "Goldhunga": [
+  {
+   "place_id": 242182161,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 13273073616,
+   "lat": "27.7511006",
+   "lon": "85.2946008",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u0917\u094b\u0932\u0922\u0941\u0919\u094d\u0917\u093e",
+   "display_name": "\u0917\u094b\u0932\u0922\u0941\u0919\u094d\u0917\u093e, Tarakeshwar-04, \u0924\u093e\u0930\u0915\u0947\u0936\u094d\u0935\u0930, \u0924\u093e\u0930\u0915\u0947\u0936\u094d\u0935\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 19975, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7311006",
+    "27.7711006",
+    "85.2746008",
+    "85.3146008"
+   ]
+  }
+ ],
+ "Jitpurphedi": [],
+ "Kabhresthali": [
+  {
+   "place_id": 242439975,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 224659298,
+   "lat": "27.7846491",
+   "lon": "85.3009480",
+   "class": "amenity",
+   "type": "health_post",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "Kabhresthali Health Post",
+   "display_name": "Kabhresthali Health Post, 27DR022, Tarakeshwar-02, \u0924\u093e\u0930\u0915\u0947\u0936\u094d\u0935\u0930, \u0924\u093e\u0930\u0915\u0947\u0936\u094d\u0935\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44610, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7846039",
+    "27.7846942",
+    "85.3009062",
+    "85.3009899"
+   ]
+  }
+ ],
+ "Chunikhel": [
+  {
+   "place_id": 242069064,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 200724460,
+   "lat": "27.7624355",
+   "lon": "85.3659838",
+   "class": "leisure",
+   "type": "park",
+   "place_rank": 24,
+   "importance": 0.08006794460975049,
+   "addresstype": "park",
+   "name": "Chunikhel",
+   "display_name": "Chunikhel, Budhanilkantha-13, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7620717",
+    "27.7627247",
+    "85.3655822",
+    "85.3663861"
+   ]
+  },
+  {
+   "place_id": 242086930,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2313807719,
+   "lat": "27.6178363",
+   "lon": "85.3095830",
+   "class": "place",
+   "type": "locality",
+   "place_rank": 25,
+   "importance": 0.06673461127641718,
+   "addresstype": "locality",
+   "name": "Chunikhel",
+   "display_name": "Chunikhel, \u092c\u0941\u0919\u094d\u0917\u092e\u0924\u0940, Lalitpur-22, \u0932\u0932\u093f\u0924\u092a\u0941\u0930, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44760, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6078363",
+    "27.6278363",
+    "85.2995830",
+    "85.3195830"
+   ]
+  },
+  {
+   "place_id": 242245929,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 5606426425,
+   "lat": "27.6192430",
+   "lon": "85.3050941",
+   "class": "amenity",
+   "type": "bus_station",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "chunikhel",
+   "display_name": "chunikhel, \u090f\u0915\u093e\u0928\u094d\u0924\u0915\u0941\u0928\u093e-\u091f\u093f\u0915\u093e\u092d\u0948\u0930\u092c \u0938\u0921\u0915, \u092a\u093e\u0930\u0940\u0917\u093e\u0909\u0901, Lalitpur-22, \u0917\u094b\u0926\u093e\u0935\u0930\u0940, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0932\u0932\u093f\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44760, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6191930",
+    "27.6192930",
+    "85.3050441",
+    "85.3051441"
+   ]
+  }
+ ],
+ "Baluwa": [
+  {
+   "place_id": 242519377,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 225518413,
+   "lat": "27.7521317",
+   "lon": "85.3909414",
+   "class": "amenity",
+   "type": "health_post",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "Baluwa Upa Swasthya Chowki",
+   "display_name": "Baluwa Upa Swasthya Chowki, 27DR030, Gokarneshwar-03, \u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930, \u0917\u094b\u0915\u0930\u094d\u0923\u0947\u0936\u094d\u0935\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89977, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7520524",
+    "27.7521766",
+    "85.3908603",
+    "85.3910225"
+   ]
+  },
+  {
+   "place_id": 242359715,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 7841772385,
+   "lat": "27.7129402",
+   "lon": "85.3797228",
+   "class": "tourism",
+   "type": "viewpoint",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "tourism",
+   "name": "Baluwa khani",
+   "display_name": "Baluwa khani, Siddhi Binayak Marg, Kageshwori Manohara-07, \u0915\u093e\u0917\u0947\u0936\u094d\u0935\u0930\u0940 \u092e\u0928\u094b\u0939\u0930\u093e, \u0915\u093e\u0917\u0947\u0936\u094d\u0935\u0930\u0940 \u092e\u0928\u094b\u0939\u0930\u093e \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 20187, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7128902",
+    "27.7129902",
+    "85.3796728",
+    "85.3797728"
+   ]
+  },
+  {
+   "place_id": 242083378,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 4803502725,
+   "lat": "27.7290195",
+   "lon": "85.4421952",
+   "class": "amenity",
+   "type": "recycling",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "Salambu Devi Baluwa Prasodhan Udyog Pvt Ltd",
+   "display_name": "Salambu Devi Baluwa Prasodhan Udyog Pvt Ltd, Sankhu Road, Shankharapur-09, \u0936\u0919\u094d\u0916\u0930\u093e\u092a\u0941\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44603, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7289695",
+    "27.7290695",
+    "85.4421452",
+    "85.4422452"
+   ]
+  },
+  {
+   "place_id": 239564910,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 10017464350,
+   "lat": "27.7450298",
+   "lon": "85.3330401",
+   "class": "shop",
+   "type": "hardware",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "shop",
+   "name": "GITI BALUWA",
+   "display_name": "GITI BALUWA, Dhapasi Marg, Tokha-05, \u091f\u094b\u0916\u093e, \u091f\u094b\u0916\u093e \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44606, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7449798",
+    "27.7450798",
+    "85.3329901",
+    "85.3330901"
+   ]
+  },
+  {
+   "place_id": 242551701,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 135766304,
+   "lat": "27.7239911",
+   "lon": "85.5421544",
+   "class": "amenity",
+   "type": "school",
+   "place_rank": 30,
+   "importance": 5.35584039062641e-05,
+   "addresstype": "amenity",
+   "name": "Shree Baluwa Secondary School",
+   "display_name": "Shree Baluwa Secondary School, 24DR006, \u0917\u0948\u0930\u0940\u0917\u093e\u0909\u0901, Mandandeupur-02, \u092e\u0923\u094d\u0921\u0928\u0926\u0947\u0909\u092a\u0941\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u092d\u094d\u0930\u0947\u092a\u0932\u093e\u091e\u094d\u091a\u094b\u0915 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44812, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7236442",
+    "27.7243407",
+    "85.5417598",
+    "85.5424865"
+   ]
+  }
+ ],
+ "Mahankal": [
+  {
+   "place_id": 242357635,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2190750377,
+   "lat": "27.7361203",
+   "lon": "85.3473916",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.14673461127641713,
+   "addresstype": "suburb",
+   "name": "\u092e\u0939\u093e\u0919\u094d\u0915\u093e\u0932",
+   "display_name": "\u092e\u0939\u093e\u0919\u094d\u0915\u093e\u0932, Budhanilkantha-09, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920, \u092c\u0942\u0922\u093e\u0928\u0940\u0932\u0915\u0923\u094d\u0920 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44606, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7161203",
+    "27.7561203",
+    "85.3273916",
+    "85.3673916"
+   ]
+  },
+  {
+   "place_id": 242240241,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 333963670,
+   "lat": "27.6727436",
+   "lon": "85.2756271",
+   "class": "amenity",
+   "type": "place_of_worship",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "MahanKal",
+   "display_name": "MahanKal, Nagaun Desey road, \u0926\u0947-\u0928\u0928\u0940, Kirtipur-09, \u0915\u0940\u0930\u094d\u0924\u093f\u092a\u0941\u0930, \u0915\u0940\u0930\u094d\u0924\u093f\u092a\u0941\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44618, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6727300",
+    "27.6727572",
+    "85.2756091",
+    "85.2756430"
+   ]
+  },
+  {
+   "place_id": 242289949,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 11962120770,
+   "lat": "27.7242827",
+   "lon": "85.3568315",
+   "class": "highway",
+   "type": "bus_stop",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "highway",
+   "name": "Mahankal",
+   "display_name": "Mahankal, \u092e\u0939\u093e\u0928\u0915\u0932 \u0930\u094b\u0921, \u092a\u093e\u0928\u0940 \u091f\u094d\u092f\u093e\u0919\u094d\u0915\u0940, \u092c\u094c\u0926\u094d\u0927, Kathmandu-06, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0901 \u092e\u0939\u093e\u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u0920\u092e\u093e\u0921\u094c\u0902 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44602, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7242327",
+    "27.7243327",
+    "85.3567815",
+    "85.3568815"
+   ]
+  }
+ ],
+ "Nagarkot": [
+  {
+   "place_id": 243180136,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 316984476,
+   "lat": "27.7185080",
+   "lon": "85.5197300",
+   "class": "place",
+   "type": "hamlet",
+   "place_rank": 20,
+   "importance": 0.311877314681546,
+   "addresstype": "hamlet",
+   "name": "\u0928\u0917\u0930\u0915\u094b\u091f",
+   "display_name": "\u0928\u0917\u0930\u0915\u094b\u091f, Mandandeupur-02, \u092e\u0923\u094d\u0921\u0928\u0926\u0947\u0909\u092a\u0941\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u092d\u094d\u0930\u0947\u092a\u0932\u093e\u091e\u094d\u091a\u094b\u0915 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44812, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6985080",
+    "27.7385080",
+    "85.4997300",
+    "85.5397300"
+   ]
+  },
+  {
+   "place_id": 243231314,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 5554725036,
+   "lat": "27.6920550",
+   "lon": "85.5199997",
+   "class": "natural",
+   "type": "peak",
+   "place_rank": 18,
+   "importance": 0.16005355840390628,
+   "addresstype": "peak",
+   "name": "Nagarkot",
+   "display_name": "Nagarkot, \u092c\u0928\u0947\u092a\u093e \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u092d\u094d\u0930\u0947\u092a\u0932\u093e\u091e\u094d\u091a\u094b\u0915 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44812, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6920050",
+    "27.6921050",
+    "85.5199497",
+    "85.5200497"
+   ]
+  },
+  {
+   "place_id": 432258689,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 1578227868,
+   "lat": "27.7221123",
+   "lon": "85.5241635",
+   "class": "landuse",
+   "type": "residential",
+   "place_rank": 24,
+   "importance": 0.08005355840390628,
+   "addresstype": "residential",
+   "name": "Nagarkot",
+   "display_name": "Nagarkot, Mandandeupur-01, \u092e\u0923\u094d\u0921\u0928\u0926\u0947\u0909\u092a\u0941\u0930 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u0915\u093e\u092d\u094d\u0930\u0947\u092a\u0932\u093e\u091e\u094d\u091a\u094b\u0915 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.7150717",
+    "27.7292694",
+    "85.5116490",
+    "85.5285393"
+   ]
+  }
+ ],
+ "Bageshwari": [
+  {
+   "place_id": 241990766,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2251951396,
+   "lat": "27.6914888",
+   "lon": "85.4775729",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.24782860043147328,
+   "addresstype": "suburb",
+   "name": "\u0935\u093e\u0917\u0947\u0936\u094d\u0935\u0930\u0940",
+   "display_name": "\u0935\u093e\u0917\u0947\u0936\u094d\u0935\u0930\u0940, Changunarayan-07, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 44812, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6714888",
+    "27.7114888",
+    "85.4575729",
+    "85.4975729"
+   ]
+  }
+ ],
+ "Sudal": [
+  {
+   "place_id": 242275422,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2251951696,
+   "lat": "27.6769722",
+   "lon": "85.4803234",
+   "class": "place",
+   "type": "suburb",
+   "place_rank": 19,
+   "importance": 0.2772938966131108,
+   "addresstype": "suburb",
+   "name": "\u0938\u0941\u0921\u093e\u0932",
+   "display_name": "\u0938\u0941\u0921\u093e\u0932, Changunarayan-08, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6569722",
+    "27.6969722",
+    "85.4603234",
+    "85.5003234"
+   ]
+  }
+ ],
+ "Tathali": [
+  {
+   "place_id": 242587154,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 220559557,
+   "lat": "27.6654025",
+   "lon": "85.4671825",
+   "class": "amenity",
+   "type": "school",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "Tathali Children Home",
+   "display_name": "Tathali Children Home, BHAKTAPUR NALA ROAD (GANESHMAN MARG), Changunarayan-09, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6649023",
+    "27.6659347",
+    "85.4667835",
+    "85.4677226"
+   ]
+  },
+  {
+   "place_id": 242513351,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 340582322,
+   "lat": "27.6708244",
+   "lon": "85.4809072",
+   "class": "office",
+   "type": "government",
+   "place_rank": 30,
+   "importance": 5.35584039062641e-05,
+   "addresstype": "office",
+   "name": "Tathali Ward Office",
+   "display_name": "Tathali Ward Office, 26DR011, Changunarayan-09, \u091a\u093e\u0901\u0917\u0941\u0928\u093e\u0930\u093e\u092f\u0923 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 46210, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6707771",
+    "27.6708718",
+    "85.4808568",
+    "85.4809576"
+   ]
+  }
+ ],
+ "Chitapol": [
+  {
+   "place_id": 241117591,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 218419310,
+   "lat": "27.6601212",
+   "lon": "85.4531539",
+   "class": "highway",
+   "type": "unclassified",
+   "place_rank": 26,
+   "importance": 0.053401277943083816,
+   "addresstype": "unclassified",
+   "name": "Chitapol Tahtali RD",
+   "display_name": "Chitapol Tahtali RD, \u0926\u0947\u0909\u091c\u093e, Suryabinayak-10, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6586769",
+    "27.6614713",
+    "85.4527196",
+    "85.4539467"
+   ]
+  }
+ ],
+ "Nankhel": [
+  {
+   "place_id": 245097026,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 2251951620,
+   "lat": "27.6475010",
+   "lon": "85.4473420",
+   "class": "place",
+   "type": "hamlet",
+   "place_rank": 20,
+   "importance": 0.244781979759108,
+   "addresstype": "hamlet",
+   "name": "\u0928\u0919\u0916\u0947\u0932",
+   "display_name": "\u0928\u0919\u0916\u0947\u0932, Suryabinayak-09, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6275010",
+    "27.6675010",
+    "85.4273420",
+    "85.4673420"
+   ]
+  }
+ ],
+ "Sipadol": [
+  {
+   "place_id": 243217766,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 1188547892,
+   "lat": "27.6571537",
+   "lon": "85.4311990",
+   "class": "highway",
+   "type": "service",
+   "place_rank": 27,
+   "importance": 0.04006794460975051,
+   "addresstype": "road",
+   "name": "Sipadol Road",
+   "display_name": "Sipadol Road, Suryabinayak-08, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6571356",
+    "27.6574242",
+    "85.4310527",
+    "85.4317338"
+   ]
+  },
+  {
+   "place_id": 243102423,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 226969445,
+   "lat": "27.6643090",
+   "lon": "85.4332976",
+   "class": "amenity",
+   "type": "clinic",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "Sipadol Janaswastha",
+   "display_name": "Sipadol Janaswastha, 26DR004, Suryabinayak-08, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6642134",
+    "27.6643619",
+    "85.4332404",
+    "85.4333549"
+   ]
+  },
+  {
+   "place_id": 242746753,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 7814361785,
+   "lat": "27.6501340",
+   "lon": "85.4365921",
+   "class": "highway",
+   "type": "bus_stop",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "highway",
+   "name": "Sipadol height",
+   "display_name": "Sipadol height, 26DR004, Suryabinayak-08, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6500840",
+    "27.6501840",
+    "85.4365421",
+    "85.4366421"
+   ]
+  },
+  {
+   "place_id": 243246871,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 6397585185,
+   "lat": "27.6436557",
+   "lon": "85.4329768",
+   "class": "office",
+   "type": "government",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "office",
+   "name": "sipadol woda karyalaya",
+   "display_name": "sipadol woda karyalaya, 26DR004, Suryabinayak-08, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6436057",
+    "27.6437057",
+    "85.4329268",
+    "85.4330268"
+   ]
+  },
+  {
+   "place_id": 242783395,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 6296924387,
+   "lat": "27.6458890",
+   "lon": "85.4360603",
+   "class": "amenity",
+   "type": "place_of_worship",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "\u0938\u093f\u092a\u093e\u0921\u094b\u0932 \u092e\u093e\u0928\u0915\u093e\u092e\u093e\u0928\u093e \u092e\u093e\u0908",
+   "display_name": "\u0938\u093f\u092a\u093e\u0921\u094b\u0932 \u092e\u093e\u0928\u0915\u093e\u092e\u093e\u0928\u093e \u092e\u093e\u0908, 26DR004, Suryabinayak-08, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6458390",
+    "27.6459390",
+    "85.4360103",
+    "85.4361103"
+   ]
+  }
+ ],
+ "Gundu": [
+  {
+   "place_id": 241846766,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 8080189658,
+   "lat": "27.6436261",
+   "lon": "85.4117466",
+   "class": "waterway",
+   "type": "dam",
+   "place_rank": 20,
+   "importance": 0.13340127794308382,
+   "addresstype": "dam",
+   "name": "Gundu Muhan",
+   "display_name": "Gundu Muhan, Suryabinayak-07, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6435761",
+    "27.6436761",
+    "85.4116966",
+    "85.4117966"
+   ]
+  },
+  {
+   "place_id": 239604918,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 12758859766,
+   "lat": "27.6504170",
+   "lon": "85.4191559",
+   "class": "leisure",
+   "type": "park",
+   "place_rank": 24,
+   "importance": 0.08006794460975049,
+   "addresstype": "park",
+   "name": "Gundu Chaur",
+   "display_name": "Gundu Chaur, Suryabinayak-07, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6503670",
+    "27.6504670",
+    "85.4191059",
+    "85.4192059"
+   ]
+  },
+  {
+   "place_id": 242718303,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 3497165161,
+   "lat": "27.6503708",
+   "lon": "85.4110479",
+   "class": "place",
+   "type": "locality",
+   "place_rank": 25,
+   "importance": 0.06673461127641718,
+   "addresstype": "locality",
+   "name": "Gundu Gabisa Chowk",
+   "display_name": "Gundu Gabisa Chowk, Suryabinayak-07, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6403708",
+    "27.6603708",
+    "85.4010479",
+    "85.4210479"
+   ]
+  },
+  {
+   "place_id": 242568808,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "way",
+   "osm_id": 219640933,
+   "lat": "27.6631916",
+   "lon": "85.4242754",
+   "class": "amenity",
+   "type": "school",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "amenity",
+   "name": "Gundu English Secondary School",
+   "display_name": "Gundu English Secondary School, Binayak Marga, \u0918\u0932\u093e\u0924\u0947, Suryabinayak-06, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6631170",
+    "27.6632661",
+    "85.4241620",
+    "85.4243888"
+   ]
+  },
+  {
+   "place_id": 242472893,
+   "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+   "osm_type": "node",
+   "osm_id": 8080174160,
+   "lat": "27.6477944",
+   "lon": "85.4091049",
+   "class": "healthcare",
+   "type": "hospice",
+   "place_rank": 30,
+   "importance": 6.794460975046947e-05,
+   "addresstype": "healthcare",
+   "name": "Gundu Health Post",
+   "display_name": "Gundu Health Post, F99, \u0917\u0941\u0928\u094d\u0921\u0941, Suryabinayak-07, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915, \u0938\u0942\u0930\u094d\u092f\u0935\u093f\u0928\u093e\u092f\u0915 \u0928\u0917\u0930\u092a\u093e\u0932\u093f\u0915\u093e, \u092d\u0915\u094d\u0924\u092a\u0941\u0930 \u091c\u093f\u0932\u094d\u0932\u093e, \u092c\u093e\u0917\u092e\u0924\u0940 \u092a\u094d\u0930\u0926\u0947\u0936, 89130, \u0928\u0947\u092a\u093e\u0932",
+   "boundingbox": [
+    "27.6477444",
+    "27.6478444",
+    "85.4090549",
+    "85.4091549"
+   ]
+  }
+ ],
+ "Kautunje": []
+}

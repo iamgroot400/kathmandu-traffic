@@ -65,15 +65,28 @@ def split_phases(inlinks: list):
     return [l for _, l in pairs[:k + 1]], [l for _, l in pairs[k + 1:]]
 
 
-def add_fixed_time_signals(W, cycle_s: float = 90.0, min_green: float = 10.0) -> dict:
-    """Signalise every intersection in `W`. Returns a summary dict."""
-    signalised = skipped = 0
+def add_fixed_time_signals(W, cycle_s: float = 90.0, min_green: float = 10.0,
+                           priority_minor: set | None = None, yield_priority: float = 0.2) -> dict:
+    """Signalise every intersection in `W`. Returns a summary dict.
+
+    priority_minor (D36): links that are narrow side streets. Where one whole phase is side
+    streets, the junction is left unsignalised and those streets give way (merge_priority =
+    yield_priority) instead of taking green time from the main road. Default None: unchanged.
+    """
+    signalised = skipped = priority = 0
     for node in W.NODES:
         inlinks = list(node.inlinks.values())
         major, minor = split_phases(inlinks)
         if major is None:
             skipped += 1
             continue
+        if priority_minor:
+            side = next((g for g in (major, minor) if all(l in priority_minor for l in g)), None)
+            if side is not None:
+                for l in side:
+                    l.merge_priority = yield_priority
+                priority += 1
+                continue
 
         # green in proportion to lanes served, so the busier road gets more of the cycle
         lanes_major = sum(l.number_of_lanes for l in major)
@@ -85,7 +98,7 @@ def add_fixed_time_signals(W, cycle_s: float = 90.0, min_green: float = 10.0) ->
         node.override_signal(signal=[g_major, g_minor], groups=[major, minor], reset=True)
         signalised += 1
 
-    return {"signalised": signalised, "skipped": skipped, "cycle_s": cycle_s}
+    return {"signalised": signalised, "skipped": skipped, "priority": priority, "cycle_s": cycle_s}
 
 
 def self_check(W) -> None:

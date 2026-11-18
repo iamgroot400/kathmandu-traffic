@@ -35,11 +35,13 @@ def main() -> None:
     # topology; UXsim's own examples use 0.005 (~550 m), which is far too coarse here.
     ap.add_argument("--merge-threshold", type=float, default=0.0005)
     ap.add_argument("--out-dir", type=Path, default=Path("data"))
+    # e.g. '["highway"~"trunk|primary|secondary|tertiary"]' for the JICA-demand network (D35)
+    ap.add_argument("--road-filter", default=ROAD_FILTER)
     args = ap.parse_args()
 
     nodes, links = OSMImporter.import_osm_data(
         north=args.north, south=args.south, east=args.east, west=args.west,
-        custom_filter=ROAD_FILTER,
+        custom_filter=args.road_filter,
     )
     print(f"imported:     {len(nodes)} nodes, {len(links)} links")
     print(f"node sample:  {nodes[0]}")

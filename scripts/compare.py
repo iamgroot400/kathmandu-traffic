@@ -44,29 +44,8 @@ CONFIGS = {
     "adaptive_pricing": {"adaptive": True, "toll_file": TOLLS, "toll_strength": 0.2},
 }
 
-# Two-sided 95% t critical values by degrees of freedom (n-1).
-_T95 = {1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571, 6: 2.447, 7: 2.365,
-        8: 2.306, 9: 2.262, 10: 2.228, 11: 2.201, 12: 2.179, 14: 2.145, 19: 2.093,
-        29: 2.045}
+from stats import ci95, t95  # noqa: E402,F401
 
-
-def t95(df: int) -> float:
-    if df <= 0:
-        return float("inf")
-    for k in sorted(_T95):
-        if df <= k:
-            return _T95[k]
-    return 1.96
-
-
-def ci95(values):
-    """Mean and half-width of a 95% confidence interval."""
-    vals = list(values)
-    if len(vals) < 2:
-        return (vals[0] if vals else 0.0), float("inf")
-    mean = statistics.fmean(vals)
-    sem = statistics.stdev(vals) / math.sqrt(len(vals))
-    return mean, t95(len(vals) - 1) * sem
 
 
 def worker(payload: dict) -> dict:

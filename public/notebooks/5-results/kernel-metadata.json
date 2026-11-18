@@ -1,0 +1,20 @@
+{
+ "id": "aashikkhatri/kathmandu-traffic-5-results",
+ "title": "Kathmandu traffic 5 - results",
+ "code_file": "notebook.ipynb",
+ "language": "python",
+ "kernel_type": "notebook",
+ "is_private": false,
+ "enable_gpu": false,
+ "enable_tpu": false,
+ "enable_internet": true,
+ "dataset_sources": [],
+ "competition_sources": [],
+ "kernel_sources": [
+  "aashikkhatri/kathmandu-traffic-2-baseline-and-validation",
+  "aashikkhatri/kathmandu-traffic-3a-interventions-seeds-1-8",
+  "aashikkhatri/kathmandu-traffic-3b-interventions-seeds-9-15",
+  "aashikkhatri/kathmandu-traffic-4a-projection-seeds-1-8",
+  "aashikkhatri/kathmandu-traffic-4b-projection-seeds-9-15"
+ ]
+}

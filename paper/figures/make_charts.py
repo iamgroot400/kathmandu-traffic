@@ -63,8 +63,8 @@ def fig_core():
 
 
 def fig_geh():
-    rows = list(csv.DictReader(open(ROOT / "results" / "geh.csv", encoding="utf-8")))
-    names = [r["landmark"] + ("*" if r["approx_coords"] == "True" else "") for r in rows]
+    rows = list(csv.DictReader(open(ROOT / "results" / "geh_jica2012.csv", encoding="utf-8")))
+    names = [r["intersection"] for r in rows]
     gehs = [float(r["geh"]) for r in rows]
     colors = [PALETTE["pass"] if g < 5 else PALETTE["fail"] for g in gehs]
 
@@ -72,7 +72,7 @@ def fig_geh():
     bars = ax.barh(names, gehs, color=colors)
     ax.axvline(5, color="black", linestyle="--", linewidth=1, label="GEH = 5 threshold")
     ax.set_xlabel("GEH statistic (lower is better fit)", fontsize=10)
-    ax.set_title("Baseline validation, 6 named intersections", fontsize=11)
+    ax.set_title("Baseline validation, 9 intersections (JICA 2012 counts)", fontsize=11)
     ax.set_xlim(0, max(gehs) * 1.2)
     for b, g in zip(bars, gehs):
         ax.text(g + max(gehs) * 0.02, b.get_y() + b.get_height() / 2, f"{g:.1f}", va="center", fontsize=9)
@@ -160,9 +160,75 @@ def fig_sensitivity():
     plt.close(fig)
 
 
+JICA_TESTS = [("H1 Adaptive signals", "adaptive", "baseline"), ("H2 Congestion pricing", "pricing", "baseline"),
+              ("H3 Adaptive + pricing", "adaptive_pricing", "baseline"), ("H4 Tidal lanes (AM)", "am_tidal", "am_no_tidal"),
+              ("H5 Parking enforcement", "parking", "baseline"), ("H6 Staggered departures", "staggered", "baseline"),
+              ("H7 Decentralized", "decentralized", "baseline"),
+              ("H7 vs equal uniform cut", "decentralized", "uniform_cut")]
+
+
+def jica_paired(key="tis_s"):
+    """(label, mean %, CI %) per test from the public clean run, paired by seed."""
+    src = {}
+    for r in csv.DictReader(open(ROOT / "results" / "clean" / "jica_h1h7.csv", encoding="utf-8")):
+        src.setdefault(r["config"], {})[int(r["seed"])] = float(r[key])
+    out = []
+    for label, c, b in JICA_TESTS:
+        shared = sorted(set(src[c]) & set(src[b]))
+        m, h = ci95([(src[c][s] - src[b][s]) / src[b][s] * 100 for s in shared])
+        out.append((label, m, h))
+    return out
+
+
+def fig_jica_levers():
+    res = jica_paired()
+    names = [r[0] for r in res]; means = [r[1] for r in res]; errs = [r[2] for r in res]
+    colors = [PALETTE["bar"] if abs(m) > e else "#9a9a9a" for m, e in zip(means, errs)]
+    fig, ax = plt.subplots(figsize=(6.0, 4.6))
+    bars = ax.barh(names, means, xerr=errs, capsize=4, color=colors)
+    ax.axvline(0, color="black", linewidth=0.8)
+    ax.set_xlabel("Change in mean time in system (%), 15 paired seeds", fontsize=10)
+    ax.set_title("Interventions on the JICA-demand baseline", fontsize=11)
+    ax.tick_params(axis="y", labelsize=9)
+    ax.set_xlim(min(m - e for m, e in zip(means, errs)) - 8, 8)
+    for b, m, e in zip(bars, means, errs):
+        ax.text(min(m - e, 0) - 0.8, b.get_y() + b.get_height() / 2, f"{m:+.1f}%", ha="right",
+                va="center", fontsize=8.5)
+    ax.invert_yaxis()
+    fig.tight_layout(pad=1.2)
+    fig.savefig(OUT / "fig_jica_levers.png", dpi=200)
+    plt.close(fig)
+
+
+def fig_jica_validation():
+    """Model / observed entering volume per junction, mean and 95% CI over the baseline seed sweep."""
+    ratios = {}
+    for f in sorted((ROOT / "results" / "clean" / "jica_sweep").glob("_geh_main_y0.2_s*.csv")):
+        for r in csv.DictReader(open(f, encoding="utf-8")):
+            ratios.setdefault(r["intersection"], []).append(float(r["model_pcu_h"]) / float(r["observed_pcu_h"]))
+    rows = sorted(((k, *ci95(v), len(v)) for k, v in ratios.items()), key=lambda x: -x[1])
+    fig, ax = plt.subplots(figsize=(6.0, 4.2))
+    names = [r[0] for r in rows]; means = [r[1] for r in rows]; errs = [r[2] for r in rows]
+    bars = ax.barh(names, means, xerr=errs, capsize=4, color=PALETTE["bar"])
+    ax.axvline(1, color="black", linewidth=1, label="model = observed")
+    ax.axvspan(1 / 1.5, 1.5, color="#2a7a3b", alpha=0.10, label="within a factor 1.5")
+    ax.set_xlabel("Model / observed peak entering volume (PCU/h)", fontsize=10)
+    ax.set_title(f"Validation against JICA 2011-12 counts, {rows[0][3]} seeds", fontsize=11)
+    ax.set_xlim(0, 1.6)
+    for b, m in zip(bars, means):
+        ax.text(0.03, b.get_y() + b.get_height() / 2, f"{m:.2f}", va="center", fontsize=9, color="white")
+    ax.legend(loc="lower right", fontsize=8.5)
+    ax.invert_yaxis()
+    fig.tight_layout(pad=1.2)
+    fig.savefig(OUT / "fig_jica_validation.png", dpi=200)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     fig_core()
     fig_geh()
     fig_additional()
     fig_sensitivity()
+    fig_jica_levers()
+    fig_jica_validation()
     print("wrote fig_core.png, fig_geh.png, fig_additional.png, fig_sensitivity.png")
