@@ -1,77 +1,26 @@
-\subsection{What the validation gap means for these results}
-% built from assumptions.md's untested/violated rows + the claim ledger's weak/moderate rows
-Section~\ref{sec:validation} is the central limitation of this study. The baseline's
-absolute delay and speed figures should be read as internally consistent values
-produced by a calibrated model, not as measured properties of Kathmandu's roads: a
-single calibration target (mean speed) does not constrain how demand distributes
-spatially (Section~\ref{sec:sensitivity}), and a direct check against six named
-intersections confirms this in practice, not only in principle. The relative
-comparisons in Section~\ref{sec:core} are better supported than the absolute
-numbers, but not unconditionally: the single-seed spot check in
-Section~\ref{sec:validation} found adaptive signal control specifically reverses
-direction at the one intersection where the baseline is most wrong, while pricing
-and the combined lever did not. We report this as a bounded, $n=1$ finding that
-future work with more seeds at that location should either confirm or retire, not
-as a qualification of the main $n=15$ result.
+The simulation remains partial. It carries \ValShare{} of counted intersection traffic and under
+half at the four busiest junctions. Residential streets and lanes are absent, so any traffic that
+really uses them is forced onto modeled roads, and trips to and from the outer valley enter only at
+the edge of the box. The demand is from 2011 while the network is recent, the peak hour factor of
+0.10 and the give way rule are assumptions, and Ring Road speed is still \ValRingGap~km/h below the
+survey. Relative comparisons between interventions are better supported than absolute travel
+times.
 
-\subsection{Demand is synthesized, not surveyed}
-% A1
-The 260,000-trip demand matrix is a gravity model over junction density, with no
-land-use data, survey, or observed trip count behind it, and no peak directionality
-(production equals attraction at every zone) unless explicitly reweighted for a
-specific test (Section~\ref{sec:additional-methods}). Any claim about where
-congestion occurs, as opposed to how much an intervention changes it in aggregate,
-should be weighted accordingly.
+Route choice is within day dynamic user optimum, rerouting every 600 seconds; a day to day
+equilibrium did not converge in the first version and was not retried. Pricing holds demand fixed,
+so it can only reroute trips, and no local price elasticity is available. Several analyses from the
+first version were not rerun on the new baseline and are omitted: a sweep over assumed lane
+capacity, a sensitivity sweep on fitted demand factors, and an elastic demand pricing test.
 
-\subsection{Route choice is a process, not an equilibrium}
-% A5, C7
-Day-to-day equilibrium did not converge on this network (Section~\ref{sec:related}
-documents the only comparable prior results; our own attempt is reported in
-Section~\ref{sec:stats}). Results describe within-day dynamic user optimum
-behavior. Whether the oscillation reflects a solver-tuning limitation or a
-structurally unstable equilibrium on this network was not determined.
+Deployability differs sharply between levers. No well documented case was found of congestion
+pricing implemented and measured in a lower or middle income city with institutional capacity
+comparable to Kathmandu's. The closest precedent is Jakarta, where electronic road pricing did not
+launch after about a decade, and the occupancy rule used instead was defeated by drivers hiring
+passengers \citep{jakartapost2013}. Adaptive signals need no enforcement of driver behavior, and in
+this model they deliver most of the combined lever's benefit on their own.
 
-\subsection{Pricing is a lower bound; two supported alternatives are confounded}
-% A6, M3
-The pricing result (Section~\ref{sec:core}) assumes inelastic demand: drivers
-reroute around a toll but do not cancel trips. A real deployment with elastic
-demand would plausibly show a larger effect than reported here. Separately, the two
-supported additional interventions (Section~\ref{sec:additional}) each carry an
-unresolved confound: staggered departures' 36.33\% reduction reflects a large
-(50\%) window change whose benefit may not scale linearly to smaller, more
-realistic schedule shifts; decentralized attraction's 31.13\% reduction is mixed
-with an 11.4\% cut to total demand that this study did not isolate with a
-volume-matched control.
-
-\subsection{An independent model of two real Kathmandu intersections}
-% tiwari2024satdobato
-Tiwari et al. (2024) modeled the Satdobato and Gwarko Ring Road intersections in
-SIDRA Intersection, calibrated to field data with the same GEH statistic used in
-Section~\ref{sec:validation}. Their model gives existing average delays of
-226.5~s and 201.1~s per vehicle (both LoS F), and 51.8~s and 52.5~s (LoS D) after
-signal phasing and cycle-time optimization alone. This is a second model built on
-field data, not a measured before-and-after, and it agrees with this study's
-direction. The same paper tested coordinating signal timing
-between the two intersections rather than optimizing each in isolation and found
-coordination performed \emph{worse}, attributing this to the intersections'
-physical spacing reducing any platooning benefit -- an independent
-precedent for this paper's own correction of the interaction term
-(Section~\ref{sec:core}): combining two individually effective measures is not
-guaranteed to outperform optimizing them separately. Separately, this study's own
-per-lane capacity -- not measured but computed from its calibrated free-flow speed
-and jam density settings ($\approx$2400~veh/h) -- runs somewhat above the
-1203--2160~veh/h/lane saturation flow Tiwari et al. measured in the field at the same two
-intersections, suggesting the
-baseline may allow slightly more per-lane throughput than Kathmandu's roads
-sustain under real mixed traffic.
-
-\subsection{Scope not modeled}
-% A9, C12
-Trips originating or ending outside the modeled network boundary are not
-represented in the main results; an attempt to add such demand (Section~\ref{sec:additional})
-reduced, rather than improved, face-validity against named landmarks and is not
-used elsewhere in this paper. One of its two failures was traced to the network
-extract's geographic boundary excluding a real feeder road; the other remains
-unexplained. Deep reinforcement learning for signal control, public transport
-interventions, and new road or rail capacity are outside this study's scope by
-design, not by result.
+An independent study agrees in direction. \citet{tiwari2024satdobato}, calibrated to field data at
+Satdobato and Gwarko with the same GEH statistic, model average delays falling from 226.5 and 201.1
+seconds to 51.8 and 52.5 seconds after signal optimization. They also found coordinating the two
+intersections worse than optimizing each alone, a reminder that combining measures does not
+guarantee more than their sum.

@@ -1,0 +1,14 @@
+Every simulated number in this paper comes from one public run on Kaggle, whose code, logs and
+output files can be inspected or rerun. The network, survey inputs and code are the dataset
+\url{https://www.kaggle.com/datasets/aashikkhatri/kathmandu-traffic-sim}. The notebooks, each at
+\url{https://www.kaggle.com/code/aashikkhatri/kathmandu-traffic-} followed by the name given, are:
+\begin{itemize}
+\item \texttt{1-build-demand}: demand tables and side street list from the survey inputs;
+\item \texttt{2-baseline-and-validation}: baseline seed sweep, validation and toll schedule (Section 4.1);
+\item \texttt{3a-interventions-seeds-1-8}, \texttt{3b-interventions-seeds-9-15}: the ten configurations (Sections 4.2, 4.3);
+\item \texttt{4a-projection-seeds-1-8}, \texttt{4b-projection-seeds-9-15}: demand growth (Section 4.5);
+\item \texttt{5-results}: reads the outputs above and prints every table.
+\end{itemize}
+The first version figures in Sections 4.1, 4.3 and 4.4 come from earlier local runs of that model.
+The claim ledger in the repository (\texttt{paper/claims.md}) traces each number to its notebook,
+output file and computation.

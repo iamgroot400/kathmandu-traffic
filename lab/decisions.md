@@ -27,3 +27,11 @@ Clean run from 2026-11-15. Earlier decisions: archive/2026-11-15_before_clean_ru
 - Paired, 15 seeds, time in system (archive in brackets): H1 -23.2% +/- 2.0 (-19.9); H2 -5.9 +/- 1.9 (-5.2); H3 -28.9 +/- 1.7 (-26.2), interaction +0.2 +/- 3.1 (-1.1, still additive); H4 -0.2 +/- 0.4 (n.s.); H5 -1.3 +/- 1.9 (n.s.); H6 -26.7 +/- 1.3 (same), completion -3.8 points; H7 -9.1 +/- 1.3, vs volume-matched cut +0.3 +/- 1.7 (n.s.).
 - Conclusions unchanged from the archive; every effect slightly larger because the baseline now carries all its vehicles.
 - Paper and charts repointed at `results/clean/` (sweep summary, 25 per-junction files, 150 intervention rows, 60 projection rows); build asserts equal vehicles in every compared pair except H7 (trip cut by design). Added section 4.5 (2030 projection) and a data availability note; removed the H6 rerun and platoon-loss text. 4 pages.
+
+## D5 - Every number traced to the Kaggle run; LaTeX and docs rebuilt (2026-11-18)
+- `tools/fetch_results.sh` downloads the stage 2-4 outputs into `results/clean/` (checked identical to the hand-assembled copy).
+- `paper/evidence.py` computes all 74 simulated numbers once and writes `paper/claims.md` (number, notebook link, file, computation, macro), `paper/numbers.tex` (LaTeX macros) and the README results table.
+- LaTeX (`paper/main.tex`, `sections/*.tex`) rewritten to match the PDF text; every simulated number is a macro. Not compiled locally (no TeX install); macros, braces and citations checked by script.
+- Three hand-typed figures replaced by computed ones: tolled links 1,066 (archive run) -> 1,079 (clean run); busiest-junction share 40-50%; give-way sensitivity at most 0.2 km/h / 2 points.
+- First-version numbers (sections 4.1, 4.3, 4.4) are local runs, not Kaggle; labelled as such in the paper, the availability statement and claims.md.
+- Docs: new `README.md`, `docs/pipeline.md`, `paper/README.md`; first-version README and Kaggle manual moved to `docs/first_version*.md`.

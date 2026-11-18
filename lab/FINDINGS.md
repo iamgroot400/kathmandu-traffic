@@ -43,7 +43,15 @@ clean run must know.
 - Primary measure: time in system over all vehicles (unfinished trips counted to the horizon).
   Delay over completed trips is biased whenever completion differs between arms.
 
-## Results to reproduce (15 paired seeds, before the clean run)
+## Clean public run (2026-11-17): done
+
+The clean run reproduced every conclusion below; each effect is slightly larger because every
+arm now carries all its vehicles. The current numbers live in `paper/claims.md` (generated from
+the Kaggle outputs by `paper/evidence.py`), not in this file. The open questions at the end are
+answered there and in `decisions.md` D4: pricing stays small (-5.9%); Ring Road is now 5 km/h
+below the survey.
+
+## Results before the clean run (archive values, superseded)
 
 | Test | Time in system | Note |
 |---|---|---|

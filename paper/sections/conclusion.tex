@@ -1,25 +1,11 @@
-Signal retiming and congestion pricing each significantly reduce delay on a
-calibrated simulation of Kathmandu's arterial network, and combining them produces
-the largest effect of any intervention tested here (65.30\% $\pm$ 4.47\%). We
-tested directly whether this combined effect is super-additive and found it is
-not -- a correction to this project's own earlier working conclusion, reported
-here rather than carried forward uncorrected. A separate robustness check across a
-range of per-lane road capacities, since this study's own capacity assumption was
-never measured against the city, finds the combined lever lowers delay in
-direction at every capacity tested while completing more trips, whereas the
-individual levers' effects are not robust below the calibrated default, meaning the standalone findings should be read
-as conditional on that assumption and the combined result as this paper's more
-robust claim. We report this result alongside the
-honest limits of the model it rests on: a calibration that matches the city on
-average but not every intersection, a route-choice process rather than a settled
-equilibrium, and two further candidate interventions that we tested and rejected
-rather than omitted. Two additional interventions -- staggered departure
-scheduling and decentralized trip attraction -- show comparably large effects and
-are reported with their own stated confounds rather than as additional headline
-results. Future work should prioritize closing the validation gap with more
-observed intersection counts, isolating the confounds on the two supported
-additional interventions, running more seeds on the interaction term itself,
-since the current result (CI including zero, 9/15 seeds negative) rules out a
-large super-additive effect but cannot rule out a smaller one at this sample size,
-and re-testing the individual levers below the calibrated capacity with a metric
-that counts unfinished trips.
+On a simulation of Kathmandu built from the JICA 2011 survey and calibrated to observed speeds,
+three interventions reliably reduce peak congestion: staggered departure times (\HSixTisMag\% less
+time in system), adaptive signal control (\HOneTisMag\%), and adaptive signals with congestion
+pricing (\HThreeTisMag\%), the last being additive rather than synergistic. Pricing alone has a
+small effect (\HTwoTisMag\%), decentralizing destinations works only through the trips it removes,
+and tidal lanes and parking enforcement show no reliable effect. The ranking matches the study's
+first version but the size of the pricing effect does not, which shows how much such estimates
+depend on the side streets a model includes. Future work should add residential streets and outer
+valley demand, use counts newer than 2011, measure a local price elasticity, and rerun the capacity
+analysis on this baseline. Under 2030 demand the present network completes only
+\ProjThirtyComp{} of peak trips, so these levers buy time rather than absorb growth.

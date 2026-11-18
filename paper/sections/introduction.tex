@@ -1,32 +1,18 @@
-Kathmandu Valley's peak-hour arterial congestion has grown with motorization far
-faster than road capacity: a 2012 survey found motorcycle traffic volumes had
-increased roughly 19.8$\times$ since 1991 (a 16\% annual growth rate)
-\cite{jica2012}, concentrated on a road network that has not grown proportionally.
-Two interventions are available to a city without the years and capital a new road
-or metro line requires: retiming existing traffic signals, and charging for road
-use at the busiest times. Both are software- or policy-level changes to
-infrastructure that already exists, in contrast to physical capacity expansion.
+Kathmandu Valley's motorization has grown far faster than its road network. A 2012 survey by the
+Japan International Cooperation Agency (JICA) and the Department of Roads found that motorcycle
+traffic had increased roughly 19.8 times since 1991, an average annual growth near 16 percent,
+concentrated on arterial roads that have not expanded in proportion \citep{jica2012}. A city
+without the years and capital for new roads or a metro line can still act on the roads it has:
+retime signals, charge for road use at the busiest hours, or change when and where trips are made.
 
-This paper asks two questions. First, do signal retiming and congestion pricing
-each reduce delay significantly on Kathmandu's arterial network, and does
-combining them interact super-additively -- a mechanism claim, not only an
-effect-size claim, that would imply pricing relieves saturation enough for
-adaptive signal control to regain room to act (Section~\ref{sec:core})? We find
-the first holds and test the second directly, and report that it does not hold
-statistically, rather than assume it from the combined effect's size alone.
-Second, how do these results hold up against the honest
-limits of a synthesized-demand simulation: against observed traffic counts
-(Section~\ref{sec:validation}), against the model's own fitted-parameter
-sensitivity (Section~\ref{sec:sensitivity}), and against four further candidate
-interventions tested with the same rigor, two of which are rejected
-(Section~\ref{sec:additional})?
+This paper asks which of seven such interventions reliably reduce peak congestion in a simulation
+of Kathmandu, and by how much. Two are signal and pricing levers and their combination (H1 to H3);
+four manage capacity or demand: tidal flow lanes (H4), parking and encroachment enforcement (H5),
+staggered departure times (H6), and decentralizing trip attraction away from the city core (H7).
 
-We build a calibrated mesoscopic simulation of Kathmandu's Ring Road and
-city-core arterial network (233 nodes, 590 links) and test every comparison across
-15 paired random seeds, reporting a confidence interval rather than a single-run
-point estimate -- a design choice motivated directly by observing that small
-changes in this model's demand can move single-run delay by several percent on
-noise alone (Section~\ref{sec:stats}). This same design is what let us catch that
-an apparent super-additive interaction did not survive a properly computed
-confidence interval (Section~\ref{sec:core}) -- a correction made during this
-project's own internal review, reported here rather than silently dropped.
+The study's first version used synthetic gravity model demand on main roads only, and placed
+traffic poorly across real intersections. This version rebuilds demand from the JICA 2011 origin
+destination survey, adds tertiary roads, calibrates road speeds to an independent speed survey,
+and reruns every intervention, together with a projection of demand growth to 2030. Section
+\ref{sec:v1} reports how the conclusions moved between the two versions, since that movement is
+itself informative about what such models can and cannot say.

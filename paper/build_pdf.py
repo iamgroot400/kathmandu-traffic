@@ -89,6 +89,34 @@ def sweep_numbers():
     return out
 
 
+BUSIEST = ("Thapathali", "Old Baneshwor", "New Baneshwor", "Kalanki")
+
+
+def junction_ratios():
+    """(lowest, highest) model/count ratio in % at the four busiest junctions, mean over baseline seeds."""
+    rat = {}
+    for f in (CLEAN / "jica_sweep").glob("_geh_main_y0.2_s*.csv"):
+        for r in csv.DictReader(open(f, encoding="utf-8")):
+            rat.setdefault(r["intersection"], []).append(float(r["model_pcu_h"]) / float(r["observed_pcu_h"]))
+    m = [statistics.fmean(rat[k]) * 100 for k in BUSIEST]
+    return min(m), max(m)
+
+
+def yield_shift():
+    """Largest change in inner speed (km/h) and volume share (points) with give-way priority 0.1 or 0.4."""
+    rows = list(csv.DictReader(open(CLEAN / "jica_sweep_summary.csv", encoding="utf-8")))
+    mean = lambda c, k: statistics.fmean(float(r[k]) for r in rows if r["config"] == c)  # noqa: E731
+    alts = ("yield_0.1", "yield_0.4")
+    return (max(abs(mean(c, "inner_kmh") - mean("main_y0.2", "inner_kmh")) for c in alts),
+            max(abs(mean(c, "share") - mean("main_y0.2", "share")) * 100 for c in alts))
+
+
+def tolled_links():
+    """Links tolled: positive delay in the untolled baseline run (toll = 0.2 x that delay)."""
+    return sum(float(r["observed_delay_s"]) > 0
+               for r in csv.DictReader(open(CLEAN / "tolls_jica.csv", encoding="utf-8")))
+
+
 def projection_numbers():
     """Demand growth projection: completion and paired time-in-system change per growth factor."""
     by = load_by(CLEAN / "jica_projection.csv")
@@ -185,6 +213,8 @@ def main():
     S = sweep_numbers()
     O = old_numbers()
     P = projection_numbers()
+    lo, hi = junction_ratios()
+    dk, ds = yield_shift()
     B = J["base"]
     pc = lambda h, k="tis": f"{J[h][k][0]:+.1f}% +/- {J[h][k][1]:.1f}%"
     pts = lambda h: f"{J[h]['comp'][0]:+.1f} +/- {J[h]['comp'][1]:.1f} points"
@@ -329,7 +359,7 @@ def main():
     s.append(Paragraph(
         "H1 replaces fixed time signals with a queue actuated heuristic that switches phase "
         "when a competing queue exceeds the current one by a lost time adjusted threshold. H2 "
-        "tolls each link at 0.2 times its own delay in an untolled baseline run (1,066 links); "
+        f"tolls each link at 0.2 times its own delay in an untolled baseline run ({tolled_links():,} links); "
         "demand does not respond to price, so tolls only reroute trips. H3 applies both. H4 "
         "compares morning demand (trips toward the core raised by 40 percent, away from it "
         "lowered) with and without one lane shifted toward the peak direction; on this network "
@@ -364,9 +394,9 @@ def main():
         "The gain is in where traffic goes and in a stable network, not in total volume. "
         "The remaining gap is concentrated at the "
         "four busiest junctions, Thapathali, Old and New Baneshwor and Kalanki, which receive "
-        "40 to 50 percent of their counts. Halving or doubling the assumed give way priority "
-        "(0.1 and 0.4, five seeds each) moves inner speed by under 0.3 km/h and the volume "
-        "share by under 2 points.", BODY))
+        f"{lo:.0f} to {hi:.0f} percent of their counts. Halving or doubling the assumed give way "
+        f"priority (0.1 and 0.4, five seeds each) moves inner speed by at most {dk:.1f} km/h and "
+        f"the volume share by at most {ds:.0f} points.", BODY))
     s.append(fig("fig_jica_validation.png", "<b>Figure 1.</b> Model to observed peak entering "
                  "volume at nine intersections (JICA 2011-12 counts), mean over the baseline "
                  "seed sweep. Error bars: 95% CI.", COL_W))
@@ -498,9 +528,18 @@ def main():
         "absorb growth.", BODY))
     s.append(Paragraph("Data and Code Availability", H1))
     s.append(Paragraph(
-        "Every result in this paper comes from one public run: the network, demand inputs, "
-        "code and notebooks are on Kaggle (dataset kathmandu-traffic-sim and notebooks "
-        "kathmandu-traffic-1 to 5), and each notebook's output can be inspected or rerun.", BODY))
+        "Every simulated number in this paper comes from one public run on Kaggle, whose code, "
+        "logs and output files can be inspected or rerun. The network, survey inputs and code "
+        "are the dataset kaggle.com/datasets/aashikkhatri/kathmandu-traffic-sim. Notebook 1 "
+        "builds the demand; notebook 2 runs the baseline and validation (section 4.1); notebooks "
+        "3a and 3b run the interventions (sections 4.2 and 4.3); notebooks 4a and 4b run the "
+        "demand growth projection (section 4.5); notebook 5 prints every table. Each is at "
+        "kaggle.com/code/aashikkhatri/kathmandu-traffic- followed by 1-build-demand, "
+        "2-baseline-and-validation, 3a-interventions-seeds-1-8, 3b-interventions-seeds-9-15, "
+        "4a-projection-seeds-1-8, 4b-projection-seeds-9-15 or 5-results. The first version "
+        "figures in sections 4.1, 4.3 and 4.4 come from earlier local runs of that model. A "
+        "claim ledger in the repository (paper/claims.md) traces each number to its notebook, "
+        "output file and computation.", BODY))
 
     # ---- references ----
     s.append(Paragraph("References", H1))

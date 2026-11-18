@@ -1,31 +1,21 @@
 \begin{abstract}
-% C1, C2, C3, C4, C5, M1 - only strong/moderate claims per the claim ledger
-We test whether signal retiming and congestion pricing reduce peak-hour delay on
-Kathmandu's arterial network, using a calibrated mesoscopic simulation (233 nodes,
-590 links) and a paired-seed statistical design (15 seeds per configuration,
-reported with 95\% confidence intervals) chosen because single-run comparisons on
-this model cannot separate an intervention's effect from routing noise. Adaptive
-signal control reduces mean delay by 24.50\% $\pm$ 7.08\% relative to a fixed-time
-baseline (15/15 seeds agreeing in sign); congestion pricing reduces it by
-31.89\% $\pm$ 5.97\% (15/15); combining both reduces delay by 65.30\% $\pm$ 4.47\%
-(15/15) -- the strongest single result in this study. We tested directly whether
-this combined effect exceeds what the two levers would predict independently (a
-super-additive interaction) using a per-seed interaction term; the result,
-$-185.3 \pm 275.6$ seconds, is not statistically significant, so we do not find
-support for a synergistic interaction, and report the combined lever's strong
-standalone effect instead. A robustness check across a range of per-lane road
-capacities, since this study's own capacity assumption was never measured against
-the city, finds the combined lever lowers delay in direction at every capacity tested
-(significantly at three of four) while completing more trips; the individual
-levers' effects are not robust below the calibrated default. A
-$\pm20\%$ sensitivity sweep on the
-model's calibrated parameters empirically confirms that two of the three fitted
-factors are not independently identified by the single calibration target used
-(a $-20\%$ change to either produces identical simulation output), and the
-calibrated baseline passes validation against observed traffic counts at only two
-of six checked intersections, with errors in both directions. We report these
-limitations explicitly, test four further candidate interventions with the same
-statistical rigor (two supported with stated confounds, two tested and rejected),
-and argue that the relative comparisons reported here are better supported by the
-evidence than the model's absolute delay figures.
+This paper tests seven candidate interventions for peak hour congestion in Kathmandu on a
+mesoscopic simulation whose demand is built from the 2011 JICA vehicle and person trip origin
+destination survey, on a network of arterial and tertiary roads with side streets that give way
+at junctions. Road speeds are calibrated to the JICA travel speed survey only; intersection counts
+are held out for validation, where the model carries \ValShare{} of counted peak volume with a
+junction correlation of \ValCorr. Every comparison uses 15 paired random seeds and mean time in
+system over all vehicles, so trips that never finish cannot flatter a result. Staggered departure
+times reduce time in system by \HSixTisMag\%, adaptive signal control by \HOneTisMag\%, and
+adaptive signals with congestion pricing by \HThreeTisMag\%, all well beyond their 95\% intervals.
+Pricing alone gives \HTwoTisMag\%, and the combined effect is the sum of its parts, not more.
+Decentralizing trip attraction helps only as much as cutting the same volume uniformly; tidal
+lanes and a parking enforcement proxy show no reliable effect. Under demand grown to 2030, only
+\ProjThirtyComp{} of peak trips finish. Compared with an earlier version of this model on synthetic
+demand and main roads only, the ranking of interventions holds but pricing loses most of its
+effect, a reminder that intervention estimates depend on how much of the street network the model
+represents.
+
+\medskip\noindent\textbf{Keywords:} traffic simulation, signal control, congestion pricing, travel
+demand management, Kathmandu, mesoscopic modeling
 \end{abstract}
