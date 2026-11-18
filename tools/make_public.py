@@ -19,7 +19,7 @@ CODE = [
     "scripts/stats.py", "scripts/run_baseline.py", "scripts/signals.py", "scripts/adaptive_signals.py",
     "scripts/tidal_lanes.py", "scripts/run_pricing.py", "scripts/dump_link_volumes.py",
     "scripts/build_minor_ways.py", "scripts/build_od_jica.py", "scripts/build_growth_od.py",
-    "scripts/sweep_jica_seeds.py", "scripts/compare_jica.py", "scripts/project_jica.py",
+    "scripts/sweep_jica_seeds.py", "scripts/compare_jica.py", "scripts/project_jica.py", "scripts/tune_counts.py",
     "checks/geh_jica2012.py", "checks/speed_jica2012.py",
     # how the inputs were made (need the JICA report PDFs / internet, not run in the pipeline)
     "scripts/build_network.py", "scripts/extract_jica_ptod.py", "scripts/extract_jica_vtod.py",

@@ -121,6 +121,12 @@ def main() -> None:
     # uniform: every pair x scale, the volume-matched control for decentralized (H7);
     # 54,065 / 58,525 = loaded PCU of decentralized / base on data/jica_net
     ap.add_argument("--scale", type=float, default=54065 / 58525)
+    # count-tuning experiments (scripts/tune_counts.py); defaults reproduce the base demand exactly
+    ap.add_argument("--intrazonal", type=float, default=0.0,
+                    help="share of trips inside one zone loaded between that zone's own junctions")
+    ap.add_argument("--outer-main", action="store_true",
+                    help="zones outside the network box load only at main-road junctions (valley entry roads)")
+    ap.add_argument("--tag", default=None, help="write od_matrix_<tag>.csv and zones_<tag>.csv")
     args = ap.parse_args()
 
     od = small_zone_od(args.k_peak)
@@ -148,12 +154,26 @@ def main() -> None:
     for z, c in cent.items():
         cand = sorted(catch.get(z, []), key=lambda n: (-g.degree(n), dist2(cent[z], nodes[n])))
         load[z] = cand[: args.sub] or [min(scc, key=lambda n: dist2(c, nodes[n]))]
+    if args.outer_main:   # outer zones enter on main roads only, nearest first
+        minor = set((args.data / "minor_ways.txt").read_text(encoding="utf-8").split())
+        main_nodes = {int(r[k]) for r in csv.reader(open(args.data / "network_links.csv", encoding="utf-8"))
+                      if r and r[0].rsplit("-", 1)[-1] not in minor for k in (1, 2)} & scc
+        lat = [p[0] for p in nodes.values()]
+        lon = [p[1] for p in nodes.values()]
+        for z, (a, b) in cent.items():
+            if not (min(lat) <= a <= max(lat) and min(lon) <= b <= max(lon)):
+                load[z] = sorted(main_nodes, key=lambda n: dist2(cent[z], nodes[n]))[: args.sub]
     load["901"] = [min(scc, key=lambda n: dist2(p, nodes[n])) for p in GATEWAYS_901]
 
     frac = defaultdict(float)                 # junction pair -> PCU, before rounding
     intrazonal = same_node = 0.0
     for (o, d), v in od.items():
         if o == d:
+            inner = [(a, b) for a in load[o] for b in load[o] if a != b]
+            if args.intrazonal and inner:     # short trips between the zone's own junctions
+                for p in inner:
+                    frac[p] += v * args.intrazonal / len(inner)
+                v *= 1 - args.intrazonal
             intrazonal += v
             continue
         sub_pairs = [(a, b) for a in load[o] for b in load[d]]
@@ -176,7 +196,14 @@ def main() -> None:
           f"{sum(len(v) for v in load.values())} loading junctions")
 
     used = sorted({n for p in pair for n in p})
-    if args.variant != "base":
+    if args.tag:                              # tuning experiment: its own zones and OD files
+        with (args.data / f"zones_{args.tag}.csv").open("w", newline="", encoding="utf-8") as fh:
+            w = csv.writer(fh)
+            w.writerow(["zone_id", "lat", "lon"])
+            for n in used:
+                w.writerow([f"N{n}", nodes[n][0], nodes[n][1]])
+        od_path = args.data / f"od_matrix_{args.tag}.csv"
+    elif args.variant != "base":
         base_ids = {r["zone_id"] for r in csv.DictReader(open(args.data / "zones.csv", encoding="utf-8"))}
         missing = {f"N{n}" for n in used} - base_ids
         assert not missing, f"variant uses junctions not in the base zones.csv: {sorted(missing)[:5]}"

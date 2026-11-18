@@ -1,0 +1,16 @@
+{
+ "id": "aashikkhatri/kathmandu-traffic-6d-tuning-loading-points",
+ "title": "Kathmandu traffic 6d - tuning: loading points",
+ "code_file": "notebook.ipynb",
+ "language": "python",
+ "kernel_type": "notebook",
+ "is_private": false,
+ "enable_gpu": false,
+ "enable_tpu": false,
+ "enable_internet": true,
+ "dataset_sources": [
+  "aashikkhatri/kathmandu-traffic-sim"
+ ],
+ "competition_sources": [],
+ "kernel_sources": []
+}

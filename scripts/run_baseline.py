@@ -127,6 +127,11 @@ def add_model_args(ap: argparse.ArgumentParser) -> None:
     ap.add_argument("--no-signals", action="store_true",
                     help="leave intersections as free merges (OSM import default)")
     ap.add_argument("--cycle", type=float, default=90.0, help="signal cycle length")
+    # count-tuning (scripts/tune_counts.py); defaults leave the model unchanged
+    ap.add_argument("--reaction-time", type=float, default=1.0,
+                    help="UXsim reaction time (s); per-lane capacity is at most 1/reaction-time")
+    ap.add_argument("--min-main-lanes", type=int, default=0,
+                    help="raise main-road links to at least this many lanes per direction")
     ap.add_argument("--adaptive", action="store_true",
                     help="queue-actuated control instead of fixed-time")
     ap.add_argument("--min-green", type=float, default=10.0)
@@ -198,12 +203,16 @@ def build_world(args, verbose: bool = True):
     # print_mode=0 also silences analyzer output, so stats would vanish too.
     W = World(name="kathmandu", deltan=args.deltan, tmax=args.tmax,
               print_mode=1 if verbose else 0, save_mode=1, show_mode=0,
-              random_seed=args.seed,
+              random_seed=args.seed, reaction_time=args.reaction_time,
               vehicle_logging_timestep_interval=args.vehicle_log_interval)
     minor = set()
     if args.minor_ways:
         minor = set(args.minor_ways.read_text(encoding="utf-8").split())
     way = lambda l: str(l[0]).rsplit("-", 1)[-1]
+    if args.min_main_lanes:   # main roads whose OSM lane count is missing or low
+        for l in links:
+            if way(l) not in minor:
+                l[3] = max(l[3], args.min_main_lanes)
     OSMImporter.osm_network_to_World(W, nodes, [l for l in links if way(l) not in minor],
                                      default_jam_density=args.jam_density,
                                      coef_degree_to_meter=111000)

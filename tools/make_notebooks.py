@@ -210,6 +210,65 @@ for c in ["baseline", "x1.20_4yr", "x1.94_2026", "x2.32_2030"]:
     print(line)'''),
 ])
 
+# Count-tuning experiments: one lever per notebook, independent of steps 1-5 (they build their own
+# demand from the dataset, so they always use the dataset's current code).
+TUNE_NB = {
+    "6a-tune-peak-demand": ("peak", "peak demand",
+        "The model carries about two thirds of the counted traffic. This notebook raises the peak-hour factor "
+        "(the share of daily trips made in the peak hour) from 0.10 to 0.12, 0.14 and 0.16."),
+    "6b-tune-valley-gateways": ("gateways", "valley entry roads",
+        "Trips from the 18 survey zones outside the network box currently enter at the nearest edge junctions, "
+        "which can be side streets. Here they enter only on main roads, at 4, 2 or 1 junctions per zone."),
+    "6c-tune-side-streets": ("sidestreets", "side streets",
+        "Side streets carry 0.353 of a main-road lane (JICA's capacity table). Lower values keep more traffic "
+        "on the main roads that pass the counted junctions: 0.25, 0.18, 0.12, and 0.25 at 20 km/h."),
+    "6d-tune-loading-points": ("loading", "loading points",
+        "Each zone loads at up to 4 junctions, and the 30% of trips that start and end inside one zone are "
+        "left off the network. This notebook tries 8 loading junctions, and puts half or all of those "
+        "inside-zone trips back on the network between the zone's own junctions."),
+    # round 2: in round 1 the busy junctions' approaches were queued at 3-25x free-flow travel time,
+    # each lane passing about 500-1,000 PCU/h, so their limit is junction capacity
+    "7a-tune-lanes": ("lanes", "main-road lanes",
+        "Round 1 showed the busy junctions' approaches queued, some with only 1-2 lanes because OpenStreetMap "
+        "often has no lane count. Main roads are raised to at least 2 or 3 lanes per direction, and 2 lanes is "
+        "also combined with the best entry-road setting from round 1."),
+    "7b-tune-saturation-flow": ("saturation", "saturation flow",
+        "Motorcycle-heavy traffic passes more PCU per lane per hour than the car-based default of one "
+        "vehicle every second. The reaction time is lowered to 0.8, 0.67 and 0.5 s (up to twice the lane capacity)."),
+    "7c-tune-signal-cycle": ("signals", "signal cycle",
+        "Every signal runs a 90 s cycle. Here it is 60, 120 and 150 s."),
+    "7d-tune-combined": ("combined", "combined levers",
+        "The best entry-road setting from round 1 (outer zones on main roads, one loading junction per zone) "
+        "with higher lane saturation flow and at least 2 main-road lanes."),
+}
+# round 3: capacity x demand, so volumes rise without roads becoming faster than the speed survey
+R3 = "Round 2 showed that more junction capacity brings volumes up but leaves the roads far faster than the " \
+     "speed survey. Here a capacity setting from round 2, with outer zones on main roads at one loading junction, " \
+     "is combined with higher peak demand (peak-hour factor {k}), to load that capacity back to surveyed speeds."
+for key, idea, what, k in (("8a-tune-rt0.8-demand", "cap_rt0.8", "0.8s + demand", "0.11, 0.12, 0.13"),
+                           ("8b-tune-rt0.67-demand", "cap_rt0.67", "0.67s + demand", "0.12, 0.13, 0.14"),
+                           ("8c-tune-lanes3-demand", "cap_lanes3", "3 lanes + demand", "0.11, 0.12, 0.13"),
+                           ("8d-tune-rt0.5-lanes2-demand", "cap_rt0.5_lanes2", "0.5s 2 lanes demand", "0.12, 0.14, 0.16")):
+    TUNE_NB[key] = (idea, what, R3.format(k=k))
+for key, (idea, what, why) in TUNE_NB.items():
+    title = f"Kathmandu traffic {key[:2]} - tuning: {what}"
+    assert len(title) <= 50, title   # Kaggle limit
+    SLUG[key] = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")   # Kaggle derives the URL from the title
+    NOTEBOOKS[key] = (title, [DATASET], [], [
+        md(f"""# {key[:2]}. Tuning to the junction counts: {what}
+
+**Question:** which lever brings the model's junction volumes to the JICA 2011-12 counts?
+**Target:** GEH < 5 at all 6 tuning junctions (Chabahil, Gausala, Kalimati, New Baneshwor, Old Baneshwor, Thapathali), on the mean volume over 5 seeds, with road speeds still near the JICA speed survey (Ring Road 24.0, inner main roads 15.3 km/h).
+
+The other 3 counted junctions (Balaju, Kalanki, Koteshwor) were set aside by a fixed random draw before any tuning run and are not shown here; they are checked only once a configuration has been chosen.
+
+**This notebook:** {why} Every configuration runs on seeds 1-5, next to the unchanged baseline. Volumes are measured in the second hour of a two-hour steady peak."""),
+        code(SETUP + '\nfind_project("scripts/tune_counts.py")'),
+        code(INSTALL),
+        code('run("scripts/build_minor_ways.py")\nrun("scripts/build_od_jica.py", "--data", "data/jica_net")'),
+        code(f'run("scripts/tune_counts.py", "--idea", "{idea}", "--seeds", "5", "--jobs", "3", tries=3)'),
+    ])
+
 FORBIDDEN = re.compile(r"\b[DAE]\d{1,2}\b|(?-i:ASSUME)|human|judge|hackathon|pitch|claude|assistant|audit|Anthropic", re.I)
 
 
