@@ -47,7 +47,19 @@ traces each number to its notebook, file and computation.
 | **`kathmandu-traffic`** (this one) | the simulation |
 | `kathmandu-traffic-vision` | junction cameras: counting, red-light violations, number plates |
 
-Calibration against the junction counts (rounds 1-5, ongoing): [`docs/count-calibration.md`](docs/count-calibration.md).
+## Work after the paper's runs
+
+These runs are recorded in [`lab/decisions.md`](lab/decisions.md) (D6-D12); they do not change the
+results table above.
+
+- **Calibration against the junction counts** (six rounds, stopped): best 2 of 6 tuning junctions
+  with GEH < 5 (round 5, mean GEH 20.0, speeds 22.3 / 15.1 km/h). Round 5 found and fixed a lane-count
+  bug in the OpenStreetMap import; round 6 over-corrected and was not adopted. The 3 held-out junctions
+  were never revealed. Details: [`docs/count-calibration.md`](docs/count-calibration.md).
+- **The interventions at future demand** (`scripts/future_jica.py`, 6 paired seeds): no arm restores
+  2011 conditions at 2026 or 2030 demand. The combined plan (adaptive signals + pricing + staggered
+  departures) cuts time in system by 51.0% +/- 7.3% (2026) and 37.2% +/- 2.7% (2030) against doing
+  nothing at the same demand (D12).
 
 ## How a number gets from Kaggle into the paper
 
