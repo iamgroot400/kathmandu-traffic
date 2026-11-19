@@ -39,6 +39,16 @@ traces each number to its notebook, file and computation.
 - Demand growth: trips completed in 6 h fall from 98.1% at 2011 demand to 33.6% at 2026 demand and 24.1% at 2030 demand.
 <!-- results:end -->
 
+## Part of a three-repository project
+
+| Repository | Contents |
+|---|---|
+| `kathmandu-traffic-docs` | project overview, data sources, technology, roadmap |
+| **`kathmandu-traffic`** (this one) | the simulation |
+| `kathmandu-traffic-vision` | junction cameras: counting, red-light violations, number plates |
+
+Calibration against the junction counts (rounds 1-5, ongoing): [`docs/count-calibration.md`](docs/count-calibration.md).
+
 ## How a number gets from Kaggle into the paper
 
 ```

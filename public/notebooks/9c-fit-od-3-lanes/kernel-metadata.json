@@ -1,0 +1,16 @@
+{
+ "id": "aashikkhatri/kathmandu-traffic-9c-fit-od-to-counts-3-lanes",
+ "title": "Kathmandu traffic 9c - fit OD to counts: 3 lanes",
+ "code_file": "notebook.ipynb",
+ "language": "python",
+ "kernel_type": "notebook",
+ "is_private": false,
+ "enable_gpu": false,
+ "enable_tpu": false,
+ "enable_internet": true,
+ "dataset_sources": [
+  "aashikkhatri/kathmandu-traffic-sim"
+ ],
+ "competition_sources": [],
+ "kernel_sources": []
+}

@@ -75,6 +75,24 @@ for idea, cap, ks in (("cap_rt0.8", ["--reaction-time", "0.8"], ("0.11", "0.12",
                       ("cap_lanes3", ["--min-main-lanes", "3"], ("0.11", "0.12", "0.13")),
                       ("cap_rt0.5_lanes2", ["--reaction-time", "0.5", "--min-main-lanes", "2"], ("0.12", "0.14", "0.16"))):
     IDEAS[idea] = {"base": ([], []), **{f"gw1_k{k}": (GW1 + ["--k-peak", k], cap) for k in ks}}
+# round 4: zones loaded trips at their highest-degree nodes, i.e. at the big junctions themselves
+# (1,860 PCU/h at each Baneshwor node); such trips bypass the junction's approaches and its count
+MB = ["--midblock", "--outer-main"]
+IDEAS["midblock"] = {"base": ([], []),
+                     "mb_rt0.67_k0.14": (MB + ["--k-peak", "0.14"], ["--reaction-time", "0.67"]),
+                     "mb_rt0.67_k0.12": (MB + ["--k-peak", "0.12"], ["--reaction-time", "0.67"]),
+                     "mb_lanes3_k0.13": (MB + ["--k-peak", "0.13"], ["--min-main-lanes", "3"]),
+                     "mb_rt0.5_lanes2_k0.14": (MB + ["--k-peak", "0.14"], ["--reaction-time", "0.5", "--min-main-lanes", "2"])}
+# round 5: two network rules applied city-wide, fixed before any run. (1) UXsim read OSM `lanes` as
+# per direction, doubling every tagged two-way road (the Ring Road at Chabahil/Gausala) while the
+# one-way Baneshwor/Thapathali roads were right; (2) main links with the most roadside shops slow to 30 km/h
+LANES = ["--osm-way-tags", "data/jica_net/osm_way_tags.csv"]
+FRIC = LANES + ["--friction-kmh", "30", "--friction-share", "0.10"]
+for idea, net in (("osmlanes", LANES), ("osmlanes_friction", FRIC)):
+    IDEAS[idea] = {"base": ([], []), "net": ([], net),
+                   "net_mb_k0.13": (MB + ["--k-peak", "0.13"], net),
+                   "net_mb_rt0.67_k0.14": (MB + ["--k-peak", "0.14"], net + ["--reaction-time", "0.67"]),
+                   "net_mb_rt0.5_k0.14": (MB + ["--k-peak", "0.14"], net + ["--reaction-time", "0.5"])}
 
 
 def geh(m, o):
@@ -101,19 +119,20 @@ def run(idea: str, name: str, od_args: list, run_args: list, seed: int) -> str:
     return f"{out.name}: {res.stdout.strip().splitlines()[-1]}"
 
 
-def score(idea: str, configs: dict, reveal_test: bool) -> None:
+def score(idea: str, configs: dict, reveal_test: bool, radius: float = 0) -> None:
     import geh_jica2012
     import speed_jica2012
     out_dir = ROOT / "results" / f"tune_{idea}"
+    sfx = f"_r{radius:g}" if radius else ""   # cluster measure writes its own files
     rows, junc = [], []
     for name in configs:
         vols, per_seed = {}, []
         for f in sorted(out_dir.glob(f"{name}_s*.csv")):
             if not re.fullmatch(rf"{re.escape(name)}_s\d+\.csv", f.name):
                 continue
-            g_rel = f"tune_{idea}/_geh_{f.stem}.csv"
+            g_rel = f"tune_{idea}/_geh{sfx}_{f.stem}.csv"
             with contextlib.redirect_stdout(io.StringIO()):
-                geh_jica2012.main(f.relative_to(ROOT / "results").as_posix(), g_rel, 0.786)
+                geh_jica2012.main(f.relative_to(ROOT / "results").as_posix(), g_rel, 0.786, radius)
             g = {r["intersection"]: r for r in csv.DictReader(open(ROOT / "results" / g_rel, encoding="utf-8"))}
             for k, r in g.items():
                 vols.setdefault(k, []).append(float(r["model_pcu_h"]))
@@ -141,8 +160,8 @@ def score(idea: str, configs: dict, reveal_test: bool) -> None:
         if reveal_test:
             row["test_pass_of_3"] = sum(geh(mean[k], obs[k]) < 5 for k in TEST)
         rows.append(row)
-    for path, data in ((out_dir.parent / f"tune_{idea}_summary.csv", rows),
-                       (out_dir.parent / f"tune_{idea}_junctions.csv", junc)):
+    for path, data in ((out_dir.parent / f"tune_{idea}{sfx}_summary.csv", rows),
+                       (out_dir.parent / f"tune_{idea}{sfx}_junctions.csv", junc)):
         with open(path, "w", newline="", encoding="utf-8") as fh:
             w = csv.DictWriter(fh, fieldnames=list(data[0]))
             w.writeheader()
@@ -165,6 +184,8 @@ def main() -> None:
     ap.add_argument("--jobs", type=int, default=3)
     ap.add_argument("--summary-only", action="store_true")
     ap.add_argument("--reveal-test", action="store_true", help="also score the 3 held-out junctions")
+    ap.add_argument("--radius", type=float, default=0,
+                    help="count each junction as traffic entering all nodes within this many metres (0: one node)")
     a = ap.parse_args()
     configs = json.loads(a.configs) if a.configs else IDEAS[a.idea]
     assert not set(TUNE) & set(TEST) and len(TUNE + TEST) == 9
@@ -179,7 +200,7 @@ def main() -> None:
         with ProcessPoolExecutor(max_workers=a.jobs, max_tasks_per_child=1) as ex:
             for i, fut in enumerate(as_completed([ex.submit(run, *t) for t in tasks]), 1):
                 print(f"[{i}/{len(tasks)}] {fut.result()}", flush=True)
-    score(a.idea, configs, a.reveal_test)
+    score(a.idea, configs, a.reveal_test, a.radius)
 
 
 if __name__ == "__main__":

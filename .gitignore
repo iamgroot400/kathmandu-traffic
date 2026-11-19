@@ -40,3 +40,8 @@ Thumbs.db
 .venv-vision/
 *.pt
 *.mp4
+
+# downloaded Kaggle run outputs (regenerate from the public notebooks)
+kaggle/r4/
+kaggle/r5/
+kaggle/tune/

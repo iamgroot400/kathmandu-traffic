@@ -250,6 +250,22 @@ for key, idea, what, k in (("8a-tune-rt0.8-demand", "cap_rt0.8", "0.8s + demand"
                            ("8c-tune-lanes3-demand", "cap_lanes3", "3 lanes + demand", "0.11, 0.12, 0.13"),
                            ("8d-tune-rt0.5-lanes2-demand", "cap_rt0.5_lanes2", "0.5s 2 lanes demand", "0.12, 0.14, 0.16")):
     TUNE_NB[key] = (idea, what, R3.format(k=k))
+TUNE_NB["9a-tune-midblock-loading"] = ("midblock", "mid-block loading",
+    "Each zone loaded its trips at its highest-degree nodes, which are the big junctions themselves: about 1,860 "
+    "PCU/h started or ended at each Baneshwor junction node, never passing its approach roads or its count. Here "
+    "trips load at mid-block nodes (on one road, at least 50 m from any junction and 100 m from a counted one) "
+    "nearest each zone's centre, with outer zones on main roads, across the best capacity and demand settings so far.")
+R5 = ("Rounds 1-4 always left the Ring Road junctions (Chabahil, Gausala) and Kalimati too high and the "
+      "Baneshwor / Thapathali junctions too low. A network check found why: UXsim's OpenStreetMap importer reads "
+      "the `lanes` tag as lanes per direction, but on a two-way road OpenStreetMap counts both directions, so every "
+      "tagged two-way road (the Ring Road among them) had twice its width, while the one-way Baneshwor and Thapathali "
+      "roads were right. Here every tagged two-way road gets half its lanes per direction{extra}. The rules apply "
+      "to the whole city and were fixed before any run; they do not look at the counts. Trips load at mid-block "
+      "nodes as in round 4.")
+TUNE_NB["10a-tune-osm-lanes"] = ("osmlanes", "two-way lane fix", R5.format(extra=""))
+TUNE_NB["10b-tune-osm-lanes-friction"] = ("osmlanes_friction", "lanes + friction", R5.format(
+    extra=", and the 10% of main road links with the most shops, amenities and offices within 100 m (from "
+          "OpenStreetMap) get a 30 km/h free-flow speed instead of 60, for stopping buses, pedestrians and street trade"))
 for key, (idea, what, why) in TUNE_NB.items():
     title = f"Kathmandu traffic {key[:2]} - tuning: {what}"
     assert len(title) <= 50, title   # Kaggle limit
@@ -267,6 +283,40 @@ The other 3 counted junctions (Balaju, Kalanki, Koteshwor) were set aside by a f
         code(INSTALL),
         code('run("scripts/build_minor_ways.py")\nrun("scripts/build_od_jica.py", "--data", "data/jica_net")'),
         code(f'run("scripts/tune_counts.py", "--idea", "{idea}", "--seeds", "5", "--jobs", "3", tries=3)'),
+    ])
+
+# round 4: trips no longer start inside junctions; a junction is counted as all nodes within 100 m
+KEY_9A = "9a-tune-midblock-loading"
+NOTEBOOKS[KEY_9A][3][0]["source"] += (
+    "\n\n**Junction measure:** OpenStreetMap draws some large junctions as several nodes, so each junction is also "
+    "scored as all traffic entering the nodes within 100 m of it (fixed before rescoring any run). Both measures are printed.")
+NOTEBOOKS[KEY_9A][3].append(code(f'run("scripts/tune_counts.py", "--idea", "midblock", "--summary-only", "--radius", "100")'))
+for key in ("10a-tune-osm-lanes", "10b-tune-osm-lanes-friction"):   # round 5 is scored on the 100 m measure too
+    NOTEBOOKS[key][3].append(code(f'run("scripts/tune_counts.py", "--idea", "{TUNE_NB[key][0]}", "--summary-only", "--radius", "100")'))
+ODME = {"9b-fit-od-0.67s": ("--midblock --outer-main --k-peak 0.14", "--reaction-time 0.67",
+                             "0.67 s reaction time, peak factor 0.14"),
+        "9c-fit-od-3-lanes": ("--midblock --outer-main --k-peak 0.13", "--min-main-lanes 3",
+                               "at least 3 main-road lanes, peak factor 0.13")}
+for key, (start, cap, what) in ODME.items():
+    title = f"Kathmandu traffic {key[:2]} - fit OD to counts: {cap.split()[-1]}{'s' if 'reaction' in cap else ' lanes'}"
+    assert len(title) <= 50, title
+    SLUG[key] = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
+    NOTEBOOKS[key] = (title, [DATASET], [], [
+        md(f"""# {key[:2]}. Fitting origin-destination flows to the junction counts
+
+Rounds 1-4 found settings that carry the right *total* traffic at roughly the surveyed speeds, but not the right *spatial pattern*: Kalimati stays too high and the Baneshwor / Thapathali junctions too low, whatever the global setting. This notebook adjusts the zone-to-zone flows themselves.
+
+**Method (path-based multiplicative OD estimation):** simulate 3 seeds; at each of the 6 tuning junctions take r = counted / modelled entering volume (all nodes within 100 m); route every OD pair on the shortest path over the simulated travel times; multiply its demand by r^0.5 for every tuning junction its path enters (at most x1.5 or /1.5 per iteration); repeat up to 6 times or until all 6 pass GEH < 5.
+
+**Start:** trips loaded at mid-block nodes (never inside a junction), outer zones on main roads, {what}.
+
+**Caveat:** this fits the 6 tuning junctions directly, so afterwards they are calibration targets, not validation. Only the 3 held-out junctions (Balaju, Kalanki, Koteshwor), never used here, can validate the result."""),
+        code(SETUP + '\nfind_project("scripts/fit_od_counts.py")'),
+        code(INSTALL),
+        code('run("scripts/build_minor_ways.py")\nrun("scripts/build_od_jica.py", "--data", "data/jica_net")'),
+        code(f'run("scripts/fit_od_counts.py", "--start", "{start}", "--run", "{cap}", "--iterations", "6", '
+             f'"--seeds", "3", "--jobs", "3", "--radius", "100", tries=3)'),
+        code('import pandas as pd\nprint(pd.read_csv("results/odme/log.csv").to_string(index=False))'),
     ])
 
 FORBIDDEN = re.compile(r"\b[DAE]\d{1,2}\b|(?-i:ASSUME)|human|judge|hackathon|pitch|claude|assistant|audit|Anthropic", re.I)

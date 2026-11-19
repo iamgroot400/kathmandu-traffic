@@ -29,13 +29,32 @@ def geh(model: float, observed: float) -> float:
     return math.sqrt((model - observed) ** 2 / ((model + observed) / 2))
 
 
-def main(dump="linkvol_base.csv", out_name="geh_jica2012.csv", pcu=PCU_FACTOR):
+def cluster_group(rows, node, radius_m):
+    """`node` plus every node within radius_m of it: OSM often draws one large junction as several nodes."""
+    pos = {}
+    for r in rows:
+        pos[r["start"]] = (float(r["start_lat"]), float(r["start_lon"]))
+        pos[r["end"]] = (float(r["end_lat"]), float(r["end_lon"]))
+    p = pos[node]
+    dist = lambda q: math.hypot(q[0] - p[0], (q[1] - p[1]) * math.cos(math.radians(p[0]))) * 111000  # noqa: E731
+    return {n for n, q in pos.items() if dist(q) <= radius_m} | {node}
+
+
+def cluster_entering(rows, node, radius_m):
+    """Volume entering the node's group from outside it; radius 0 gives the single node's entering volume."""
+    group = cluster_group(rows, node, radius_m)
+    return sum(float(r["vol_pcu_h"]) for r in rows if r["end"] in group and r["start"] not in group)
+
+
+def main(dump="linkvol_base.csv", out_name="geh_jica2012.csv", pcu=PCU_FACTOR, radius_m=0):
     """Model vs observed peak-hour entering volume at the nine counted intersections."""
-    pcu = float(pcu)
+    pcu, radius_m = float(pcu), float(radius_m)
     rows = list(csv.DictReader(open(ROOT / "results" / dump, encoding="utf-8")))
     entering = {}
     for r in rows:
         entering[r["end"]] = entering.get(r["end"], 0.0) + float(r["vol_pcu_h"])
+    if radius_m:
+        entering = {n: cluster_entering(rows, n, radius_m) for n in NODES.values()}
 
     obs_rows = [r for r in csv.DictReader(open(ROOT / "data/jica2012/intersection_counts_2011.csv", encoding="utf-8"))
                 if r["am_entering_veh_h"]]

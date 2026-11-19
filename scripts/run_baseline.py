@@ -40,6 +40,50 @@ def load_network(data: Path):
     return nodes, links
 
 
+def halve_twoway_lanes(links, tags_file: Path, way) -> int:
+    """UXsim's importer reads OSM `lanes` as lanes per direction; on a two-way road it counts both
+    directions, so each direction gets ceil(lanes / 2). One-way roads and untagged roads are unchanged."""
+    tags = {r["way"]: r for r in csv.DictReader(tags_file.open(encoding="utf-8"))}
+    n = 0
+    for l in links:
+        t = tags.get(way(l))
+        if not t or not t["lanes"].split(";")[0].strip().isdigit():
+            continue
+        if t["oneway"] in ("yes", "1", "-1", "true") or t["junction"] in ("roundabout", "circular"):
+            continue
+        l[3] = max(1, math.ceil(int(t["lanes"].split(";")[0]) / 2))
+        n += 1
+    return n
+
+
+def roadside_friction(nodes, links, pois_file: Path, share: float, kmh: float, skip) -> int:
+    """Main links whose midpoint has the most shops / amenities / offices within 100 m (top `share`
+    of main links) get free-flow speed `kmh`: stopping buses, pedestrians and street trade."""
+    import json
+    pois = json.loads(pois_file.read_text(encoding="utf-8"))   # [lat, lon]
+    cell = 0.001                                                 # ~110 m grid for the neighbour search
+    grid = {}
+    for la, lo in pois:
+        grid.setdefault((int(la / cell), int(lo / cell)), []).append((la, lo))
+    pos = {n[0]: (n[2], n[1]) for n in nodes}                    # node rows are [id, lon, lat]
+
+    def count(la, lo):
+        k = math.cos(math.radians(la))
+        return sum(1 for di in (-1, 0, 1) for dj in (-1, 0, 1)
+                   for p in grid.get((int(la / cell) + di, int(lo / cell) + dj), ())
+                   if math.hypot(p[0] - la, (p[1] - lo) * k) * 111000 <= 100)
+
+    main = [l for l in links if not skip(l)]
+    dens = [count((pos[l[1]][0] + pos[l[2]][0]) / 2, (pos[l[1]][1] + pos[l[2]][1]) / 2) for l in main]
+    cut = sorted(dens)[int(len(dens) * (1 - share))]
+    n = 0
+    for l, d in zip(main, dens):
+        if d >= max(cut, 1):
+            l[4] = min(l[4], kmh / 3.6)
+            n += 1
+    return n
+
+
 def connectivity(nodes, links):
     """Largest strongly connected component - the only part that can carry traffic."""
     g = nx.DiGraph()
@@ -132,6 +176,13 @@ def add_model_args(ap: argparse.ArgumentParser) -> None:
                     help="UXsim reaction time (s); per-lane capacity is at most 1/reaction-time")
     ap.add_argument("--min-main-lanes", type=int, default=0,
                     help="raise main-road links to at least this many lanes per direction")
+    ap.add_argument("--osm-way-tags", type=Path, default=None,
+                    help="data/jica_net/osm_way_tags.csv: give two-way roads half their OSM lanes tag per direction")
+    ap.add_argument("--friction-kmh", type=float, default=0,
+                    help="free-flow speed on the main links with the most roadside shops / amenities")
+    ap.add_argument("--friction-share", type=float, default=0.10,
+                    help="share of main links (by roadside POI count within 100 m) that get --friction-kmh")
+    ap.add_argument("--pois", type=Path, default=Path("data/kathmandu_pois.json"))
     ap.add_argument("--adaptive", action="store_true",
                     help="queue-actuated control instead of fixed-time")
     ap.add_argument("--min-green", type=float, default=10.0)
@@ -209,6 +260,12 @@ def build_world(args, verbose: bool = True):
     if args.minor_ways:
         minor = set(args.minor_ways.read_text(encoding="utf-8").split())
     way = lambda l: str(l[0]).rsplit("-", 1)[-1]
+    if args.osm_way_tags:
+        say(f"two-way lanes: {halve_twoway_lanes(links, args.osm_way_tags, way)} links set to half their OSM lanes tag")
+    if args.friction_kmh:
+        n = roadside_friction(nodes, links, args.pois, args.friction_share, args.friction_kmh,
+                              lambda l: way(l) in minor)
+        say(f"roadside friction: {n} main links at {args.friction_kmh:.0f} km/h")
     if args.min_main_lanes:   # main roads whose OSM lane count is missing or low
         for l in links:
             if way(l) not in minor:

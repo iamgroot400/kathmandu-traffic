@@ -29,6 +29,7 @@ from __future__ import annotations
 import argparse
 import csv
 import math
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -126,6 +127,8 @@ def main() -> None:
                     help="share of trips inside one zone loaded between that zone's own junctions")
     ap.add_argument("--outer-main", action="store_true",
                     help="zones outside the network box load only at main-road junctions (valley entry roads)")
+    ap.add_argument("--midblock", action="store_true",
+                    help="load each zone at mid-block nodes nearest its centre, never at junction nodes")
     ap.add_argument("--tag", default=None, help="write od_matrix_<tag>.csv and zones_<tag>.csv")
     args = ap.parse_args()
 
@@ -150,14 +153,28 @@ def main() -> None:
     catch = defaultdict(list)
     for n in scc:
         catch[min(cent, key=lambda z: dist2(cent[z], nodes[n]))].append(n)
+    # mid-block nodes (2 neighbours: a point along one road) - trips loaded at a junction node itself
+    # never pass its approaches, so they bypass both the signal and the junction count
+    nb = lambda n: len(set(g.predecessors(n)) | set(g.successors(n)))  # noqa: E731
+    m = lambda a, b: math.sqrt(dist2(a, b)) * 111000                    # noqa: E731
+    junctions = [n for n in scc if nb(n) >= 3]
+    sys.path.insert(0, str(ROOT / "checks"))
+    from geh_jica2012 import NODES as COUNTED          # stay out of each counted junction's 100 m footprint
+    counted = [int(n) for n in COUNTED.values()]
+    midblock = {n for n in scc if nb(n) <= 2 and min(m(nodes[n], nodes[j]) for j in junctions) >= 50
+                and min(m(nodes[n], nodes[c]) for c in counted) >= 100} if args.midblock else set()
     load = {}
     for z, c in cent.items():
         cand = sorted(catch.get(z, []), key=lambda n: (-g.degree(n), dist2(cent[z], nodes[n])))
+        if args.midblock:
+            cand = sorted((n for n in catch.get(z, []) if n in midblock), key=lambda n: dist2(c, nodes[n])) or cand
         load[z] = cand[: args.sub] or [min(scc, key=lambda n: dist2(c, nodes[n]))]
     if args.outer_main:   # outer zones enter on main roads only, nearest first
         minor = set((args.data / "minor_ways.txt").read_text(encoding="utf-8").split())
         main_nodes = {int(r[k]) for r in csv.reader(open(args.data / "network_links.csv", encoding="utf-8"))
                       if r and r[0].rsplit("-", 1)[-1] not in minor for k in (1, 2)} & scc
+        if args.midblock:
+            main_nodes = (main_nodes & midblock) or main_nodes
         lat = [p[0] for p in nodes.values()]
         lon = [p[1] for p in nodes.values()]
         for z, (a, b) in cent.items():
