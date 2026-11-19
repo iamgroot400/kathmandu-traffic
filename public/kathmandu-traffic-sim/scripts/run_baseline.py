@@ -56,6 +56,73 @@ def halve_twoway_lanes(links, tags_file: Path, way) -> int:
     return n
 
 
+def untagged_lanes(links, tags_file: Path, way, spec: str, minor) -> int:
+    """Main links whose OSM way has no `lanes` tag get the lanes per direction given for their class in
+    `spec`, e.g. "trunk=2,primary=2,secondary=1" (the median of the tagged main links of each class),
+    instead of UXsim's generic defaults (trunk 3, primary 2, secondary 2)."""
+    per_class = {k: int(v) for k, v in (kv.split("=") for kv in spec.split(","))}
+    tags = {r["way"]: r for r in csv.DictReader(tags_file.open(encoding="utf-8"))}
+    n = 0
+    for l in links:
+        t = tags.get(way(l))
+        if way(l) in minor or not t or t["lanes"].strip() or t["highway"] not in per_class:
+            continue
+        l[3] = per_class[t["highway"]]
+        n += 1
+    return n
+
+
+def pedestrian_friction(nodes, links, pois_file: Path, ped_file: Path, exempt, a_kmh: float = 15,
+                        b_kmh: float = 30, b_top: float = 0.10) -> tuple[int, int]:
+    """Walkers, street trade and stopping vehicles slow traffic in busy areas. Trunk roads (`exempt`: wide, with
+    footpaths) are left out. Tier A (a_kmh): links within 50 m of an OSM pedestrian street (the pedestrianised
+    core: Basantapur, Thamel, Ason). Tier B (b_kmh): the top b_top of the remaining links by OSM shops /
+    amenities / offices within 100 m along the whole link, per km. Speeds only ever go down."""
+    import json
+    pos = {n[0]: (n[2], n[1]) for n in nodes}                    # node rows are [id, lon, lat]
+    cell = 0.001                                                 # ~110 m grid for the neighbour search
+
+    def grid_of(points):
+        g = {}
+        for i, (la, lo) in enumerate(points):
+            g.setdefault((int(la / cell), int(lo / cell)), []).append((i, la, lo))
+        return g
+
+    pois = grid_of(json.loads(pois_file.read_text(encoding="utf-8")))
+    peds = grid_of(json.loads(ped_file.read_text(encoding="utf-8")))
+
+    def near(g, l, radius, step=50):
+        (ya, xa), (yb, xb) = pos[l[1]], pos[l[2]]
+        k = math.cos(math.radians(ya))
+        length = math.hypot(yb - ya, (xb - xa) * k) * 111000
+        m = max(1, int(length // step))
+        found = set()
+        for j in range(m + 1):
+            pa, po = ya + (yb - ya) * j / m, xa + (xb - xa) * j / m
+            for di in (-1, 0, 1):
+                for dj in (-1, 0, 1):
+                    for i, la, lo in g.get((int(pa / cell) + di, int(po / cell) + dj), ()):
+                        if math.hypot(la - pa, (lo - po) * k) * 111000 <= radius:
+                            found.add(i)
+        return length, found
+
+    cand = [l for l in links if not exempt(l)]
+    tier_a = [l for l in cand if near(peds, l, 50)[1]]
+    rest = [l for l in cand if l not in tier_a]
+    dens = []
+    for l in rest:
+        length, found = near(pois, l, 100)
+        dens.append(len(found) / max(length, 100) * 1000)       # per km; links under 100 m count as 100 m
+    cut_b = sorted(dens)[int(len(dens) * (1 - b_top))] if dens else float("inf")
+    for l in tier_a:
+        l[4] = min(l[4], a_kmh / 3.6)
+    nb = 0
+    for l, d in zip(rest, dens):
+        if d >= max(cut_b, 1):
+            l[4], nb = min(l[4], b_kmh / 3.6), nb + 1
+    return len(tier_a), nb
+
+
 def roadside_friction(nodes, links, pois_file: Path, share: float, kmh: float, skip) -> int:
     """Main links whose midpoint has the most shops / amenities / offices within 100 m (top `share`
     of main links) get free-flow speed `kmh`: stopping buses, pedestrians and street trade."""
@@ -178,6 +245,12 @@ def add_model_args(ap: argparse.ArgumentParser) -> None:
                     help="raise main-road links to at least this many lanes per direction")
     ap.add_argument("--osm-way-tags", type=Path, default=None,
                     help="data/jica_net/osm_way_tags.csv: give two-way roads half their OSM lanes tag per direction")
+    ap.add_argument("--untagged-lanes", default="",
+                    help='with --osm-way-tags: lanes per direction for untagged main roads by class, '
+                         'e.g. "trunk=2,primary=2,secondary=1"')
+    ap.add_argument("--pedestrian-friction", type=Path, default=None,
+                    help="with --osm-way-tags; data/jica_net/osm_pedestrian_points.json: non-trunk links near a "
+                         "pedestrian street 15 km/h; top 10%% of the rest by roadside shops 30 km/h")
     ap.add_argument("--friction-kmh", type=float, default=0,
                     help="free-flow speed on the main links with the most roadside shops / amenities")
     ap.add_argument("--friction-share", type=float, default=0.10,
@@ -266,6 +339,14 @@ def build_world(args, verbose: bool = True):
         n = roadside_friction(nodes, links, args.pois, args.friction_share, args.friction_kmh,
                               lambda l: way(l) in minor)
         say(f"roadside friction: {n} main links at {args.friction_kmh:.0f} km/h")
+    if args.untagged_lanes:
+        n = untagged_lanes(links, args.osm_way_tags, way, args.untagged_lanes, minor)
+        say(f"untagged lanes: {n} main links set to their class's tagged median ({args.untagged_lanes})")
+    if args.pedestrian_friction:
+        trunk = {r["way"] for r in csv.DictReader(args.osm_way_tags.open(encoding="utf-8"))
+                 if r["highway"] in ("trunk", "motorway")}
+        na, nb = pedestrian_friction(nodes, links, args.pois, args.pedestrian_friction, lambda l: way(l) in trunk)
+        say(f"pedestrian friction: {na} links at 15 km/h, {nb} at 30 km/h")
     if args.min_main_lanes:   # main roads whose OSM lane count is missing or low
         for l in links:
             if way(l) not in minor:
@@ -278,7 +359,8 @@ def build_world(args, verbose: bool = True):
     for l in links:
         if way(l) in minor:
             link = W.addLink(str(l[0]), str(l[1]), str(l[2]), length=l[5] * 111000,
-                             free_flow_speed=(args.minor_free_flow_kmh / 3.6
+                             free_flow_speed=(min(args.minor_free_flow_kmh / 3.6, l[4]) if args.minor_free_flow_kmh
+                                              and args.pedestrian_friction else args.minor_free_flow_kmh / 3.6
                                               if args.minor_free_flow_kmh else l[4]), jam_density_per_lane=args.jam_density,
                              number_of_lanes=1, auto_rename=True)
             link.capacity_out = args.minor_capacity_ratio * link.capacity

@@ -266,6 +266,16 @@ TUNE_NB["10a-tune-osm-lanes"] = ("osmlanes", "two-way lane fix", R5.format(extra
 TUNE_NB["10b-tune-osm-lanes-friction"] = ("osmlanes_friction", "lanes + friction", R5.format(
     extra=", and the 10% of main road links with the most shops, amenities and offices within 100 m (from "
           "OpenStreetMap) get a 30 km/h free-flow speed instead of 60, for stopping buses, pedestrians and street trade"))
+TUNE_NB["11a-tune-lanes-pedestrians"] = ("net6", "lanes + pedestrians",
+    "Round 5's best setting still left Kalimati too high. A check of its approach roads found that they have no "
+    "lane count in OpenStreetMap, so the importer gave them its generic default: 3-4 lanes per direction for a trunk "
+    "road, where the tagged trunk roads of Kathmandu have a median of 2 (secondary: default 2, tagged median 1). Here "
+    "untagged main roads get the median of the tagged roads of their class (trunk 2, primary 2, secondary 1). Also new: "
+    "pedestrian friction on side streets and non-trunk main roads (trunk roads such as the Ring Road have footpaths "
+    "and are exempt). Links within 50 m of an OpenStreetMap pedestrian street (the pedestrianised core: Basantapur, "
+    "Thamel, Ason) get 15 km/h; the top 10% of the remaining links by OpenStreetMap shops, amenities and offices "
+    "within 100 m along the whole link, per km, get 30 km/h. Both rules apply to the whole city, come from "
+    "OpenStreetMap only, and were fixed before any run; they replace round 5's midpoint rule.")
 for key, (idea, what, why) in TUNE_NB.items():
     title = f"Kathmandu traffic {key[:2]} - tuning: {what}"
     assert len(title) <= 50, title   # Kaggle limit
@@ -291,7 +301,7 @@ NOTEBOOKS[KEY_9A][3][0]["source"] += (
     "\n\n**Junction measure:** OpenStreetMap draws some large junctions as several nodes, so each junction is also "
     "scored as all traffic entering the nodes within 100 m of it (fixed before rescoring any run). Both measures are printed.")
 NOTEBOOKS[KEY_9A][3].append(code(f'run("scripts/tune_counts.py", "--idea", "midblock", "--summary-only", "--radius", "100")'))
-for key in ("10a-tune-osm-lanes", "10b-tune-osm-lanes-friction"):   # round 5 is scored on the 100 m measure too
+for key in ("10a-tune-osm-lanes", "10b-tune-osm-lanes-friction", "11a-tune-lanes-pedestrians"):   # 100 m measure too
     NOTEBOOKS[key][3].append(code(f'run("scripts/tune_counts.py", "--idea", "{TUNE_NB[key][0]}", "--summary-only", "--radius", "100")'))
 ODME = {"9b-fit-od-0.67s": ("--midblock --outer-main --k-peak 0.14", "--reaction-time 0.67",
                              "0.67 s reaction time, peak factor 0.14"),
@@ -317,6 +327,71 @@ Rounds 1-4 found settings that carry the right *total* traffic at roughly the su
         code(f'run("scripts/fit_od_counts.py", "--start", "{start}", "--run", "{cap}", "--iterations", "6", '
              f'"--seeds", "3", "--jobs", "3", "--radius", "100", tries=3)'),
         code('import pandas as pd\nprint(pd.read_csv("results/odme/log.csv").to_string(index=False))'),
+    ])
+
+# round 6 OD fitting: as 9b/9c, but the total is held at the survey total (round 4 ran away by adding trips
+# to saturated junctions), on the corrected networks
+LANES5 = "--osm-way-tags data/jica_net/osm_way_tags.csv"
+ODME6 = {"11b-fit-od-round6": ("round-6 network", LANES5 + " --untagged-lanes trunk=2,primary=2,secondary=1 "
+                               "--pedestrian-friction data/jica_net/osm_pedestrian_points.json --reaction-time 0.5",
+                               "round 6's network rules (two-way lane fix, untagged lanes by class, pedestrian friction)"),
+         "11c-fit-od-round5": ("round-5 network", LANES5 + " --friction-kmh 30 --friction-share 0.10 --reaction-time 0.5",
+                               "round 5's best network (two-way lane fix, roadside friction)")}
+for key, (short, cap, what) in ODME6.items():
+    title = f"Kathmandu traffic {key[:2]} - fit OD, {short}"
+    assert len(title) <= 50, title
+    SLUG[key] = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
+    NOTEBOOKS[key] = (title, [DATASET], [], [
+        md(f"""# {key[:2]}. Fitting origin-destination flows to the junction counts, fixed total
+
+Round 4 fitted the zone-to-zone flows to the 6 tuning junctions and diverged: each step added trips on paths into the Baneshwor junctions, which were already saturated, so queues grew instead of counts. Since then two network errors were found and fixed (two-way roads at double width; untagged roads at generic widths). This notebook repeats the fit on the corrected network, and **keeps the total demand at the survey total**: trips move between origin-destination pairs, none are added overall.
+
+**Method:** simulate 3 seeds; at each tuning junction r = counted / modelled entering volume (all nodes within 100 m); route every pair on simulated travel times; multiply its demand by r^0.5 for every tuning junction its path enters (at most x1.5 or /1.5 per iteration); rescale to the starting total; up to 6 iterations or until all 6 pass GEH < 5.
+
+**Network:** {what}; 0.5 s reaction time. **Start:** mid-block loading, outer zones on main roads, peak factor 0.14.
+
+**Caveat:** this fits the 6 tuning junctions directly, so afterwards they are calibration targets, not validation. Only the 3 held-out junctions (Balaju, Kalanki, Koteshwor), never used here, can validate the result."""),
+        code(SETUP + '\nfind_project("scripts/fit_od_counts.py")'),
+        code(INSTALL),
+        code('run("scripts/build_minor_ways.py")\nrun("scripts/build_od_jica.py", "--data", "data/jica_net")'),
+        code(f'run("scripts/fit_od_counts.py", "--start", "--midblock --outer-main --k-peak 0.14", "--run", "{cap}", '
+             f'"--iterations", "6", "--seeds", "3", "--jobs", "3", "--radius", "100", "--fixed-total", tries=3)'),
+        code('import pandas as pd\nprint(pd.read_csv("results/odme/log.csv").to_string(index=False))'),
+    ])
+
+# future demand: do the interventions still work in 2026 and 2030? Published model, as notebooks 3-4; the
+# new runner script comes from the dataset, the demand and tolls from notebooks 1 and 2
+for key, levels, what in (("12a-future-2026", ("2011", "2026"), "2026 demand (x1.94), with the 2011 reference"),
+                          ("12b-future-2030", ("2030",), "2030 demand (x2.32)")):
+    title = f"Kathmandu traffic {key[:3]} - interventions at {key[-4:]}"
+    assert len(title) <= 50, title
+    SLUG[key] = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
+    NOTEBOOKS[key] = (title, [DATASET], ["1-build-demand", "2-baseline-and-validation"], [
+        md(f"""# {key[:3]}. Do the interventions still work at future demand? {what}
+
+The intervention results (H1-H7) were measured at 2011 demand. The projection (notebooks 4a-4b) showed that at grown demand most trips no longer finish within 6 hours. This notebook runs the strongest interventions at that grown demand, on the published model, each paired by seed with the no-intervention run at the same demand:
+
+| Arm | What |
+|---|---|
+| baseline | no intervention |
+| adaptive | queue-actuated signals (H1) |
+| adaptive_pricing | signals + tolls (H3; the 2011 toll schedule, not re-derived for future congestion) |
+| staggered | the same demand over a 50% longer window (H6) |
+| all | signals + tolls + staggered departures |
+
+Demand grown at 4.52%/yr (JICA/DoR 2024 forecast): x1.94 for 2026, x2.32 for 2030. Horizon 6 hours. 6 seeds.
+
+**Criterion, fixed before any run:** an arm *solves* a demand level if its completion within 6 hours is at least the 2011 baseline's and its mean time in system is no worse than the 2011 baseline's (2011 reference run in notebook 12a)."""),
+        code(SETUP + '\nfind_project("data/jica_net/od_matrix.csv")\n'
+             'tolls = glob.glob("/kaggle/input/**/results/tolls_jica.csv", recursive=True)[0]\n'
+             'os.makedirs("results", exist_ok=True); shutil.copy(tolls, "results/tolls_jica.csv")\n'
+             'shutil.copy(glob.glob("/kaggle/input/**/scripts/future_jica.py", recursive=True)[0], "scripts/future_jica.py")\n'
+             'if os.path.exists("results/jica_future.partial.csv"): os.remove("results/jica_future.partial.csv")'),
+        code(INSTALL),
+        code("\n".join(f'run("scripts/future_jica.py", "--level", "{lv}", "--first-seed", "1", "--seeds", "6", '
+                       f'"--jobs", "3", tries=3)' for lv in levels) +
+             f'\nshutil.copy("results/jica_future.partial.csv", "/kaggle/working/future_{key[-4:]}.csv")'),
+        code('run("scripts/future_jica.py", "--summary-only")'),
     ])
 
 FORBIDDEN = re.compile(r"\b[DAE]\d{1,2}\b|(?-i:ASSUME)|human|judge|hackathon|pitch|claude|assistant|audit|Anthropic", re.I)

@@ -67,6 +67,7 @@ def main() -> None:
     ap.add_argument("--alpha", type=float, default=0.5, help="damping exponent on each junction's ratio")
     ap.add_argument("--clip", type=float, default=1.5, help="largest change per pair per iteration")
     ap.add_argument("--radius", type=float, default=0)
+    ap.add_argument("--fixed-total", action="store_true", help="keep total demand at the starting total")
     ap.add_argument("--stop-after-update", action="store_true", help="write the next OD file, then stop (testing)")
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
@@ -123,7 +124,10 @@ def main() -> None:
                         f *= ratio[k]
                 new[o, d] = v * min(a.clip, max(1 / a.clip, f))
         keys = list(new)
-        units = largest_remainder(round(sum(new.values()) / 5), [new[k] for k in keys])
+        # fixed total: trips move between pairs but the survey total is kept, so extra trips cannot pile
+        # into saturated junctions (round 4 ran away from 75.9k to 97k PCU/h without it)
+        total = sum(demand.values()) if a.fixed_total else sum(new.values())
+        units = largest_remainder(round(total / 5), [new[k] for k in keys])
         with open(NET / f"od_matrix_odme_{it + 1}.csv", "w", newline="", encoding="utf-8") as fh:
             w = csv.writer(fh)
             w.writerow(["origin_id", "dest_id", "demand"])

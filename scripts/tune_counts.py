@@ -93,6 +93,15 @@ for idea, net in (("osmlanes", LANES), ("osmlanes_friction", FRIC)):
                    "net_mb_k0.13": (MB + ["--k-peak", "0.13"], net),
                    "net_mb_rt0.67_k0.14": (MB + ["--k-peak", "0.14"], net + ["--reaction-time", "0.67"]),
                    "net_mb_rt0.5_k0.14": (MB + ["--k-peak", "0.14"], net + ["--reaction-time", "0.5"])}
+# round 6: (1) untagged main roads get the median lanes of tagged roads of their class (UXsim's generic
+# defaults made untagged trunk roads 3-4 lanes vs a tagged median of 2, secondary 2 vs 1); (2) pedestrian
+# friction on all links, measured along the whole link (replaces round 5's midpoint rule)
+NET6 = LANES + ["--untagged-lanes", "trunk=2,primary=2,secondary=1",
+                "--pedestrian-friction", "data/jica_net/osm_pedestrian_points.json"]
+IDEAS["net6"] = {"base": ([], []), "net6": ([], NET6),
+                 "net6_mb_rt0.5_k0.14": (MB + ["--k-peak", "0.14"], NET6 + ["--reaction-time", "0.5"]),
+                 "net6_mb_rt0.5_k0.16": (MB + ["--k-peak", "0.16"], NET6 + ["--reaction-time", "0.5"]),
+                 "net6_mb_rt0.67_k0.14": (MB + ["--k-peak", "0.14"], NET6 + ["--reaction-time", "0.67"])}
 
 
 def geh(m, o):

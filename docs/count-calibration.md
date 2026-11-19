@@ -24,6 +24,7 @@ Decisions in full: [`lab/decisions.md`](../lab/decisions.md), D6 to D10.
 | 3 | 8a-8d | each capacity setting x higher peak demand | 2 | total volume solved, spatial pattern not: Kalimati always high, Baneshwor / Thapathali low |
 | 4 | 9a-9c | 100 m junction clusters; trips loaded mid-block, not inside junctions; OD flows fitted to counts | 1 | OD fitting diverged: extra demand only lengthened queues at saturated junctions |
 | 5 | 10a-10b | two-way OpenStreetMap lane fix; roadside friction | **2** | see below |
+| 6 | 11a-11c | lane widths for untagged roads; pedestrian-street friction; OD fitting with fixed total | 0 | too much capacity removed (16 / 9 km/h vs survey 24 / 15); OD fitting again moved away from the counts |
 
 ## Round 5: the lane-count bug
 
@@ -51,6 +52,8 @@ In the best setting, Chabahil (1.00) and Gausala (0.95) pass; Thapathali is at 0
 
 ## Status
 
-Not yet at 6 of 6; the held-out junctions have not been revealed. Camera counts by approach at
-Kalimati and the Baneshwor junctions would show where the model's routing differs from reality.
-If a setting is adopted, the interventions (H1-H7) must be rerun on it before the paper changes.
+Stopped at round 5: 2 of 6 tuning junctions pass (mean GEH 20.0). Round 6 made the fit worse and was
+not adopted. The held-out junctions have not been revealed, because no setting reached 6 of 6.
+More parameter search is unlikely to help: the remaining errors are spatial (Kalimati too high,
+Baneshwor and Thapathali too low), and the next useful evidence is camera counts by approach at those
+junctions. If a setting is adopted, the interventions (H1-H7) must be rerun on it before the paper changes.

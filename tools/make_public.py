@@ -19,7 +19,7 @@ CODE = [
     "scripts/stats.py", "scripts/run_baseline.py", "scripts/signals.py", "scripts/adaptive_signals.py",
     "scripts/tidal_lanes.py", "scripts/run_pricing.py", "scripts/dump_link_volumes.py",
     "scripts/build_minor_ways.py", "scripts/build_od_jica.py", "scripts/build_growth_od.py",
-    "scripts/sweep_jica_seeds.py", "scripts/compare_jica.py", "scripts/project_jica.py", "scripts/tune_counts.py", "scripts/fit_od_counts.py", "scripts/build_way_tags.py",
+    "scripts/sweep_jica_seeds.py", "scripts/compare_jica.py", "scripts/project_jica.py", "scripts/tune_counts.py", "scripts/fit_od_counts.py", "scripts/build_way_tags.py", "scripts/build_pedestrian_ways.py", "scripts/future_jica.py",
     "checks/geh_jica2012.py", "checks/speed_jica2012.py",
     # how the inputs were made (need the JICA report PDFs / internet, not run in the pipeline)
     "scripts/build_network.py", "scripts/extract_jica_ptod.py", "scripts/extract_jica_vtod.py",
@@ -28,7 +28,7 @@ CODE = [
 DATA = [
     "data/network_nodes.csv", "data/network_links.csv",
     "data/jica_net/network_nodes.csv", "data/jica_net/network_links.csv",
-    "data/jica_net/osm_way_tags.csv", "data/kathmandu_pois.json",
+    "data/jica_net/osm_way_tags.csv", "data/kathmandu_pois.json", "data/jica_net/osm_pedestrian_points.json",
     "data/jica_od/ptod_2011.csv", "data/jica_od/vtod_2011.csv", "data/jica_od/zones_2011.csv",
     "data/jica_od/geocode_cache.json",
     "data/jica2012/intersection_counts_2011.csv", "data/jica2012/route_speeds_2011.csv",
