@@ -44,7 +44,7 @@ traces each number to its notebook, file and computation.
 | Repository | Contents |
 |---|---|
 | `kathmandu-traffic-docs` | project overview, data sources, technology, roadmap |
-| **`kathmandu-traffic`** (this one) | the simulation |
+| **`kathmandu-traffic-simulation`** (this one) | the simulation |
 | `kathmandu-traffic-vision` | junction cameras: counting, red-light violations, number plates |
 
 ## Work after the paper's runs
@@ -60,6 +60,10 @@ results table above.
   2011 conditions at 2026 or 2030 demand. The combined plan (adaptive signals + pricing + staggered
   departures) cuts time in system by 51.0% +/- 7.3% (2026) and 37.2% +/- 2.7% (2030) against doing
   nothing at the same demand (D12).
+
+- **In units a reader can picture** (`checks/vehicle_hours.py`, same 15 paired seeds): adaptive signals save
+  21,915 +/- 2,033 vehicle-hours per morning peak (11.2 +/- 1.0 minutes per vehicle); signals + pricing
+  27,232 +/- 1,890 (14.0 +/- 1.0 min); staggered departures 25,151 +/- 1,408 (12.9 +/- 0.7 min).
 
 ## How a number gets from Kaggle into the paper
 
